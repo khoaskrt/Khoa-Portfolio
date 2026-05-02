@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-05-02T21:58:00+07:00",
+  "title": "Design System: Sales School Landing Page",
+  "extensions": {
+    "colorMeta": {
+      "base-black": {
+        "role": "neutral",
+        "displayName": "Black Field",
+        "canonical": "oklch(0.00 0 0)",
+        "tonalRamp": ["oklch(0.18 0.005 250)", "oklch(0.28 0.005 250)", "oklch(0.38 0.005 250)", "oklch(0.48 0.005 250)", "oklch(0.58 0.005 250)", "oklch(0.68 0.005 250)", "oklch(0.80 0.005 250)", "oklch(0.92 0.005 250)"]
+      },
+      "base-white": {
+        "role": "neutral",
+        "displayName": "White Voice",
+        "canonical": "oklch(1 0 0)",
+        "tonalRamp": ["oklch(0.15 0.005 250)", "oklch(0.26 0.005 250)", "oklch(0.37 0.005 250)", "oklch(0.48 0.005 250)", "oklch(0.59 0.005 250)", "oklch(0.70 0.005 250)", "oklch(0.82 0.005 250)", "oklch(0.95 0.005 250)"]
+      },
+      "signal-red": {
+        "role": "primary",
+        "displayName": "Decision Red",
+        "canonical": "oklch(0.64 0.23 25)",
+        "tonalRamp": ["oklch(0.22 0.12 25)", "oklch(0.30 0.15 25)", "oklch(0.38 0.17 25)", "oklch(0.47 0.19 25)", "oklch(0.56 0.21 25)", "oklch(0.66 0.23 25)", "oklch(0.76 0.18 25)", "oklch(0.90 0.08 25)"]
+      },
+      "signal-red-deep": {
+        "role": "secondary",
+        "displayName": "Signal Core Red",
+        "canonical": "oklch(0.58 0.22 25)",
+        "tonalRamp": ["oklch(0.20 0.11 25)", "oklch(0.28 0.13 25)", "oklch(0.36 0.15 25)", "oklch(0.44 0.18 25)", "oklch(0.52 0.20 25)", "oklch(0.60 0.22 25)", "oklch(0.74 0.16 25)", "oklch(0.88 0.07 25)"]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Hero statement words and first-glance identity."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Support labels and contextual narrative text."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Uppercase utility metadata and navigation markers."
+      }
+    },
+    "shadows": [
+      {
+        "name": "signal-halo",
+        "value": "0 0 10px rgba(220,38,38,0.5)",
+        "purpose": "Operational glow around status marker."
+      }
+    ],
+    "motion": [
+      {
+        "name": "hero-ease",
+        "value": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "purpose": "Primary reveal easing for staged hero elements."
+      },
+      {
+        "name": "hero-duration",
+        "value": "0.8s",
+        "purpose": "Standard timing for line-item entrance transitions."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "md",
+        "value": "768px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Navigation Link",
+      "kind": "nav",
+      "refersTo": "nav-link-default",
+      "description": "High-tracking uppercase footer navigation link with sparse red hover response.",
+      "html": "<a class=\"ds-nav-link\" href=\"#\">BEGIN</a>",
+      "css": ".ds-nav-link { color: #ffffff; text-transform: uppercase; letter-spacing: 0.4em; font-family: Outfit, ui-sans-serif, system-ui, sans-serif; font-size: 12px; font-weight: 300; text-decoration: none; transition: color 240ms cubic-bezier(0.22, 1, 0.36, 1); } .ds-nav-link:hover { color: #ef4444; } .ds-nav-link:focus-visible { outline: 1px solid #ef4444; outline-offset: 4px; color: #ef4444; }"
+    },
+    {
+      "name": "Signal Status Dot",
+      "kind": "custom",
+      "refersTo": "status-dot",
+      "description": "Compact presence indicator paired with timeline metadata.",
+      "html": "<span class=\"ds-status-dot\" aria-hidden=\"true\"></span>",
+      "css": ".ds-status-dot { display: inline-block; width: 8px; height: 8px; background: #dc2626; box-shadow: 0 0 10px rgba(220,38,38,0.5); }"
+    },
+    {
+      "name": "Hero Wordmark",
+      "kind": "custom",
+      "refersTo": "nav-link-default",
+      "description": "Two-line hero lockup with heavy display and thin counterpart line.",
+      "html": "<div class=\"ds-wordmark\"><h1 class=\"ds-wordmark-main\">SALES</h1><h2 class=\"ds-wordmark-sub\">SCHOOL</h2></div>",
+      "css": ".ds-wordmark { text-align: right; } .ds-wordmark-main { margin: 0; color: #ffffff; font-family: \"Space Grotesk\", sans-serif; font-size: clamp(3.5rem, 15vw, 12rem); line-height: 0.8; letter-spacing: -0.02em; font-weight: 700; text-transform: uppercase; } .ds-wordmark-sub { margin: -0.12em 0 0; color: #ffffff; font-family: Outfit, ui-sans-serif, system-ui, sans-serif; font-size: clamp(3.5rem, 15vw, 12rem); line-height: 0.8; letter-spacing: 0.16em; font-weight: 300; text-transform: uppercase; }"
+    },
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "nav-link-default",
+      "description": "Synthesized canonical CTA aligned to the existing monochrome-plus-red language.",
+      "html": "<button class=\"ds-btn-primary\">Start Session</button>",
+      "css": ".ds-btn-primary { border: 1px solid rgba(255,255,255,0.3); background: transparent; color: #ffffff; font-family: Outfit, ui-sans-serif, system-ui, sans-serif; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 500; padding: 12px 20px; transition: color 220ms cubic-bezier(0.22, 1, 0.36, 1), border-color 220ms cubic-bezier(0.22, 1, 0.36, 1), transform 220ms cubic-bezier(0.22, 1, 0.36, 1); } .ds-btn-primary:hover { color: #ef4444; border-color: #ef4444; transform: translateY(-1px); } .ds-btn-primary:focus-visible { outline: 1px solid #ef4444; outline-offset: 4px; } .ds-btn-primary:active { transform: translateY(0); }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "nav-link-default",
+      "description": "Synthesized text field for future form modules, preserving the current visual language.",
+      "html": "<label class=\"ds-input-wrap\">Email<input class=\"ds-input\" type=\"email\" placeholder=\"name@company.com\" /></label>",
+      "css": ".ds-input-wrap { display: grid; gap: 8px; color: #ffffff; font-family: Outfit, ui-sans-serif, system-ui, sans-serif; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; } .ds-input { width: 100%; border: 1px solid rgba(255,255,255,0.3); background: transparent; color: #ffffff; font-family: Outfit, ui-sans-serif, system-ui, sans-serif; font-size: 14px; letter-spacing: 0.04em; padding: 12px 14px; transition: border-color 220ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 220ms cubic-bezier(0.22, 1, 0.36, 1); } .ds-input::placeholder { color: rgba(255,255,255,0.55); } .ds-input:hover { border-color: rgba(255,255,255,0.5); } .ds-input:focus-visible { outline: none; border-color: #ef4444; box-shadow: 0 0 0 1px #ef4444; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Decision Room",
+    "overview": "This system stages a single cinematic moment, a high-contrast portrait where typography carries authority and pacing does the persuasion. The aesthetic is intentionally sparse, but not passive. Visual weight is concentrated in oversized wordmarks, disciplined uppercase micro-labels, and one load-bearing accent that signals intent.\n\nThe experience is built for recruiter-speed scanning and leadership signaling, not feature marketing. Content appears in a calm sequence, then resolves into a clear directional statement. The overall voice is confident, strategic, and operations-minded, with no decorative detours.\n\nThe system explicitly rejects the anti-references in PRODUCT.md: generic SaaS product styling, corporate-template feature blocks, and conversion-led marketing patterns that bury personal narrative.",
+    "keyCharacteristics": [
+      "Cinematic monochrome field with sparse red signaling",
+      "Display-led hierarchy with compressed vertical rhythm",
+      "Uppercase metadata language for tactical clarity",
+      "Motion used for reveal and emphasis, never flourish"
+    ],
+    "rules": [
+      {
+        "name": "The Signal Scarcity Rule",
+        "body": "Red remains rare and intentional. If red becomes background fill or broad decorative wash, hierarchy collapses.",
+        "section": "colors"
+      },
+      {
+        "name": "The Compression Rule",
+        "body": "Hero line-height stays compressed at 0.8 so language feels cut from one block, not stacked as separate banners.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat Surface Rule",
+        "body": "Surfaces remain visually flat at rest. Depth cues appear through overlays and controlled contrast, not container elevation.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do keep red as a sparse directional signal (#ef4444 / #dc2626), not a broad surface fill.",
+      "Do preserve the recruiter-speed hierarchy with oversized hero language and tracked micro-labels.",
+      "Do maintain strong narrative ordering: identity first, context second, directional statement last.",
+      "Do respect reduced-motion preferences when extending animations beyond current reveal choreography."
+    ],
+    "donts": [
+      "Don't design this like a generic SaaS product or app landing page.",
+      "Don't use feature-marketing patterns that feel corporate-template heavy.",
+      "Don't replace personal storytelling with product-style conversion blocks.",
+      "Don't introduce side-stripe accents, gradient text, or interchangeable icon-card grids that dilute the current voice."
+    ]
+  }
+}

@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&family=Outfit:wght@100;300;400;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-black text-white;
+  }
+}
+
+@layer utilities {
+  .safe-area-pad {
+    padding-top: max(1rem, env(safe-area-inset-top));
+    padding-right: max(1rem, env(safe-area-inset-right));
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+    padding-left: max(1rem, env(safe-area-inset-left));
+  }
+
+  .landing-overlay {
+    color: rgb(245 248 252 / 0.98);
+    text-shadow: 0 0 10px rgb(255 255 255 / 0.2);
+  }
+
+  .hero-cement {
+    color: rgb(250 252 255 / 1);
+    text-shadow:
+      0 0 24px rgb(255 255 255 / 0.62),
+      0 0 8px rgb(255 255 255 / 0.36),
+      0 1px 0 rgb(255 255 255 / 0.56),
+      0 -1px 0 rgb(90 98 110 / 0.34),
+      1px 0 0 rgb(188 196 208 / 0.22),
+      -1px 0 0 rgb(108 116 128 / 0.18);
+    -webkit-text-stroke: 0.55px rgb(246 250 255 / 0.62);
+    filter: brightness(1.24) contrast(1.2) saturate(0.9);
+    letter-spacing: -0.012em;
+    opacity: 1;
+  }
+
+  .hero-cement-soft {
+    color: rgb(246 249 253 / 1);
+    text-shadow:
+      0 0 18px rgb(255 255 255 / 0.52),
+      0 0 6px rgb(255 255 255 / 0.28),
+      0 1px 0 rgb(255 255 255 / 0.42),
+      0 -1px 0 rgb(86 94 106 / 0.32),
+      1px 0 0 rgb(182 190 202 / 0.18),
+      -1px 0 0 rgb(102 110 122 / 0.16);
+    -webkit-text-stroke: 0.45px rgb(243 248 254 / 0.56);
+    filter: brightness(1.18) contrast(1.16) saturate(0.9);
+    opacity: 1;
+  }
+}
