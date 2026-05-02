@@ -1,0 +1,10 @@
+@theme {
+  --font-sans: 'Outfit', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Space Grotesk', sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-black text-white;
+  }
+}
