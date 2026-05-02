@@ -9,7 +9,7 @@ export function AboutSection() {
   const prefersReducedMotion = useReducedMotion();
   const { scrollYProgress } = useScroll({
     target: narrativeRef,
-    offset: ['start 82%', 'end 28%'],
+    offset: ['start 94%', 'end 18%'],
   });
   const descriptionLines = aboutContent.description
     .split('. ')
@@ -20,7 +20,7 @@ export function AboutSection() {
   return (
     <motion.section
       id={aboutContent.id}
-      className="about-shell relative isolate min-h-dvh overflow-hidden px-4 py-12 sm:px-6 sm:py-16 md:px-10 lg:px-12 lg:py-20"
+      className="about-shell relative isolate min-h-[135vh] overflow-hidden px-4 pt-12 pb-36 sm:min-h-[145vh] sm:px-6 sm:pt-16 sm:pb-44 md:min-h-[152vh] md:px-10 md:pb-52 lg:min-h-[162vh] lg:px-12 lg:pt-20 lg:pb-64"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.2 }}
@@ -66,7 +66,11 @@ export function AboutSection() {
         </motion.div>
       </div>
 
-      <motion.article ref={narrativeRef} variants={aboutItemVariants} className="mx-auto mt-8 w-full max-w-[1200px] lg:mt-12">
+      <motion.article
+        ref={narrativeRef}
+        variants={aboutItemVariants}
+        className="mx-auto mt-8 w-full max-w-[1200px] pb-20 sm:pb-24 md:pb-28 lg:mt-12 lg:pb-36"
+      >
         <p className="about-reading-glow max-w-[70ch] text-[clamp(1.5rem,3vw,2.4rem)] font-normal leading-[1.42] tracking-[0.005em]">
           {descriptionLines.map((line, index) => (
             <ReadingLine
@@ -87,6 +91,11 @@ export function AboutSection() {
       <span className="pointer-events-none absolute bottom-24 right-6 text-[150px] font-light leading-none text-white/30 lg:bottom-20 lg:right-8">
         ]
       </span>
+
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-[34%] bg-[linear-gradient(to_bottom,oklch(0.1_0.012_253/0),oklch(0.1_0.012_253/0.82),oklch(0.1_0.012_253/1))]"
+      />
     </motion.section>
   );
 }
@@ -100,8 +109,10 @@ type ReadingLineProps = {
 };
 
 function ReadingLine({ line, index, total, progress, reducedMotion }: ReadingLineProps) {
-  const center = total === 1 ? 0.5 : index / (total - 1);
-  const range = 1 / Math.max(total * 0.95, 3);
+  const normalized = total === 1 ? 0.5 : index / (total - 1);
+  const baseCenter = 0.1 + normalized * 0.66;
+  const center = index === 0 ? Math.min(0.24, baseCenter + 0.08) : baseCenter;
+  const range = Math.max(0.16, 0.48 / Math.max(total, 2));
   const opacity = useTransform(
     progress,
     [Math.max(0, center - range), center, Math.min(1, center + range)],
