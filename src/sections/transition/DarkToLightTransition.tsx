@@ -1,51 +1,71 @@
-import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react';
-import { useRef } from 'react';
+import { motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from 'motion/react';
+import { useEffect, useRef } from 'react';
 
-export function DarkToLightTransition() {
+type DarkToLightTransitionProps = {
+  onRevealReadyChange?: (ready: boolean) => void;
+};
+
+export function DarkToLightTransition({ onRevealReadyChange }: DarkToLightTransitionProps) {
   const bandRef = useRef<HTMLElement>(null);
   const prefersReducedMotion = useReducedMotion();
-  const { scrollYProgress } = useScroll();
-  const glowDrift = useTransform(scrollYProgress, [0.2, 0.62], ['-1%', '10%']);
-  const glowOpacity = useTransform(scrollYProgress, [0.18, 0.38, 0.66], [0.88, 1, 0.82]);
+
+  const { scrollYProgress } = useScroll({
+    target: bandRef,
+    offset: ['start 94%', 'end 2%'],
+  });
+
+  const lineScaleY = useTransform(scrollYProgress, [0.04, 0.5], [0, 1]);
+  const lineOpacity = useTransform(scrollYProgress, [0, 0.5, 0.64], [0.9, 0.84, 0]);
+  const panelStart = 0.3;
+  const panelEnd = 0.86;
+  const panelScaleX = useTransform(scrollYProgress, [panelStart, panelEnd], [0, 2.1]);
+  const revealOnThreshold = 0.93;
+  const revealOffThreshold = 0.86;
+  const revealStateRef = useRef(false);
+
+  useEffect(() => {
+    if (!onRevealReadyChange) return;
+    if (!prefersReducedMotion) return;
+    revealStateRef.current = true;
+    onRevealReadyChange(true);
+  }, [onRevealReadyChange, prefersReducedMotion]);
+
+  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
+    if (!onRevealReadyChange) return;
+    if (prefersReducedMotion) {
+      return;
+    }
+
+    const isRevealed = revealStateRef.current;
+    const nextReveal = isRevealed ? latest > revealOffThreshold : latest >= revealOnThreshold;
+
+    if (nextReveal !== isRevealed) {
+      revealStateRef.current = nextReveal;
+      onRevealReadyChange(nextReveal);
+    }
+  });
 
   return (
     <section
       ref={bandRef}
       aria-hidden="true"
-      className="relative h-[66vh] min-h-[430px] max-h-[760px] overflow-hidden bg-[oklch(0.1_0.012_253)] sm:h-[70vh] lg:h-[74vh]"
+      className="relative h-[clamp(24rem,65dvh,38.4rem)] min-h-[384px] max-h-[614px] overflow-hidden bg-[oklch(0.1_0.012_253)] sm:h-[clamp(28.8rem,74dvh,46.8rem)] sm:min-h-[461px] sm:max-h-[749px] lg:h-[clamp(36rem,84dvh,62.4rem)] lg:min-h-[576px] lg:max-h-[998px]"
     >
-      <div className="absolute inset-0 bg-[linear-gradient(to_bottom,oklch(0.1_0.012_253)_0%,oklch(0.12_0.018_252)_17%,oklch(0.2_0.042_251)_36%,oklch(0.43_0.105_247)_60%,oklch(0.72_0.065_245)_82%,oklch(0.92_0.01_255)_100%)]" />
-
       <motion.div
-        className="absolute inset-x-[-20%] top-[-56%] h-[120%] blur-[64px]"
+        className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-[oklch(0.94_0.01_255)]"
         style={{
-          y: prefersReducedMotion ? '0%' : glowDrift,
-          opacity: prefersReducedMotion ? 0.88 : glowOpacity,
-          background:
-            'radial-gradient(78% 100% at 50% 0%, oklch(0.34 0.145 251 / 0.78) 0%, oklch(0.2 0.078 251 / 0.62) 44%, transparent 82%)',
+          scaleY: prefersReducedMotion ? 1 : lineScaleY,
+          opacity: prefersReducedMotion ? 0 : lineOpacity,
+          transformOrigin: 'center top',
         }}
       />
 
       <motion.div
-        className="absolute inset-x-[-26%] bottom-[-70%] h-[124%] blur-[80px]"
+        className="absolute inset-y-0 left-1/2 w-[220vw] -translate-x-1/2 bg-[oklch(0.93_0.005_255)]"
         style={{
-          y: prefersReducedMotion ? '0%' : glowDrift,
-          opacity: prefersReducedMotion ? 0.78 : glowOpacity,
-          background:
-            'radial-gradient(62% 100% at 50% 0%, oklch(0.8 0.055 245 / 0.58) 0%, oklch(0.9 0.02 252 / 0.36) 48%, transparent 84%)',
-        }}
-      />
-
-      <div className="absolute inset-x-0 top-0 h-[20%] bg-[linear-gradient(to_bottom,oklch(0.1_0.012_253/0.95),oklch(0.1_0.012_253/0))]" />
-      <div className="absolute inset-x-0 bottom-0 h-[30%] bg-[linear-gradient(to_bottom,oklch(0.92_0.01_255/0),oklch(0.92_0.01_255/0.8),oklch(0.92_0.01_255))]" />
-      <div className="absolute bottom-[-4%] left-1/2 h-[34%] w-px -translate-x-1/2 bg-[linear-gradient(to_bottom,oklch(0.95_0.01_255/0),oklch(0.95_0.01_255/0.72),oklch(0.95_0.01_255/0))]" />
-
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.055] mix-blend-soft-light"
-        style={{
-          backgroundImage:
-            "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E\")",
-          backgroundSize: '180px 180px',
+          scaleX: prefersReducedMotion ? 1 : panelScaleX,
+          opacity: 1,
+          transformOrigin: 'center center',
         }}
       />
     </section>

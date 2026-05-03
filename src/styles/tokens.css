@@ -1,6 +1,7 @@
 @theme {
   --font-sans: 'Outfit', ui-sans-serif, system-ui, sans-serif;
   --font-display: 'Space Grotesk', sans-serif;
+  --font-quote: 'Plus Jakarta Sans', 'Outfit', ui-sans-serif, system-ui, sans-serif;
 }
 
 @layer base {

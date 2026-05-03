@@ -1,20 +1,24 @@
 ---
 name: Sales School Landing Page
-description: Cinematic personal-brand hero with monochrome contrast and decisive red accents.
+description: Cinematic personal-brand narrative shifting from command-black to archival-light with restrained signal red.
 colors:
-  base-black: "#000000"
-  base-white: "#ffffff"
+  night-base: "oklch(0.1 0.012 253)"
+  night-overlay: "oklch(0.112 0.012 255 / 0.55)"
+  mist-line: "oklch(0.94 0.01 255)"
+  day-surface: "oklch(0.93 0.005 255)"
+  day-ink: "oklch(0.12 0.01 255)"
+  day-muted: "oklch(0.34 0.01 255)"
   signal-red: "#ef4444"
   signal-red-deep: "#dc2626"
-  vignette-black: "#00000066"
-  border-white-soft: "#ffffff1a"
-  border-white-mid: "#ffffff4d"
+  frost-text: "#f5f8fc"
+  border-frost-soft: "#ffffff1a"
+  border-frost-mid: "#ffffff4d"
 typography:
   display:
     fontFamily: "Space Grotesk, sans-serif"
     fontSize: "clamp(3.5rem, 15vw, 12rem)"
     fontWeight: 700
-    lineHeight: 0.8
+    lineHeight: 0.82
     letterSpacing: "-0.02em"
   body:
     fontFamily: "Outfit, ui-sans-serif, system-ui, sans-serif"
@@ -30,6 +34,7 @@ typography:
     letterSpacing: "0.2em"
 rounded:
   none: "0px"
+  hairline-round: "999px"
 spacing:
   xs: "4px"
   sm: "8px"
@@ -39,7 +44,7 @@ spacing:
 components:
   nav-link-default:
     backgroundColor: "transparent"
-    textColor: "{colors.base-white}"
+    textColor: "{colors.frost-text}"
     typography: "{typography.label}"
     rounded: "{rounded.none}"
     padding: "0"
@@ -49,110 +54,121 @@ components:
     typography: "{typography.label}"
     rounded: "{rounded.none}"
     padding: "0"
-  status-dot:
-    backgroundColor: "{colors.signal-red-deep}"
+  hero-cta-default:
+    backgroundColor: "#ffffff1a"
+    textColor: "{colors.frost-text}"
     rounded: "{rounded.none}"
-    width: "8px"
-    height: "8px"
+    padding: "8px 16px"
+  hero-cta-hover:
+    backgroundColor: "#ffffff1a"
+    textColor: "#fca5a5"
+    rounded: "{rounded.none}"
+    padding: "8px 16px"
+  status-dot-active:
+    backgroundColor: "#ffffffe6"
+    rounded: "{rounded.hairline-round}"
+    width: "10px"
+    height: "10px"
 ---
 
 # Design System: Sales School Landing Page
 
 ## Overview
 
-**Creative North Star: "The Decision Room"**
+**Creative North Star: "The Decision Room to Debrief Archive"**
 
-This system stages a single cinematic moment, a high-contrast portrait where typography carries authority and pacing does the persuasion. The aesthetic is intentionally sparse, but not passive. Visual weight is concentrated in oversized wordmarks, disciplined uppercase micro-labels, and one load-bearing accent that signals intent.
+This system moves through a controlled narrative arc: a command-like dark hero where identity is asserted, then a measured transition into a light work-history surface where evidence is read. The aesthetic is cinematic but disciplined, with oversized display typography, sparse accent signaling, and motion that reveals sequence rather than spectacle.
 
-The experience is built for recruiter-speed scanning and leadership signaling, not feature marketing. Content appears in a calm sequence, then resolves into a clear directional statement. The overall voice is confident, strategic, and operations-minded, with no decorative detours.
-
-The system explicitly rejects the anti-references in PRODUCT.md: generic SaaS product styling, corporate-template feature blocks, and conversion-led marketing patterns that bury personal narrative.
+The experience is built for recruiter-speed scanning and leadership signaling, not feature marketing. Visual density is concentrated where decisions matter, then relaxed for factual sections. This system explicitly rejects PRODUCT.md anti-references: generic SaaS styling, conversion-heavy template blocks, and product-feature storytelling.
 
 **Key Characteristics:**
-- Cinematic monochrome field with sparse red signaling
-- Display-led hierarchy with compressed vertical rhythm
+- Two-phase palette, night-to-day progression tied to narrative flow
+- Display-led hierarchy with compressed hero lines and breathable body passages
 - Uppercase metadata language for tactical clarity
-- Motion used for reveal and emphasis, never flourish
+- Motion as structural timing, not decorative flourish
 
 ## Colors
 
-The palette is monochrome-first, with red reserved for directional moments and status emphasis.
+The palette is phase-based: deep neutral night tones for authority, then low-chroma day neutrals for readability, with red reserved for directional signal moments.
 
 ### Primary
-- **Decision Red** (`#ef4444`): Bracket markers and hover-state emphasis that guide scanning toward key statements.
+- **Decision Red** (`#ef4444`): Bracket markers, hover emphasis, and directional nudges in navigation and footer language.
 
 ### Secondary
-- **Signal Core Red** (`#dc2626`): Compact status marker used for operational presence and timestamp anchoring.
+- **Signal Core Red** (`#dc2626`): Deeper state signal for compact indicator moments.
 
 ### Neutral
-- **Black Field** (`#000000`): Full-page base tone that frames imagery and typography as the primary communication layer.
-- **White Voice** (`#ffffff`): Primary content color across headline, body metadata, and navigation labels.
-- **Soft Divider White** (`#ffffff1a`): Subtle structural rule for footer separation.
-- **Mid Divider White** (`#ffffff4d`): Medium-contrast underline cue for byline emphasis.
-- **Vignette Black** (`#00000066`): Edge darkening overlay that deepens focus on the portrait center.
+- **Night Base** (`oklch(0.1 0.012 253)`): Hero-stage foundation and transition band start.
+- **Night Overlay** (`oklch(0.112 0.012 255 / 0.55)`): Atmospheric layer in About to preserve depth without card stacks.
+- **Day Surface** (`oklch(0.93 0.005 255)`): Work-experience background for long-form scan comfort.
+- **Day Ink** (`oklch(0.12 0.01 255)`): Primary text tone on light surfaces.
+- **Day Muted** (`oklch(0.34 0.01 255)`): Metadata and timestamp language.
+- **Frost Text** (`#f5f8fc`): High-contrast hero foreground and overlay copy.
+- **Mist Line** (`oklch(0.94 0.01 255)`): Transition divider cue anchoring the palette shift.
 
-**The Signal Scarcity Rule.** Red remains rare and intentional. If red becomes background fill or broad decorative wash, hierarchy collapses.
+**The Signal Scarcity Rule.** Red stays sparse and directional. If red becomes a dominant background treatment, the narrative hierarchy collapses.
 
 ## Typography
 
 **Display Font:** Space Grotesk (fallback: sans-serif)
 **Body Font:** Outfit (fallback: ui-sans-serif, system-ui, sans-serif)
-**Label/Mono Font:** Outfit (same family, high tracking in labels)
+**Label/Mono Font:** Outfit (same family, high tracking for UI metadata)
 
-**Character:** Space Grotesk delivers decisive geometric force for hero language, while Outfit keeps supporting copy soft, legible, and recruiter-fast.
+**Character:** Space Grotesk carries decisive, strategic voice in large statements; Outfit softens supporting copy for recruiter-speed comprehension.
 
 ### Hierarchy
-- **Display** (700, `clamp(3.5rem, 15vw, 12rem)`, 0.8): Hero statement words that define the page identity in one glance.
-- **Headline** (300, `clamp(3.5rem, 15vw, 12rem)`, 0.8): Secondary hero line that contrasts weight while preserving scale parity.
-- **Title** (500, `clamp(0.875rem, 1.1vw, 1rem)`, 1.45): Byline emphasis and key attribution moments.
-- **Body** (300, `clamp(0.875rem, 1.1vw, 1rem)`, 1.45): Utility-level narrative labels and contextual descriptors.
-- **Label** (300, `clamp(0.625rem, 0.9vw, 0.8125rem)`, 0.2em tracking, uppercase): Navigation metadata, top-bar system labeling, and footer command language.
+- **Display** (700, `clamp(3rem,14vw,10rem)`, 0.82): Hero and section wall statements that anchor page identity.
+- **Headline** (600, `clamp(3.5rem,9.2vw,8.3rem)`, 0.9): Work-experience heading with high scan impact.
+- **Title** (600, `clamp(1.34rem,1.62vw,1.92rem)`, 1.1): Role titles and key attribution in list content.
+- **Body** (300, `clamp(0.875rem,1.1vw,1rem)`, 1.45): Utility narrative labels and supporting copy, capped to short readable measures.
+- **Label** (300, `clamp(0.625rem,0.9vw,0.8125rem)`, 0.2em tracking, uppercase): Nav rails, timestamps, and control language.
 
-**The Compression Rule.** Hero line-height stays compressed at 0.8 so language feels cut from one block, not stacked as separate banners.
+**The Compression Rule.** Hero display lines remain tightly set so statements feel like one decisive block, not stacked banners.
 
 ## Elevation
 
-Depth is driven by imagery, blend mode, and tonal layering rather than card stacks. The page stays flat in structure while contrast overlays and vignette treatment create atmospheric separation.
+Depth comes from overlays, image tuning, and tonal gradients rather than repeated card containers. The hero and About zones are mostly flat surfaces with atmospheric layering, while selective shadows only appear around image framing and active progress markers.
 
 ### Shadow Vocabulary
-- **Signal Halo** (`0 0 10px rgba(220,38,38,0.5)`): Used only around the red status dot to indicate active presence.
+- **Signal Halo** (`0 0 10px rgb(255 255 255 / 0.3)`): Active rail-dot emphasis in About progression.
+- **Frame Depth** (`0 16px 42px rgb(0 0 0 / 0.42)`): About image figure grounding against the dark field.
+- **Orb Ambient** (`0 16px 80px rgb(0 0 0 / 0.38)`): Large background-orb separation without introducing card hierarchy.
 
-**The Flat Surface Rule.** Surfaces remain visually flat at rest. Depth cues appear through overlays and controlled contrast, not container elevation.
+**The Flat Surface Rule.** Most surfaces stay flat at rest. Elevation appears only to indicate progression or anchor key imagery.
 
 ## Components
 
 ### Navigation
-- **Shape:** Edge-aligned text system (0px radius)
-- **Default:** Uppercase high-tracking labels in white for calm scanning
-- **Hover / Focus:** Shift to Decision Red with fast color transition
-- **Structure:** Footer rail separated by soft top rule for positional grounding
+- **Shape:** Edge-aligned text system (`0px` radius)
+- **Default:** Uppercase, high-tracking labels in frost tones for quick scan
+- **Hover / Focus:** Shift to red accents (`#ef4444` / light red variants) with quick color transitions
+- **Structure:** Footer and section rails use thin neutral borders rather than boxed containers
 
 ### Hero Wordmark Block
-- **Shape:** Open composition, no container box
-- **Primary Line:** Bold display in Space Grotesk, tightly tracked and compressed
-- **Secondary Line:** Thin sans contrast line with matched scale and compressed offset
-- **Support Line:** Split metadata row with byline underline to establish authorship
+- **Shape:** Open composition, no container shell
+- **Primary Line:** Bold display with compressed line-height and subtle cement glow treatment
+- **Secondary Line:** Thin uppercase contrast line at matched scale
+- **Support Line:** Metadata row mixing uppercase system copy and lighter byline
 
-### Status Marker
-- **Style:** 8px square red indicator with soft halo
-- **Role:** Signals live presence adjacent to year stamp
-- **Constraint:** Never scales above label density
+### About Narrative Rail
+- **Style:** Vertical progress line with three dots, active state brightens and slightly scales
+- **State:** Scroll-linked scale and opacity changes, reduced-motion fallback to static states
+- **Constraint:** Rail remains peripheral, never competing with quote content
 
-### Image Stage
-- **Background:** Full-bleed portrait, grayscale with brightness and contrast tuning
-- **Overlay:** Radial vignette for center focus
-- **Blend Strategy:** Foreground content uses difference blending to stay legible over image variance
+### Figure Frame
+- **Style:** Single framed image with restrained border, thin inset rule, and one structural shadow
+- **Role:** Human credibility anchor between hero positioning and narrative quote section
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** keep red as a sparse directional signal (`#ef4444` / `#dc2626`), not a broad surface fill.
-- **Do** preserve the recruiter-speed hierarchy with oversized hero language and tracked micro-labels.
-- **Do** maintain strong narrative ordering: identity first, context second, directional statement last.
-- **Do** respect reduced-motion preferences when extending animations beyond current reveal choreography.
+- **Do** preserve the dark-to-light narrative progression when adding new sections.
+- **Do** keep red usage sparse and intentional, mostly for directional or state cues.
+- **Do** maintain recruiter-speed hierarchy with very large display lines and concise metadata.
+- **Do** honor reduced-motion behavior for all scroll-linked animation systems.
 
 ### Don't:
-- **Don't** design this like a generic SaaS product or app landing page.
-- **Don't** use feature-marketing patterns that feel corporate-template heavy.
-- **Don't** replace personal storytelling with product-style conversion blocks.
-- **Don't** introduce side-stripe accents, gradient text, or interchangeable icon-card grids that dilute the current voice.
+- **Don't** revert this into a generic SaaS landing pattern or feature grid architecture.
+- **Don't** add decorative gradient text, side-stripe accents, or nested card stacks.
+- **Don't** flood neutral surfaces with high-chroma accent color.
+- **Don't** replace narrative sequencing with conversion-led UI blocks.

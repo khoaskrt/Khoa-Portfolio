@@ -1,12 +1,68 @@
 @layer utilities {
   .about-shell {
+    --about-orb-size: clamp(320px, 41vw, 620px);
+    --about-orb-top: clamp(-96px, -8vw, -42px);
     background: linear-gradient(
       180deg,
-      oklch(0.115 0.012 255 / 0.96) 0%,
+      oklch(0.112 0.012 255 / 0.55) 0%,
+      oklch(0.114 0.012 255 / 0.9) 18%,
       oklch(0.105 0.013 254 / 0.98) 62%,
       oklch(0.1 0.012 253 / 1) 100%
     );
-    border-top: 1px solid rgb(255 255 255 / 0.08);
+  }
+
+  .about-flow-bg {
+    background:
+      radial-gradient(circle at 78% 22%, rgb(255 255 255 / 0.02), transparent 36%),
+      radial-gradient(circle at 86% 66%, rgb(255 255 255 / 0.012), transparent 40%);
+  }
+
+  .about-flow-orb {
+    position: absolute;
+    right: clamp(-240px, -16vw, -112px);
+    width: var(--about-orb-size);
+    aspect-ratio: 1 / 1;
+    border-radius: 999px;
+    border: 1px solid rgb(255 255 255 / 0.05);
+    background: radial-gradient(circle at 34% 28%, rgb(255 255 255 / 0.05), rgb(8 10 14 / 0.9) 58%, rgb(4 6 10 / 0.96) 100%);
+    box-shadow:
+      inset 0 0 80px rgb(255 255 255 / 0.02),
+      0 16px 80px rgb(0 0 0 / 0.38);
+    opacity: 0.92;
+    will-change: transform;
+  }
+
+  .about-flow-orb-one {
+    top: var(--about-orb-top);
+  }
+
+  .about-flow-orb-two {
+    top: calc(var(--about-orb-top) + var(--about-orb-size) - 2px);
+  }
+
+  .about-flow-orb-three {
+    top: calc(var(--about-orb-top) + var(--about-orb-size) * 2 - 4px);
+  }
+
+  .about-rail-dot {
+    height: 0.625rem;
+    width: 0.625rem;
+    border-radius: 999px;
+    border: 1px solid rgb(255 255 255 / 0.34);
+    background: rgb(255 255 255 / 0.34);
+    box-shadow: 0 0 0 rgb(255 255 255 / 0);
+    transition:
+      background-color 260ms ease-out,
+      border-color 260ms ease-out,
+      box-shadow 260ms ease-out,
+      transform 260ms ease-out;
+  }
+
+  .about-rail-dot.is-active {
+    border-color: rgb(255 255 255 / 0.72);
+    background: rgb(255 255 255 / 0.9);
+    box-shadow: 0 0 10px rgb(255 255 255 / 0.3);
+    transform: scale(1.04);
   }
 
   .safe-area-pad {
@@ -59,11 +115,95 @@
   }
 
   .about-reading-glow {
-    color: rgb(241 246 252 / 0.92);
-    text-shadow:
-      0 0 12px rgb(255 255 255 / 0.22),
-      0 0 4px rgb(255 255 255 / 0.14),
-      0 1px 0 rgb(255 255 255 / 0.2);
-    filter: brightness(1.03) contrast(1.08);
+    color: rgb(132 132 132 / 0.92);
+    text-shadow: none;
+    filter: none;
+  }
+
+  .about-copy-wrap {
+    position: relative;
+    padding-inline: clamp(1rem, 3vw, 2rem);
+    display: grid;
+    justify-items: center;
+  }
+
+  .about-quote-stage {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    column-gap: clamp(0.45rem, 0.9vw, 0.9rem);
+    width: min(100%, clamp(18.5rem, 44vw, 35rem));
+  }
+
+  .about-quote-mark {
+    display: block;
+    transform: translateY(clamp(-0.55rem, -0.8vw, -0.25rem));
+    color: rgb(255 255 255 / 0.44);
+    font-family: var(--font-quote);
+    font-size: clamp(2.7rem, 5.2vw, 4.4rem);
+    font-weight: 500;
+    line-height: 0.7;
+    letter-spacing: -0.06em;
+  }
+
+  .about-quote-copy {
+    font-family: var(--font-quote);
+    color: rgb(237 243 250 / 0.96);
+    text-wrap: balance;
+  }
+
+  .about-quote-copy span {
+    margin-bottom: 0.05em;
+  }
+
+  .about-transition-note {
+    position: absolute;
+    right: 50%;
+    transform: translateX(50%);
+    bottom: clamp(8.2rem, 11vw, 12.2rem);
+    max-width: 31ch;
+    color: rgb(235 241 248 / 0.55);
+    font-family: var(--font-quote);
+    font-size: clamp(0.9rem, 1.1vw, 1.2rem);
+    font-weight: 400;
+    line-height: 1.25;
+    text-align: right;
+    letter-spacing: 0.01em;
+  }
+
+  @media (max-width: 1023px) {
+    .about-quote-mark {
+      transform: translateY(clamp(-0.45rem, -0.8vw, -0.18rem));
+      font-size: clamp(2.25rem, 7vw, 3.4rem);
+    }
+
+    .about-transition-note {
+      right: 50%;
+      transform: translateX(50%);
+      bottom: clamp(5.4rem, 12vw, 8rem);
+      max-width: 25ch;
+      font-size: clamp(0.82rem, 2.2vw, 1rem);
+    }
+  }
+
+  @media (max-width: 767px) {
+    .about-shell {
+      --about-orb-size: clamp(274px, 86vw, 430px);
+      --about-orb-top: clamp(-88px, -16vw, -28px);
+    }
+
+    .about-quote-stage {
+      column-gap: clamp(0.38rem, 1.1vw, 0.66rem);
+    }
+
+    .about-flow-orb {
+      right: clamp(-190px, -36vw, -94px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .about-flow-orb {
+      transform: none !important;
+    }
   }
 }
