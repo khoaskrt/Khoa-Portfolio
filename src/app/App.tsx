@@ -8,13 +8,14 @@ import { WorkExperienceSection } from '../sections/work-experience/WorkExperienc
 export default function App() {
   const prefersReducedMotion = useReducedMotion();
   const [workRevealReady, setWorkRevealReady] = useState(prefersReducedMotion);
+  const [transitionProgress, setTransitionProgress] = useState(prefersReducedMotion ? 1 : 0);
 
   return (
     <>
       <HeroSection />
-      <AboutSection />
-      <DarkToLightTransition onRevealReadyChange={setWorkRevealReady} />
-      <WorkExperienceSection revealReady={workRevealReady} />
+      <AboutSection transitionProgress={transitionProgress} />
+      <DarkToLightTransition onRevealReadyChange={setWorkRevealReady} onProgressChange={setTransitionProgress} />
+      <WorkExperienceSection revealReady={workRevealReady} transitionProgress={transitionProgress} />
     </>
   );
 }

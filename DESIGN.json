@@ -1,153 +1,192 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-05-02T21:58:00+07:00",
+  "generatedAt": "2026-05-03T09:20:27Z",
   "title": "Design System: Sales School Landing Page",
   "extensions": {
     "colorMeta": {
-      "base-black": {
+      "night-base": {
         "role": "neutral",
-        "displayName": "Black Field",
-        "canonical": "oklch(0.00 0 0)",
-        "tonalRamp": ["oklch(0.18 0.005 250)", "oklch(0.28 0.005 250)", "oklch(0.38 0.005 250)", "oklch(0.48 0.005 250)", "oklch(0.58 0.005 250)", "oklch(0.68 0.005 250)", "oklch(0.80 0.005 250)", "oklch(0.92 0.005 250)"]
+        "displayName": "Night Base",
+        "canonical": "oklch(0.1 0.012 253)",
+        "tonalRamp": [
+          "oklch(0.15 0.012 253)",
+          "oklch(0.24 0.012 253)",
+          "oklch(0.33 0.012 253)",
+          "oklch(0.42 0.012 253)",
+          "oklch(0.51 0.012 253)",
+          "oklch(0.66 0.011 253)",
+          "oklch(0.8 0.009 253)",
+          "oklch(0.94 0.006 253)"
+        ]
       },
-      "base-white": {
+      "day-surface": {
         "role": "neutral",
-        "displayName": "White Voice",
-        "canonical": "oklch(1 0 0)",
-        "tonalRamp": ["oklch(0.15 0.005 250)", "oklch(0.26 0.005 250)", "oklch(0.37 0.005 250)", "oklch(0.48 0.005 250)", "oklch(0.59 0.005 250)", "oklch(0.70 0.005 250)", "oklch(0.82 0.005 250)", "oklch(0.95 0.005 250)"]
+        "displayName": "Day Surface",
+        "canonical": "oklch(0.93 0.005 255)",
+        "tonalRamp": [
+          "oklch(0.16 0.01 255)",
+          "oklch(0.27 0.01 255)",
+          "oklch(0.38 0.009 255)",
+          "oklch(0.49 0.008 255)",
+          "oklch(0.6 0.007 255)",
+          "oklch(0.72 0.006 255)",
+          "oklch(0.83 0.005 255)",
+          "oklch(0.93 0.005 255)"
+        ]
       },
       "signal-red": {
         "role": "primary",
         "displayName": "Decision Red",
-        "canonical": "oklch(0.64 0.23 25)",
-        "tonalRamp": ["oklch(0.22 0.12 25)", "oklch(0.30 0.15 25)", "oklch(0.38 0.17 25)", "oklch(0.47 0.19 25)", "oklch(0.56 0.21 25)", "oklch(0.66 0.23 25)", "oklch(0.76 0.18 25)", "oklch(0.90 0.08 25)"]
-      },
-      "signal-red-deep": {
-        "role": "secondary",
-        "displayName": "Signal Core Red",
-        "canonical": "oklch(0.58 0.22 25)",
-        "tonalRamp": ["oklch(0.20 0.11 25)", "oklch(0.28 0.13 25)", "oklch(0.36 0.15 25)", "oklch(0.44 0.18 25)", "oklch(0.52 0.20 25)", "oklch(0.60 0.22 25)", "oklch(0.74 0.16 25)", "oklch(0.88 0.07 25)"]
+        "canonical": "#ef4444",
+        "tonalRamp": [
+          "oklch(0.25 0.06 23)",
+          "oklch(0.34 0.09 23)",
+          "oklch(0.43 0.12 23)",
+          "oklch(0.52 0.16 23)",
+          "oklch(0.61 0.19 23)",
+          "oklch(0.7 0.16 23)",
+          "oklch(0.81 0.11 23)",
+          "oklch(0.92 0.05 23)"
+        ]
       }
     },
     "typographyMeta": {
       "display": {
         "displayName": "Display",
-        "purpose": "Hero statement words and first-glance identity."
+        "purpose": "Hero and wall headlines with compressed authority."
       },
       "body": {
         "displayName": "Body",
-        "purpose": "Support labels and contextual narrative text."
+        "purpose": "Readable recruiter-speed supporting copy."
       },
       "label": {
         "displayName": "Label",
-        "purpose": "Uppercase utility metadata and navigation markers."
+        "purpose": "Uppercase tactical metadata and navigation."
       }
     },
     "shadows": [
       {
         "name": "signal-halo",
-        "value": "0 0 10px rgba(220,38,38,0.5)",
-        "purpose": "Operational glow around status marker."
+        "value": "0 0 10px rgb(255 255 255 / 0.3)",
+        "purpose": "Active rail-dot emphasis."
+      },
+      {
+        "name": "frame-depth",
+        "value": "0 16px 42px rgb(0 0 0 / 0.42)",
+        "purpose": "About image grounding."
+      },
+      {
+        "name": "orb-ambient",
+        "value": "0 16px 80px rgb(0 0 0 / 0.38)",
+        "purpose": "Background orb separation."
       }
     ],
     "motion": [
       {
-        "name": "hero-ease",
+        "name": "ease-standard",
         "value": "cubic-bezier(0.22, 1, 0.36, 1)",
-        "purpose": "Primary reveal easing for staged hero elements."
+        "purpose": "Default reveal and hover easing."
       },
       {
-        "name": "hero-duration",
-        "value": "0.8s",
-        "purpose": "Standard timing for line-item entrance transitions."
+        "name": "ease-list-reveal",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Work experience row stagger reveal."
       }
     ],
     "breakpoints": [
       {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
         "name": "md",
         "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
       }
     ]
   },
   "components": [
     {
-      "name": "Primary Navigation Link",
+      "name": "Nav Link",
       "kind": "nav",
       "refersTo": "nav-link-default",
-      "description": "High-tracking uppercase footer navigation link with sparse red hover response.",
-      "html": "<a class=\"ds-nav-link\" href=\"#\">BEGIN</a>",
-      "css": ".ds-nav-link { color: #ffffff; text-transform: uppercase; letter-spacing: 0.4em; font-family: Outfit, ui-sans-serif, system-ui, sans-serif; font-size: 12px; font-weight: 300; text-decoration: none; transition: color 240ms cubic-bezier(0.22, 1, 0.36, 1); } .ds-nav-link:hover { color: #ef4444; } .ds-nav-link:focus-visible { outline: 1px solid #ef4444; outline-offset: 4px; color: #ef4444; }"
+      "description": "Uppercase rail navigation with sparse red hover signal.",
+      "html": "<a class=\"ds-nav-link\" href=\"#work-experience\">Work Experience</a>",
+      "css": ".ds-nav-link { color: #f5f8fc; text-transform: uppercase; letter-spacing: 0.2em; font-family: Outfit, ui-sans-serif, system-ui, sans-serif; font-size: 12px; font-weight: 300; text-decoration: none; transition: color 240ms cubic-bezier(0.22, 1, 0.36, 1), opacity 240ms cubic-bezier(0.22, 1, 0.36, 1); opacity: 0.9; } .ds-nav-link:hover { color: #ef4444; opacity: 1; } .ds-nav-link:focus-visible { outline: 1px solid #ef4444; outline-offset: 4px; color: #ef4444; opacity: 1; }"
     },
     {
-      "name": "Signal Status Dot",
-      "kind": "custom",
-      "refersTo": "status-dot",
-      "description": "Compact presence indicator paired with timeline metadata.",
-      "html": "<span class=\"ds-status-dot\" aria-hidden=\"true\"></span>",
-      "css": ".ds-status-dot { display: inline-block; width: 8px; height: 8px; background: #dc2626; box-shadow: 0 0 10px rgba(220,38,38,0.5); }"
-    },
-    {
-      "name": "Hero Wordmark",
-      "kind": "custom",
-      "refersTo": "nav-link-default",
-      "description": "Two-line hero lockup with heavy display and thin counterpart line.",
-      "html": "<div class=\"ds-wordmark\"><h1 class=\"ds-wordmark-main\">SALES</h1><h2 class=\"ds-wordmark-sub\">SCHOOL</h2></div>",
-      "css": ".ds-wordmark { text-align: right; } .ds-wordmark-main { margin: 0; color: #ffffff; font-family: \"Space Grotesk\", sans-serif; font-size: clamp(3.5rem, 15vw, 12rem); line-height: 0.8; letter-spacing: -0.02em; font-weight: 700; text-transform: uppercase; } .ds-wordmark-sub { margin: -0.12em 0 0; color: #ffffff; font-family: Outfit, ui-sans-serif, system-ui, sans-serif; font-size: clamp(3.5rem, 15vw, 12rem); line-height: 0.8; letter-spacing: 0.16em; font-weight: 300; text-transform: uppercase; }"
-    },
-    {
-      "name": "Primary Button",
+      "name": "Hero CTA",
       "kind": "button",
-      "refersTo": "nav-link-default",
-      "description": "Synthesized canonical CTA aligned to the existing monochrome-plus-red language.",
-      "html": "<button class=\"ds-btn-primary\">Start Session</button>",
-      "css": ".ds-btn-primary { border: 1px solid rgba(255,255,255,0.3); background: transparent; color: #ffffff; font-family: Outfit, ui-sans-serif, system-ui, sans-serif; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 500; padding: 12px 20px; transition: color 220ms cubic-bezier(0.22, 1, 0.36, 1), border-color 220ms cubic-bezier(0.22, 1, 0.36, 1), transform 220ms cubic-bezier(0.22, 1, 0.36, 1); } .ds-btn-primary:hover { color: #ef4444; border-color: #ef4444; transform: translateY(-1px); } .ds-btn-primary:focus-visible { outline: 1px solid #ef4444; outline-offset: 4px; } .ds-btn-primary:active { transform: translateY(0); }"
+      "refersTo": "hero-cta-default",
+      "description": "Ghost CTA for dark hero context with touch-safe sizing.",
+      "html": "<button class=\"ds-hero-cta\" type=\"button\">Contact</button>",
+      "css": ".ds-hero-cta { min-height: 44px; border: 1px solid #ffffff73; background: #ffffff1a; color: #f5f8fc; font-family: Outfit, ui-sans-serif, system-ui, sans-serif; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 500; padding: 8px 16px; cursor: pointer; transition: color 220ms cubic-bezier(0.22, 1, 0.36, 1), border-color 220ms cubic-bezier(0.22, 1, 0.36, 1); } .ds-hero-cta:hover { color: #fca5a5; border-color: #ef4444; } .ds-hero-cta:focus-visible { outline: 1px solid #ef4444; outline-offset: 4px; border-color: #ef4444; } .ds-hero-cta:active { color: #fca5a5; }"
     },
     {
-      "name": "Text Input",
-      "kind": "input",
-      "refersTo": "nav-link-default",
-      "description": "Synthesized text field for future form modules, preserving the current visual language.",
-      "html": "<label class=\"ds-input-wrap\">Email<input class=\"ds-input\" type=\"email\" placeholder=\"name@company.com\" /></label>",
-      "css": ".ds-input-wrap { display: grid; gap: 8px; color: #ffffff; font-family: Outfit, ui-sans-serif, system-ui, sans-serif; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; } .ds-input { width: 100%; border: 1px solid rgba(255,255,255,0.3); background: transparent; color: #ffffff; font-family: Outfit, ui-sans-serif, system-ui, sans-serif; font-size: 14px; letter-spacing: 0.04em; padding: 12px 14px; transition: border-color 220ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 220ms cubic-bezier(0.22, 1, 0.36, 1); } .ds-input::placeholder { color: rgba(255,255,255,0.55); } .ds-input:hover { border-color: rgba(255,255,255,0.5); } .ds-input:focus-visible { outline: none; border-color: #ef4444; box-shadow: 0 0 0 1px #ef4444; }"
+      "name": "About Rail Dot",
+      "kind": "chip",
+      "refersTo": "status-dot-active",
+      "description": "Progress marker for narrative rail with active emphasis.",
+      "html": "<span class=\"ds-rail-dot\" aria-hidden=\"true\"></span> <span class=\"ds-rail-dot ds-rail-dot-active\" aria-hidden=\"true\"></span>",
+      "css": ".ds-rail-dot { display: inline-block; width: 10px; height: 10px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.34); background: rgba(255,255,255,0.34); margin-right: 8px; transition: background-color 260ms ease-out, border-color 260ms ease-out, transform 260ms ease-out, box-shadow 260ms ease-out; } .ds-rail-dot-active { border-color: rgba(255,255,255,0.72); background: rgba(255,255,255,0.9); box-shadow: 0 0 10px rgba(255,255,255,0.3); transform: scale(1.04); }"
+    },
+    {
+      "name": "Work Experience Item",
+      "kind": "custom",
+      "refersTo": "day-surface",
+      "description": "Two-column role row optimized for readability and overflow resilience.",
+      "html": "<article class=\"ds-work-item\"><p class=\"ds-work-years\">Q1/2025 - Today</p><div><h3 class=\"ds-work-title\">BizOps Manager</h3><p class=\"ds-work-company\">Basal Pay by AlphaTrue</p></div></article>",
+      "css": ".ds-work-item { display: grid; grid-template-columns: 112px minmax(0,1fr); gap: 16px; color: oklch(0.12 0.01 255); background: transparent; } .ds-work-years { margin: 0; padding-top: 2px; font-family: Outfit, ui-sans-serif, system-ui, sans-serif; font-size: clamp(0.98rem,1.1vw,1.2rem); font-weight: 300; line-height: 1.2; letter-spacing: 0.02em; color: oklch(0.42 0.01 255); overflow-wrap: anywhere; } .ds-work-title { margin: 0; font-family: Outfit, ui-sans-serif, system-ui, sans-serif; font-size: clamp(1.34rem,1.62vw,1.92rem); font-weight: 600; line-height: 1.1; letter-spacing: -0.02em; color: oklch(0.14 0.01 255); overflow-wrap: anywhere; } .ds-work-company { margin: 4px 0 0; font-family: Outfit, ui-sans-serif, system-ui, sans-serif; font-size: clamp(1.1rem,1.38vw,1.5rem); font-weight: 300; line-height: 1.16; letter-spacing: -0.01em; color: oklch(0.31 0.01 255); overflow-wrap: anywhere; } @media (min-width: 640px) { .ds-work-item { grid-template-columns: 128px minmax(0,1fr); gap: 20px; } }"
+    },
+    {
+      "name": "Transition Band",
+      "kind": "custom",
+      "refersTo": "day-surface",
+      "description": "Dark-to-light chapter bridge with centerline and widening panel.",
+      "html": "<section class=\"ds-transition\" aria-hidden=\"true\"><span class=\"ds-transition-line\"></span><span class=\"ds-transition-panel\"></span></section>",
+      "css": ".ds-transition { position: relative; min-height: 384px; max-height: 614px; height: clamp(24rem,65dvh,38.4rem); overflow: hidden; background: oklch(0.1 0.012 253); } .ds-transition-line { position: absolute; left: 50%; top: 0; width: 1px; height: 100%; transform: translateX(-50%); background: oklch(0.94 0.01 255); opacity: 0.84; } .ds-transition-panel { position: absolute; inset-block: 0; left: 50%; width: 150vw; transform: translateX(-50%); background: oklch(0.93 0.005 255); }"
     }
   ],
   "narrative": {
-    "northStar": "The Decision Room",
-    "overview": "This system stages a single cinematic moment, a high-contrast portrait where typography carries authority and pacing does the persuasion. The aesthetic is intentionally sparse, but not passive. Visual weight is concentrated in oversized wordmarks, disciplined uppercase micro-labels, and one load-bearing accent that signals intent.\n\nThe experience is built for recruiter-speed scanning and leadership signaling, not feature marketing. Content appears in a calm sequence, then resolves into a clear directional statement. The overall voice is confident, strategic, and operations-minded, with no decorative detours.\n\nThe system explicitly rejects the anti-references in PRODUCT.md: generic SaaS product styling, corporate-template feature blocks, and conversion-led marketing patterns that bury personal narrative.",
+    "northStar": "The Decision Room to Debrief Archive",
+    "overview": "This system moves through a controlled narrative arc, a command-like dark hero where identity is asserted, then a measured transition into a light work-history surface where evidence is read. Motion is structural, not decorative, and now favors compositor-safe transforms for smoother scroll behavior.\n\nThe experience is built for recruiter-speed scanning and leadership signaling, not feature marketing. Visual density is concentrated where decisions matter, then relaxed for factual sections. This system explicitly rejects PRODUCT.md anti-references: generic SaaS styling, conversion-heavy template blocks, and product-feature storytelling.",
     "keyCharacteristics": [
-      "Cinematic monochrome field with sparse red signaling",
-      "Display-led hierarchy with compressed vertical rhythm",
+      "Two-phase palette, night-to-day progression tied to narrative flow",
+      "Display-led hierarchy with compressed hero lines and breathable body passages",
       "Uppercase metadata language for tactical clarity",
-      "Motion used for reveal and emphasis, never flourish"
+      "Motion as staged sequencing with reduced paint-heavy effects"
     ],
     "rules": [
       {
         "name": "The Signal Scarcity Rule",
-        "body": "Red remains rare and intentional. If red becomes background fill or broad decorative wash, hierarchy collapses.",
+        "body": "Red stays sparse and directional. If red becomes a dominant background treatment, the narrative hierarchy collapses.",
         "section": "colors"
       },
       {
         "name": "The Compression Rule",
-        "body": "Hero line-height stays compressed at 0.8 so language feels cut from one block, not stacked as separate banners.",
+        "body": "Hero display lines remain tightly set so statements feel like one decisive block, not stacked banners.",
         "section": "typography"
       },
       {
         "name": "The Flat Surface Rule",
-        "body": "Surfaces remain visually flat at rest. Depth cues appear through overlays and controlled contrast, not container elevation.",
+        "body": "Most surfaces stay flat at rest. Elevation appears only to indicate progression or anchor key imagery.",
         "section": "elevation"
       }
     ],
     "dos": [
-      "Do keep red as a sparse directional signal (#ef4444 / #dc2626), not a broad surface fill.",
-      "Do preserve the recruiter-speed hierarchy with oversized hero language and tracked micro-labels.",
-      "Do maintain strong narrative ordering: identity first, context second, directional statement last.",
-      "Do respect reduced-motion preferences when extending animations beyond current reveal choreography."
+      "Do preserve the dark-to-light narrative progression when adding new sections.",
+      "Do keep red usage sparse and intentional, mostly for directional or state cues.",
+      "Do maintain recruiter-speed hierarchy with very large display lines and concise metadata.",
+      "Do honor reduced-motion behavior and compositor-friendly motion properties."
     ],
     "donts": [
       "Don't design this like a generic SaaS product or app landing page.",
       "Don't use feature-marketing patterns that feel corporate-template heavy.",
-      "Don't replace personal storytelling with product-style conversion blocks.",
-      "Don't introduce side-stripe accents, gradient text, or interchangeable icon-card grids that dilute the current voice."
+      "Don't replace personal storytelling with conversion-led product blocks.",
+      "Don't add decorative gradient text, side-stripe accents, or nested card stacks."
     ]
   }
 }

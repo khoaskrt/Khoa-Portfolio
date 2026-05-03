@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import khoaLogo from '../../assets/brand/khoa-logo.svg';
-import heroPortrait from '../../assets/images/hero-portrait.png';
+import heroPortrait from '../../assets/images/hero-portrait.jpg';
 import { heroContent } from './content';
 import { containerVariants, itemVariants } from './motion';
 
@@ -23,6 +23,7 @@ export function HeroSection() {
           src={heroPortrait}
           alt={heroContent.portraitAlt}
           className="h-full w-full object-cover grayscale brightness-75 contrast-110"
+          fetchPriority="high"
         />
         <div className="absolute inset-0 bg-radial-[circle_at_center,_transparent_0%,_rgba(0,0,0,0.4)_100%]" />
       </motion.div>
@@ -81,13 +82,13 @@ export function HeroSection() {
             variants={itemVariants}
             className="flex min-h-11 flex-wrap items-center justify-center gap-x-5 gap-y-3 border-t border-white/10 pt-5 text-[10px] font-light uppercase tracking-[0.18em] sm:justify-between sm:pt-6 sm:text-[11px] sm:tracking-[0.24em] md:text-[13px] md:tracking-[0.32em]"
           >
-            <div className="cursor-pointer transition-colors hover:text-red-400">
+            <div className="transition-colors">
               <span className="text-red-500">[</span> {heroContent.footerWords[0]}
             </div>
-            <div className="cursor-pointer transition-colors hover:text-red-400">{heroContent.footerWords[1]}</div>
+            <div className="transition-colors">{heroContent.footerWords[1]}</div>
             <div className="hidden opacity-85 md:block">{heroContent.footerWords[2]}</div>
             <div className="hidden opacity-85 md:block">{heroContent.footerWords[3]}</div>
-            <div className="cursor-pointer transition-colors hover:text-red-400">
+            <div className="transition-colors">
               {heroContent.footerWords[4]} <span className="text-red-500">]</span>
             </div>
           </motion.nav>

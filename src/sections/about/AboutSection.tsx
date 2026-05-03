@@ -4,7 +4,11 @@ import aboutUsImage from '../../assets/images/aboutus_image.JPG';
 import { aboutContent } from './content';
 import { aboutContainerVariants, aboutItemVariants } from './motion';
 
-export function AboutSection() {
+type AboutSectionProps = {
+  transitionProgress?: number;
+};
+
+export function AboutSection({ transitionProgress = 0 }: AboutSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const narrativeRef = useRef<HTMLElement>(null);
   const prefersReducedMotion = useReducedMotion();
@@ -39,6 +43,9 @@ export function AboutSection() {
 
   const introSentence = descriptionLines[0] ?? '';
   const quoteLines = descriptionLines.slice(1);
+  const transitionFadeProgress = Math.min(Math.max((transitionProgress - 0.5) / 0.36, 0), 1);
+  const aboutOrnamentOpacity = prefersReducedMotion ? 1 : 1 - transitionFadeProgress * 0.88;
+  const aboutRailOpacity = prefersReducedMotion ? 1 : 1 - transitionFadeProgress * 0.7;
 
   useMotionValueEvent(scrollYProgress, 'change', (latest) => {
     if (latest < 0.33) {
@@ -56,13 +63,17 @@ export function AboutSection() {
     <motion.section
       id={aboutContent.id}
       ref={sectionRef}
-      className="about-shell relative isolate min-h-[135vh] overflow-hidden px-4 pt-12 pb-36 sm:min-h-[145vh] sm:px-6 sm:pt-16 sm:pb-44 md:min-h-[152vh] md:px-10 md:pb-52 lg:min-h-[162vh] lg:px-12 lg:pt-20 lg:pb-64"
+      className="about-shell relative isolate z-[var(--z-about)] min-h-[135vh] overflow-hidden px-4 pt-12 pb-36 sm:min-h-[145vh] sm:px-6 sm:pt-16 sm:pb-44 md:min-h-[152vh] md:px-10 md:pb-52 lg:min-h-[162vh] lg:px-12 lg:pt-20 lg:pb-64"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.2 }}
       variants={aboutContainerVariants}
     >
-      <div aria-hidden="true" className="about-flow-bg pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+      <div
+        aria-hidden="true"
+        className="about-flow-bg pointer-events-none absolute inset-0 -z-10 overflow-hidden"
+        style={{ opacity: aboutOrnamentOpacity }}
+      >
         <motion.div className="about-flow-orb about-flow-orb-one" style={{ y: prefersReducedMotion ? 0 : orbOneY }} />
         <motion.div className="about-flow-orb about-flow-orb-two" style={{ y: prefersReducedMotion ? 0 : orbTwoY }} />
         <motion.div className="about-flow-orb about-flow-orb-three" style={{ y: prefersReducedMotion ? 0 : orbThreeY }} />
@@ -71,6 +82,7 @@ export function AboutSection() {
       <aside
         aria-label="About section progress"
         className="pointer-events-none absolute top-1/2 right-2 z-30 hidden -translate-y-1/2 items-center gap-3 md:flex lg:right-4"
+        style={{ opacity: aboutRailOpacity }}
       >
         <div className="relative h-[16.5rem] w-[2px] overflow-hidden rounded-full bg-white/24 lg:h-[19rem]">
           <span className="absolute -top-1 left-1/2 h-[5px] w-[5px] -translate-x-1/2 rounded-full bg-white/45" />
@@ -153,10 +165,16 @@ export function AboutSection() {
         </div>
       </motion.article>
 
-      <span className="pointer-events-none absolute left-6 top-24 text-[150px] font-light leading-none text-white/30 lg:left-8 lg:top-20">
+      <span
+        className="pointer-events-none absolute left-6 top-24 text-[150px] font-light leading-none text-white/30 lg:left-8 lg:top-20"
+        style={{ opacity: aboutOrnamentOpacity }}
+      >
         [
       </span>
-      <span className="pointer-events-none absolute bottom-24 right-6 text-[150px] font-light leading-none text-white/30 lg:bottom-20 lg:right-8">
+      <span
+        className="pointer-events-none absolute bottom-24 right-6 text-[150px] font-light leading-none text-white/30 lg:bottom-20 lg:right-8"
+        style={{ opacity: aboutOrnamentOpacity }}
+      >
         ]
       </span>
 

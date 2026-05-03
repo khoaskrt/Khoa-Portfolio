@@ -5,6 +5,16 @@
 }
 
 @layer base {
+  :root {
+    --z-bg: 0;
+    --z-about: 10;
+    --z-transition: 20;
+    --z-work: 30;
+    --z-ui: 40;
+    --transition-line-color: oklch(0.94 0.01 255);
+    --transition-line-glow: 0 0 14px rgb(255 255 255 / 0.28);
+  }
+
   body {
     @apply bg-black text-white;
   }
