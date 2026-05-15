@@ -26,14 +26,14 @@ export function AboutSection({ transitionProgress = 0 }: AboutSectionProps) {
     offset: ['start 82%', 'end 24%'],
   });
 
-  const orbOneY = useTransform(sectionProgress, [0, 1], [48, -44]);
-  const orbTwoY = useTransform(sectionProgress, [0, 1], [48, -44]);
-  const orbThreeY = useTransform(sectionProgress, [0, 1], [48, -44]);
-  const railProgress = useTransform(railSectionProgress, [0, 1], [0, 1]);
-  const introOpacity = useTransform(sectionProgress, [0, 0.18, 0.42], [0.88, 0.88, 0]);
-  const introY = useTransform(sectionProgress, [0, 0.42], [0, -24]);
-  const quoteOpacity = useTransform(sectionProgress, [0.24, 0.52], [0, 1]);
-  const quoteY = useTransform(sectionProgress, [0.24, 0.52], [40, 0]);
+  const orbOneY = useTransform(sectionProgress, [0, 1], [40, -36]);
+  const orbTwoY = useTransform(sectionProgress, [0, 1], [52, -48]);
+  const orbThreeY = useTransform(sectionProgress, [0, 1], [32, -28]);
+  const railProgress = useTransform(railSectionProgress, [0.05, 0.95], [0, 1]);
+  const introOpacity = useTransform(sectionProgress, [0, 0.16, 0.38, 0.48], [0.88, 0.88, 0.2, 0]);
+  const introY = useTransform(sectionProgress, [0, 0.48], [0, -20]);
+  const quoteOpacity = useTransform(sectionProgress, [0.22, 0.48], [0, 1]);
+  const quoteY = useTransform(sectionProgress, [0.22, 0.52], [32, 0]);
 
   const descriptionLines = aboutContent.description
     .split('. ')
@@ -101,7 +101,7 @@ export function AboutSection({ transitionProgress = 0 }: AboutSectionProps) {
 
       <header className="mx-auto flex min-h-11 w-full max-w-[1200px] items-center justify-between gap-4 text-[11px] font-light uppercase tracking-[0.16em] text-white/86 sm:text-[12px] sm:tracking-[0.2em] md:text-[13px] md:tracking-[0.24em]">
         <span className="whitespace-nowrap">{aboutContent.eyebrow}</span>
-        <a href="#hero" className="inline-flex min-h-11 items-center px-3 transition-colors hover:text-red-300 sm:px-4">
+        <a href="#hero" className="inline-flex min-h-11 items-center px-3 transition-colors duration-200 ease-[cubic-bezier(0.25,1,0.5,1)] hover:text-red-300 sm:px-4">
           Back to top
         </a>
       </header>
@@ -194,25 +194,28 @@ function ReadingLine({ line, index, reducedMotion }: ReadingLineProps) {
   const isLeadLine = index === 0;
   const { scrollYProgress: lineProgress } = useScroll({
     target: lineRef,
-    offset: isLeadLine ? ['start 96%', 'end 22%'] : ['start 78%', 'end 34%'],
+    offset: isLeadLine ? ['start 96%', 'end 18%'] : ['start 82%', 'end 28%'],
   });
   const emphasis = useTransform(
     lineProgress,
-    isLeadLine ? [0, 0.36, 0.44, 0.68, 0.78, 1] : [0, 0.44, 0.52, 0.66, 0.76, 1],
+    isLeadLine ? [0, 0.28, 0.42, 0.62, 0.76, 1] : [0, 0.36, 0.48, 0.62, 0.78, 1],
     [0, 0, 1, 1, 0, 0]
   );
-  const lineColor = useTransform(emphasis, (value) => (value >= 0.5 ? 'rgb(245 245 245)' : 'rgb(122 126 132)'));
+  const lineColor = useTransform(emphasis, [0, 0.3, 0.5, 0.7, 1], [
+    'rgb(122 126 132)',
+    'rgb(122 126 132)',
+    'rgb(245 245 245)',
+    'rgb(245 245 245)',
+    'rgb(122 126 132)',
+  ]);
 
   return (
     <motion.span
       ref={lineRef}
-      className="mb-[0.28em] block last:mb-0"
+      className="mb-[0.28em] block will-change-[color] last:mb-0"
       style={{
-        opacity: 1,
         color: reducedMotion ? 'rgb(235 235 235)' : lineColor,
-        textShadow: 'none',
       }}
-      transition={{ duration: 0.34, ease: [0.2, 1, 0.36, 1] }}
     >
       {line}
     </motion.span>

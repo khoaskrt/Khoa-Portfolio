@@ -26,13 +26,13 @@ export function DarkToLightTransition({ onRevealReadyChange, onProgressChange }:
     offset: ['start 94%', 'end -8%'],
   });
 
-  const lineScaleY = useTransform(scrollYProgress, [0.02, 0.18], [0, 1]);
-  const lineOpacity = useTransform(scrollYProgress, [0, 0.18, 0.62, 0.86], [0.34, 0.86, 0.42, 0]);
-  const panelStart = 0.18;
-  const panelEnd = 0.62;
+  const lineScaleY = useTransform(scrollYProgress, [0.04, 0.22], [0, 1]);
+  const lineOpacity = useTransform(scrollYProgress, [0, 0.14, 0.22, 0.58, 0.82], [0, 0.34, 0.86, 0.42, 0]);
+  const panelStart = 0.16;
+  const panelEnd = 0.64;
   const panelScaleX = useTransform(scrollYProgress, [panelStart, panelEnd], [0, 1.45]);
-  const bridgeOpacity = useTransform(scrollYProgress, [0.5, 0.86], [0.14, 0.92]);
-  const darkFadeOpacity = useTransform(scrollYProgress, [0.5, 0.86], [0.82, 0]);
+  const bridgeOpacity = useTransform(scrollYProgress, [0.46, 0.84], [0.14, 0.92]);
+  const darkFadeOpacity = useTransform(scrollYProgress, [0.46, 0.84], [0.82, 0]);
   const revealOnThreshold = 0.8;
   const revealOffThreshold = 0.72;
   const revealStateRef = useRef(false);

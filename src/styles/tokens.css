@@ -13,9 +13,25 @@
     --z-ui: 40;
     --transition-line-color: oklch(0.94 0.01 255);
     --transition-line-glow: 0 0 14px rgb(255 255 255 / 0.28);
+    --ease-expo-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-quart-out: cubic-bezier(0.25, 1, 0.5, 1);
+    --duration-hover: 200ms;
+    --duration-interaction: 360ms;
+    --duration-fast: 140ms;
   }
 
   body {
     @apply bg-black text-white;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }

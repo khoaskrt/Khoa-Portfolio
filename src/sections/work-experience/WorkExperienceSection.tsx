@@ -1,5 +1,6 @@
 import { AnimatePresence, motion, useInView, useReducedMotion, useScroll, useTransform } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
+import { duration, ease } from '../../motion/easing';
 import { workExperienceContent } from './content';
 
 type WorkExperienceSectionProps = {
@@ -37,12 +38,12 @@ export function WorkExperienceSection({ revealReady = false, transitionProgress 
     offset: ['start 92%', 'end 20%'],
   });
 
-  const headerOpacity = useTransform(scrollYProgress, [0.03, 0.2], [0.1, 1]);
-  const headlineOpacity = useTransform(scrollYProgress, [0.12, 0.4], [0.06, 1]);
-  const listOpacity = useTransform(scrollYProgress, [0.2, 0.6], [0.04, 1]);
-  const headerX = useTransform(scrollYProgress, [0.03, 0.2], [26, 0]);
-  const headlineX = useTransform(scrollYProgress, [0.12, 0.42], [36, 0]);
-  const listX = useTransform(scrollYProgress, [0.2, 0.62], [28, 0]);
+  const headerOpacity = useTransform(scrollYProgress, [0.04, 0.22], [0, 1]);
+  const headlineOpacity = useTransform(scrollYProgress, [0.1, 0.36], [0, 1]);
+  const listOpacity = useTransform(scrollYProgress, [0.18, 0.52], [0, 1]);
+  const headerX = useTransform(scrollYProgress, [0.04, 0.22], [20, 0]);
+  const headlineX = useTransform(scrollYProgress, [0.1, 0.38], [28, 0]);
+  const listX = useTransform(scrollYProgress, [0.18, 0.54], [22, 0]);
 
   const language = typeof document !== 'undefined' ? document.documentElement.lang || undefined : undefined;
   const monthYearFormatter = new Intl.DateTimeFormat(language, {
@@ -131,20 +132,20 @@ export function WorkExperienceSection({ revealReady = false, transitionProgress 
             <motion.li
               key={itemKey}
               className="py-5 sm:py-6"
-              initial={prefersReducedMotion ? false : { opacity: 0, x: 28 }}
-              animate={staggerReady ? { opacity: 1, x: 0 } : prefersReducedMotion ? undefined : { opacity: 0, x: 28 }}
+              initial={prefersReducedMotion ? false : { opacity: 0, x: 22 }}
+              animate={staggerReady ? { opacity: 1, x: 0 } : prefersReducedMotion ? undefined : { opacity: 0, x: 22 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{
-                duration: 0.56,
-                ease: [0.16, 1, 0.3, 1],
-                delay: prefersReducedMotion ? 0 : 0.3 + (1 - transitionUnlockProgress) * 0.12 + 0.1 * index,
+                duration: duration.reveal,
+                ease: ease.expoOut,
+                delay: prefersReducedMotion ? 0 : 0.24 + (1 - transitionUnlockProgress) * 0.1 + 0.08 * index,
               }}
             >
               <button
                 type="button"
                 aria-expanded={isOpen}
                 onClick={() => setActiveRole((prev) => (prev === itemKey ? null : itemKey))}
-                className="grid w-full gap-4 text-left transition-colors duration-300 ease-out focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[oklch(0.28_0.01_255)] sm:gap-6 lg:grid-cols-[1fr_auto]"
+                className="grid w-full gap-4 text-left transition-colors duration-200 ease-[cubic-bezier(0.25,1,0.5,1)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[oklch(0.28_0.01_255)] sm:gap-6 lg:grid-cols-[1fr_auto]"
               >
                 <div className="space-y-2">
                   <h3 className="text-[clamp(1.22rem,1.85vw,2rem)] font-medium leading-[1.1] tracking-[-0.02em] text-[oklch(0.14_0.01_255)] break-words">
@@ -169,7 +170,10 @@ export function WorkExperienceSection({ revealReady = false, transitionProgress 
                     initial={{ gridTemplateRows: '0fr', opacity: 0 }}
                     animate={{ gridTemplateRows: '1fr', opacity: 1 }}
                     exit={{ gridTemplateRows: '0fr', opacity: 0 }}
-                    transition={{ duration: 0.36, ease: [0.16, 1, 0.3, 1] }}
+                    transition={{
+                      gridTemplateRows: { duration: duration.interaction, ease: ease.expoOut },
+                      opacity: { duration: duration.hover, ease: ease.quartOut, delay: 0.06 },
+                    }}
                   >
                     <div className="min-h-0">
                       <div className="space-y-4 pb-2 sm:space-y-5">
@@ -188,7 +192,7 @@ export function WorkExperienceSection({ revealReady = false, transitionProgress 
                               href={link.href}
                               target="_blank"
                               rel="noreferrer"
-                              className="underline decoration-[oklch(0.46_0.01_255)] underline-offset-4 transition-colors duration-300 hover:text-[oklch(0.2_0.01_255)]"
+                              className="underline decoration-[oklch(0.46_0.01_255)] underline-offset-4 transition-colors duration-200 ease-[cubic-bezier(0.25,1,0.5,1)] hover:text-[oklch(0.2_0.01_255)]"
                             >
                               {link.label}
                             </a>

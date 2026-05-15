@@ -52,17 +52,17 @@
     background: rgb(255 255 255 / 0.34);
     box-shadow: 0 0 0 rgb(255 255 255 / 0);
     transition:
-      background-color 260ms ease-out,
-      border-color 260ms ease-out,
-      box-shadow 260ms ease-out,
-      transform 260ms ease-out;
+      background-color var(--duration-hover) var(--ease-quart-out),
+      border-color var(--duration-hover) var(--ease-quart-out),
+      box-shadow var(--duration-interaction) var(--ease-expo-out),
+      transform var(--duration-hover) var(--ease-quart-out);
   }
 
   .about-rail-dot.is-active {
     border-color: rgb(255 255 255 / 0.72);
     background: rgb(255 255 255 / 0.9);
     box-shadow: 0 0 10px rgb(255 255 255 / 0.3);
-    transform: scale(1.04);
+    transform: scale(1.06);
   }
 
   .safe-area-pad {

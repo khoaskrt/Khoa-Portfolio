@@ -1,24 +1,26 @@
+import { duration, ease } from '../../motion/easing';
+
 export const aboutContainerVariants = {
-  hidden: { opacity: 0, y: 24 },
+  hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.8,
-      ease: [0.22, 1, 0.36, 1],
-      staggerChildren: 0.12,
+      duration: duration.entrance,
+      ease: ease.expoOut,
+      staggerChildren: 0.1,
     },
   },
 };
 
 export const aboutItemVariants = {
-  hidden: { opacity: 0, y: 18 },
+  hidden: { opacity: 0, y: 14 },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.6,
-      ease: [0.22, 1, 0.36, 1],
+      duration: duration.reveal,
+      ease: ease.expoOut,
     },
   },
 };
