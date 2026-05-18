@@ -15,19 +15,19 @@ colors:
   border-frost-mid: "#ffffff4d"
 typography:
   display:
-    fontFamily: "Space Grotesk, sans-serif"
+    fontFamily: "Cabinet Grotesk, sans-serif"
     fontSize: "clamp(3.5rem, 15vw, 12rem)"
     fontWeight: 700
     lineHeight: 0.82
     letterSpacing: "-0.02em"
   body:
-    fontFamily: "Outfit, ui-sans-serif, system-ui, sans-serif"
+    fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif"
     fontSize: "clamp(0.875rem, 1.1vw, 1rem)"
     fontWeight: 300
     lineHeight: 1.45
     letterSpacing: "0.08em"
   label:
-    fontFamily: "Outfit, ui-sans-serif, system-ui, sans-serif"
+    fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif"
     fontSize: "clamp(0.625rem, 0.9vw, 0.8125rem)"
     fontWeight: 300
     lineHeight: 1.2
@@ -110,11 +110,12 @@ The palette is phase-based: deep neutral night tones for authority, then low-chr
 
 ## Typography
 
-**Display Font:** Space Grotesk (fallback: sans-serif)
-**Body Font:** Outfit (fallback: ui-sans-serif, system-ui, sans-serif)
-**Label/Mono Font:** Outfit (same family, high tracking for UI metadata)
+**Display Font:** Cabinet Grotesk (fallback: sans-serif) — Fontshare
+**Body Font:** Satoshi (fallback: ui-sans-serif, system-ui, sans-serif) — Fontshare
+**Serif/Quote Font:** Sentient (fallback: Georgia, serif) — Fontshare
+**Label Font:** Satoshi (same family, high tracking for UI metadata)
 
-**Character:** Space Grotesk carries decisive, strategic voice in large statements; Outfit softens supporting copy for recruiter-speed comprehension.
+**Character:** Cabinet Grotesk carries decisive, strategic voice in large display statements; Satoshi provides clean geometric precision for body copy and metadata; Sentient adds warmth and editorial authority to quotes and narrative passages. All three from Fontshare, consolidating font delivery to a single CDN.
 
 ### Hierarchy
 - **Display** (700, `clamp(3rem,14vw,10rem)`, 0.82): Hero and wall statements anchoring page identity.

@@ -63,7 +63,8 @@ export function AboutSection({ transitionProgress = 0 }: AboutSectionProps) {
     <motion.section
       id={aboutContent.id}
       ref={sectionRef}
-      className="about-shell relative isolate z-[var(--z-about)] min-h-[135vh] overflow-hidden px-4 pt-12 pb-36 sm:min-h-[145vh] sm:px-6 sm:pt-16 sm:pb-44 md:min-h-[152vh] md:px-10 md:pb-52 lg:min-h-[162vh] lg:px-12 lg:pt-20 lg:pb-64"
+      className="about-section relative isolate z-[var(--z-about)] min-h-[135vh] overflow-hidden sm:min-h-[145vh] md:min-h-[152vh] lg:min-h-[162vh]"
+      style={{ paddingInline: 'var(--layout-padding)' }}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.2 }}
@@ -99,16 +100,20 @@ export function AboutSection({ transitionProgress = 0 }: AboutSectionProps) {
         </div>
       </aside>
 
-      <header className="mx-auto flex min-h-11 w-full max-w-[1200px] items-center justify-between gap-4 text-[11px] font-light uppercase tracking-[0.16em] text-white/86 sm:text-[12px] sm:tracking-[0.2em] md:text-[13px] md:tracking-[0.24em]">
+      <header className="about-header flex min-h-11 w-full items-center justify-between gap-4 text-[var(--text-meta)] font-light uppercase tracking-[0.16em] text-white/86 sm:tracking-[0.2em] md:tracking-[0.24em]"
+        style={{ gridColumn: 'var(--content-span)' }}
+      >
         <span className="whitespace-nowrap">{aboutContent.eyebrow}</span>
-        <a href="#hero" className="inline-flex min-h-11 items-center px-3 transition-colors duration-200 ease-[cubic-bezier(0.25,1,0.5,1)] hover:text-red-300 sm:px-4">
+        <a href="#hero" className="about-header-link inline-flex min-h-11 items-center px-3 transition-colors duration-200 ease-[var(--ease-quart-out)] hover:text-red-300 sm:px-4">
           Back to top
         </a>
       </header>
 
-      <div className="mx-auto mt-6 grid min-h-[540px] w-full max-w-[1200px] grid-cols-1 gap-10 lg:mt-8 lg:grid-cols-[1.25fr_0.95fr] lg:gap-8">
+      <div className="mt-6 grid min-h-[540px] w-full grid-cols-1 gap-10 lg:mt-8 lg:grid-cols-[1.25fr_0.95fr] lg:gap-8"
+        style={{ gridColumn: 'var(--content-span)' }}
+      >
         <motion.div variants={aboutItemVariants} className="relative h-full">
-          <h2 className="pointer-events-none absolute left-0 top-16 select-none font-display text-[clamp(4.3rem,10vw,11.3rem)] font-semibold uppercase leading-[0.82] tracking-tight text-white/78">
+          <h2 className="pointer-events-none absolute left-0 top-16 select-none font-display text-[var(--text-display)] font-semibold uppercase leading-[0.82] tracking-tight text-white/78">
             {aboutContent.wallTitleFirst}
             <br />
             <span className="font-light text-white/70">{aboutContent.wallTitleSecond}</span>
@@ -120,13 +125,13 @@ export function AboutSection({ transitionProgress = 0 }: AboutSectionProps) {
         </motion.div>
 
         <motion.div variants={aboutItemVariants} className="relative z-10 pt-14 lg:pt-24">
-          <figure className="group relative max-w-[37ch] overflow-hidden border border-white/25 bg-white/[0.03] p-2 shadow-[0_16px_42px_rgba(0,0,0,0.42)]">
+          <figure className="about-figure group relative max-w-[37ch] overflow-hidden border border-white/25 bg-white/[0.03] p-2 shadow-[0_16px_42px_rgba(0,0,0,0.42)]">
             <span aria-hidden="true" className="pointer-events-none absolute inset-0 border border-white/8" />
             <span aria-hidden="true" className="pointer-events-none absolute inset-x-2 top-2 h-px bg-white/20" />
             <img
               src={aboutUsImage}
               alt={aboutContent.imageAlt}
-              className="h-[280px] w-full border border-white/12 object-cover grayscale-[8%] contrast-[1.04] brightness-[0.98]"
+              className="about-figure-img h-[280px] w-full border border-white/12 object-cover grayscale-[8%] contrast-[1.04] brightness-[0.98]"
               loading="lazy"
             />
           </figure>
@@ -136,7 +141,8 @@ export function AboutSection({ transitionProgress = 0 }: AboutSectionProps) {
       <motion.article
         ref={narrativeRef}
         variants={aboutItemVariants}
-        className="about-copy-wrap mx-auto mt-8 w-full max-w-[1200px] pb-20 sm:pb-24 md:mt-10 md:pb-28 lg:mt-12 lg:pb-36"
+        className="about-copy-wrap mt-8 w-full pb-20 sm:pb-24 md:mt-10 md:pb-28 lg:mt-12 lg:pb-36"
+        style={{ gridColumn: 'var(--content-span)' }}
       >
         <motion.p
           className="about-transition-note"
@@ -150,7 +156,7 @@ export function AboutSection({ transitionProgress = 0 }: AboutSectionProps) {
             ,,
           </span>
           <motion.p
-            className="about-reading-glow about-quote-copy w-full max-w-none text-[clamp(1.42rem,4.14vw,2.95rem)] font-light leading-[1.23] tracking-[-0.004em]"
+            className="about-reading-glow about-quote-copy w-full max-w-none text-[var(--text-quote)] font-light leading-[1.35] tracking-[-0.004em]"
             style={{ opacity: prefersReducedMotion ? 0.95 : quoteOpacity, y: prefersReducedMotion ? 0 : quoteY }}
           >
             {quoteLines.map((line, index) => (
@@ -164,19 +170,6 @@ export function AboutSection({ transitionProgress = 0 }: AboutSectionProps) {
           </motion.p>
         </div>
       </motion.article>
-
-      <span
-        className="pointer-events-none absolute left-6 top-24 text-[150px] font-light leading-none text-white/30 lg:left-8 lg:top-20"
-        style={{ opacity: aboutOrnamentOpacity }}
-      >
-        [
-      </span>
-      <span
-        className="pointer-events-none absolute bottom-24 right-6 text-[150px] font-light leading-none text-white/30 lg:bottom-20 lg:right-8"
-        style={{ opacity: aboutOrnamentOpacity }}
-      >
-        ]
-      </span>
 
     </motion.section>
   );

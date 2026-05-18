@@ -1,7 +1,8 @@
 @theme {
-  --font-sans: 'Outfit', ui-sans-serif, system-ui, sans-serif;
-  --font-display: 'Space Grotesk', sans-serif;
-  --font-quote: 'Plus Jakarta Sans', 'Outfit', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Satoshi', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Cabinet Grotesk', sans-serif;
+  --font-serif: 'Sentient', Georgia, serif;
+  --font-quote: 'Sentient', serif;
 }
 
 @layer base {
@@ -11,17 +12,54 @@
     --z-transition: 20;
     --z-work: 30;
     --z-ui: 40;
+
+    /* Colors */
+    --night-base: oklch(0.1 0.012 253);
+    --night-overlay: oklch(0.112 0.012 255 / 0.55);
+    --mist-line: oklch(0.94 0.01 255);
+    --day-surface: oklch(0.93 0.005 255);
+    --day-ink: oklch(0.12 0.01 255);
+    --day-muted: oklch(0.34 0.01 255);
+    --frost-text: #f5f8fc;
+    --signal-red: #ef4444;
+    --signal-red-deep: #dc2626;
+
+    /* Type scale */
+    --text-hero: clamp(52px, 11vw, 156px);
+    --text-display: clamp(40px, 7vw, 100px);
+    --text-section: clamp(28px, 4vw, 56px);
+    --text-meta: clamp(11px, 1vw, 13px);
+    --text-body: clamp(15px, 1.2vw, 17px);
+    --text-quote: clamp(18px, 2vw, 28px);
+
+    /* Layout */
+    --layout-padding: clamp(20px, 6vw, 96px);
+    --layout-cols: repeat(12, 1fr);
+    --layout-gap: clamp(12px, 2vw, 24px);
+    --content-span: 2 / 12;
+
+    /* Easing */
     --transition-line-color: oklch(0.94 0.01 255);
     --transition-line-glow: 0 0 14px rgb(255 255 255 / 0.28);
     --ease-expo-out: cubic-bezier(0.16, 1, 0.3, 1);
     --ease-quart-out: cubic-bezier(0.25, 1, 0.5, 1);
+    --ease-quint-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --duration-fast: 140ms;
     --duration-hover: 200ms;
     --duration-interaction: 360ms;
-    --duration-fast: 140ms;
+    --duration-reveal: 640ms;
+    --duration-entrance: 1000ms;
   }
 
   body {
     @apply bg-black text-white;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background: rgba(239, 68, 68, 0.35);
+    color: #fff;
   }
 
   @media (prefers-reduced-motion: reduce) {

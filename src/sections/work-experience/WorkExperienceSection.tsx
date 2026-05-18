@@ -1,6 +1,4 @@
-import { AnimatePresence, motion, useInView, useReducedMotion, useScroll, useTransform } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
-import { duration, ease } from '../../motion/easing';
 import { workExperienceContent } from './content';
 
 type WorkExperienceSectionProps = {
@@ -8,205 +6,357 @@ type WorkExperienceSectionProps = {
   transitionProgress?: number;
 };
 
-export function WorkExperienceSection({ revealReady = false, transitionProgress = 0 }: WorkExperienceSectionProps) {
-  const prefersReducedMotion = useReducedMotion();
-  const sectionRef = useRef<HTMLElement>(null);
-  const [isCompactViewport, setIsCompactViewport] = useState(false);
-  const [activeRole, setActiveRole] = useState<string | null>(
-    workExperienceContent.roles[0]
-      ? `${workExperienceContent.roles[0].years}-${workExperienceContent.roles[0].company}`
-      : null,
-  );
-  const sectionInView = useInView(sectionRef, { once: true, amount: 0.2 });
-  const transitionUnlockProgress = prefersReducedMotion
-    ? 1
-    : Math.min(Math.max((transitionProgress - 0.72) / 0.28, 0), 1);
-  const contentReady = prefersReducedMotion || (isCompactViewport ? revealReady || sectionInView : revealReady);
-  const staggerReady = prefersReducedMotion || (contentReady && transitionUnlockProgress >= 0.1);
+const chapterBgs = [
+  'oklch(0.945 0.005 255)',
+  'oklch(0.885 0.005 255)',
+  'oklch(0.825 0.006 255)',
+];
 
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const mediaQuery = window.matchMedia('(max-width: 767px)');
-    const syncViewport = () => setIsCompactViewport(mediaQuery.matches);
-    syncViewport();
-    mediaQuery.addEventListener('change', syncViewport);
-    return () => mediaQuery.removeEventListener('change', syncViewport);
-  }, []);
+export function WorkExperienceSection({ revealReady = false }: WorkExperienceSectionProps) {
+  const prefersReducedMotion = typeof window !== 'undefined'
+    ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    : false;
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start 92%', 'end 20%'],
-  });
-
-  const headerOpacity = useTransform(scrollYProgress, [0.04, 0.22], [0, 1]);
-  const headlineOpacity = useTransform(scrollYProgress, [0.1, 0.36], [0, 1]);
-  const listOpacity = useTransform(scrollYProgress, [0.18, 0.52], [0, 1]);
-  const headerX = useTransform(scrollYProgress, [0.04, 0.22], [20, 0]);
-  const headlineX = useTransform(scrollYProgress, [0.1, 0.38], [28, 0]);
-  const listX = useTransform(scrollYProgress, [0.18, 0.54], [22, 0]);
-
-  const language = typeof document !== 'undefined' ? document.documentElement.lang || undefined : undefined;
-  const monthYearFormatter = new Intl.DateTimeFormat(language, {
-    month: 'short',
-    year: 'numeric',
-  });
-  const parts = monthYearFormatter.formatToParts(new Date());
-  const month = parts.find((part) => part.type === 'month')?.value ?? '';
-  const year = parts.find((part) => part.type === 'year')?.value ?? '';
-  const liveMonthYear = month && year ? `${month}/${year}` : monthYearFormatter.format(new Date());
+  const liveDate = useLiveDate();
 
   return (
-    <motion.section
-      ref={sectionRef}
+    <section
       id={workExperienceContent.id}
-      data-reveal={staggerReady ? 'ready' : 'locked'}
-      className="relative isolate z-[var(--z-work)] mt-0 min-h-[90vh] overflow-hidden bg-[oklch(0.93_0.005_255)] px-4 pt-[clamp(7rem,12vh,10rem)] pb-16 text-[oklch(0.19_0.01_255)] sm:min-h-[94vh] sm:px-6 sm:pt-[clamp(8rem,13vh,11.5rem)] sm:pb-20 md:min-h-[98vh] md:px-10 md:pt-[clamp(9rem,14vh,12.5rem)] md:pb-24 lg:min-h-[103vh] lg:px-12 lg:pt-[clamp(11rem,16vh,15rem)] lg:pb-28"
+      className="work-section relative isolate z-[var(--z-work)] overflow-hidden text-[oklch(0.19_0.01_255)]"
+      style={{
+        background: 'var(--day-surface)',
+        paddingInline: 'var(--layout-padding)',
+        paddingTop: 'clamp(7rem, 12vh, 10rem)',
+        display: 'grid',
+        gridTemplateColumns: 'var(--layout-cols)',
+        columnGap: 'var(--layout-gap)',
+        alignContent: 'start',
+      }}
     >
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-[clamp(8rem,14vh,12rem)] bg-gradient-to-b from-[oklch(0.93_0.005_255/0.94)] via-[oklch(0.93_0.005_255/0.6)] to-[oklch(0.93_0.005_255/0)]"
+        className="pointer-events-none absolute inset-x-0 top-0"
+        style={{
+          height: 'clamp(8rem, 14vh, 12rem)',
+          background: 'linear-gradient(180deg, oklch(0.93 0.005 255 / 0.94), oklch(0.93 0.005 255 / 0.6) 50%, oklch(0.93 0.005 255 / 0))',
+        }}
       />
 
-      <motion.header
-        className="relative z-10 mx-auto flex w-full max-w-[1320px] items-center justify-between gap-4 font-sans text-[13px] font-normal leading-none tracking-[0.08em] text-[oklch(0.34_0.01_255)] will-change-transform"
-        style={
-          prefersReducedMotion
-            ? undefined
-            : {
-                opacity: staggerReady ? headerOpacity : 0,
-                x: contentReady ? headerX : 20,
-              }
-        }
+      <header
+        className="work-header relative z-10 flex w-full items-center justify-between gap-4 text-[var(--text-meta)] font-light leading-none tracking-[0.24em] uppercase text-[oklch(0.48_0.01_255)]"
+        style={{ gridColumn: 'var(--content-span)' }}
       >
-        <p>{workExperienceContent.topLabel}</p>
-        <p>{liveMonthYear}</p>
-      </motion.header>
+        <p className="m-0">{workExperienceContent.headerLabel}</p>
+        <p className="m-0">{liveDate}</p>
+      </header>
 
-      <div className="relative z-10 mx-auto mt-10 grid w-full max-w-[1320px] gap-10 lg:mt-18 lg:grid-cols-[1.18fr_0.92fr] lg:gap-16">
-        <motion.h2
-          className="max-w-[7.2ch] font-display text-[clamp(3.5rem,9.2vw,8.3rem)] font-bold leading-[0.9] tracking-[-0.04em] text-[oklch(0.12_0.01_255)] will-change-transform"
-          style={
-            prefersReducedMotion
-              ? undefined
-              : {
-                  opacity: staggerReady ? headlineOpacity : 0,
-                  x: contentReady ? headlineX : 30,
-                }
-          }
+      <div
+        className="work-lead relative z-10 flex w-full flex-wrap items-end justify-between gap-x-8 gap-y-4"
+        style={{ gridColumn: 'var(--content-span)', marginTop: 'clamp(2rem, 4.5vh, 3.5rem)' }}
+      >
+        <h2
+          className="m-0 font-display font-bold leading-[0.88] tracking-[-0.04em] text-[oklch(0.11_0.01_255)]"
+          style={{ fontSize: 'var(--text-display)' }}
         >
-          {workExperienceContent.headline[0]}
-          <br />
-          {workExperienceContent.headline[1]}
-        </motion.h2>
-
-        <motion.p
-          className="max-w-[42ch] self-end text-[clamp(0.98rem,1.1vw,1.18rem)] font-light leading-[1.45] tracking-[0.01em] text-[oklch(0.32_0.01_255)]"
-          style={
-            prefersReducedMotion
-              ? undefined
-              : {
-                  opacity: staggerReady ? headlineOpacity : 0,
-                  x: contentReady ? headlineX : 30,
-                }
-          }
-        >
-          {workExperienceContent.summary}
-        </motion.p>
+          {workExperienceContent.headline[0]}<br />
+          {workExperienceContent.headline[1]}<br />
+          {workExperienceContent.headline[2]}
+        </h2>
+        <div className="flex items-center gap-[0.6rem] pb-2 text-[10px] font-light tracking-[0.2em] uppercase text-[oklch(0.5_0.01_255)]">
+          <span>{workExperienceContent.chapters.length} roles</span>
+          <span className="opacity-40" aria-hidden="true">·</span>
+          <span>2024 — 2026</span>
+        </div>
       </div>
 
-      <motion.ul
-        className="relative z-10 mx-auto mt-10 w-full max-w-[1320px] divide-y divide-[oklch(0.85_0.01_255)] font-sans lg:mt-14"
-        style={
-          prefersReducedMotion
-            ? undefined
-            : {
-                opacity: staggerReady ? listOpacity : 0,
-                x: contentReady ? listX : 22,
-              }
-        }
+      <div
+        className="relative z-10 h-px w-full bg-[oklch(0.82_0.01_255)]"
+        style={{ gridColumn: 'var(--content-span)', marginTop: 'clamp(1.5rem, 3vh, 2.5rem)' }}
+        aria-hidden="true"
+      />
+
+      <div
+        className="work-chapters relative z-10 flex w-auto flex-col"
+        style={{
+          gridColumn: '1 / -1',
+          marginInline: 'calc(-1 * var(--layout-padding))',
+          marginTop: 'clamp(3.5rem, 6vh, 5.5rem)',
+        }}
       >
-        {workExperienceContent.roles.map((role, index) => {
-          const itemKey = `${role.years}-${role.company}`;
-          const isOpen = activeRole === itemKey;
-          return (
-            <motion.li
-              key={itemKey}
-              className="py-5 sm:py-6"
-              initial={prefersReducedMotion ? false : { opacity: 0, x: 22 }}
-              animate={staggerReady ? { opacity: 1, x: 0 } : prefersReducedMotion ? undefined : { opacity: 0, x: 22 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{
-                duration: duration.reveal,
-                ease: ease.expoOut,
-                delay: prefersReducedMotion ? 0 : 0.24 + (1 - transitionUnlockProgress) * 0.1 + 0.08 * index,
-              }}
-            >
-              <button
-                type="button"
-                aria-expanded={isOpen}
-                onClick={() => setActiveRole((prev) => (prev === itemKey ? null : itemKey))}
-                className="grid w-full gap-4 text-left transition-colors duration-200 ease-[cubic-bezier(0.25,1,0.5,1)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[oklch(0.28_0.01_255)] sm:gap-6 lg:grid-cols-[1fr_auto]"
-              >
-                <div className="space-y-2">
-                  <h3 className="text-[clamp(1.22rem,1.85vw,2rem)] font-medium leading-[1.1] tracking-[-0.02em] text-[oklch(0.14_0.01_255)] break-words">
-                    {role.title} at {role.company}
-                  </h3>
-                  <p className="max-w-[68ch] text-[clamp(0.94rem,1vw,1.08rem)] font-light leading-[1.4] tracking-[0.005em] text-[oklch(0.36_0.01_255)]">
-                    {role.blurb}
-                  </p>
-                </div>
-                <div className="pt-0.5 text-left lg:min-w-[235px] lg:text-right">
-                  <p className="text-[clamp(1.5rem,3.2vw,2.95rem)] font-medium leading-[1] tracking-[-0.03em] text-[oklch(0.15_0.01_255)]">
-                    {role.years}
-                  </p>
-                </div>
-              </button>
-
-              <AnimatePresence initial={false}>
-                {isOpen ? (
-                  <motion.div
-                    key={`${itemKey}-details`}
-                    className="grid overflow-hidden pt-4"
-                    initial={{ gridTemplateRows: '0fr', opacity: 0 }}
-                    animate={{ gridTemplateRows: '1fr', opacity: 1 }}
-                    exit={{ gridTemplateRows: '0fr', opacity: 0 }}
-                    transition={{
-                      gridTemplateRows: { duration: duration.interaction, ease: ease.expoOut },
-                      opacity: { duration: duration.hover, ease: ease.quartOut, delay: 0.06 },
-                    }}
-                  >
-                    <div className="min-h-0">
-                      <div className="space-y-4 pb-2 sm:space-y-5">
-                        <ul className="space-y-2 text-[0.94rem] font-light leading-[1.55] tracking-[0.01em] text-[oklch(0.28_0.01_255)]">
-                          {role.details.map((detail) => (
-                            <li key={detail} className="ml-4 list-disc">
-                              {detail}
-                            </li>
-                          ))}
-                        </ul>
-
-                        <div className="flex flex-wrap gap-x-5 gap-y-2 text-[0.84rem] font-normal uppercase tracking-[0.08em] text-[oklch(0.34_0.01_255)]">
-                          {role.links.map((link) => (
-                            <a
-                              key={link.href}
-                              href={link.href}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="underline decoration-[oklch(0.46_0.01_255)] underline-offset-4 transition-colors duration-200 ease-[cubic-bezier(0.25,1,0.5,1)] hover:text-[oklch(0.2_0.01_255)]"
-                            >
-                              {link.label}
-                            </a>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
-                ) : null}
-              </AnimatePresence>
-            </motion.li>
-          );
-        })}
-      </motion.ul>
-    </motion.section>
+        {workExperienceContent.chapters.map((chapter, index) => (
+          <ChapterCard
+            key={chapter.num}
+            chapter={chapter}
+            index={index}
+            bgColor={chapterBgs[index] ?? chapterBgs[0]}
+            revealReady={revealReady}
+            reducedMotion={prefersReducedMotion}
+          />
+        ))}
+      </div>
+    </section>
   );
+}
+
+type ChapterCardProps = {
+  key?: string;
+  chapter: (typeof workExperienceContent.chapters)[number];
+  index: number;
+  bgColor: string;
+  revealReady: boolean;
+  reducedMotion: boolean;
+};
+
+function ChapterCard({ chapter, index, bgColor, revealReady, reducedMotion }: ChapterCardProps) {
+  const cardRef = useRef<HTMLElement>(null);
+  const [isRevealed, setIsRevealed] = useState(reducedMotion);
+  const [briefOpen, setBriefOpen] = useState(false);
+
+  useEffect(() => {
+    if (reducedMotion) {
+      setIsRevealed(true);
+      return;
+    }
+    const el = cardRef.current;
+    if (!el) return;
+    if (!revealReady) return;
+
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsRevealed(true);
+            obs.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.08, rootMargin: '0px 0px -50px 0px' },
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [revealReady, reducedMotion]);
+
+  return (
+    <article
+      ref={cardRef}
+      className={`work-chapter ${isRevealed ? 'is-revealed' : ''}`}
+      style={{
+        position: 'relative',
+        isolation: 'isolate',
+        overflow: 'hidden',
+        background: bgColor,
+        color: index === 2 ? 'oklch(0.10 0.01 255)' : 'oklch(0.13 0.01 255)',
+        paddingInline: 'var(--layout-padding)',
+        paddingTop: 'clamp(3.5rem, 8vh, 6.5rem)',
+        paddingBottom: 'clamp(2.5rem, 5vh, 4rem)',
+        display: 'grid',
+        gridTemplateColumns: 'var(--layout-cols)',
+        columnGap: 'var(--layout-gap)',
+        alignItems: 'start',
+        opacity: reducedMotion ? 1 : isRevealed ? 1 : 0,
+        transform: reducedMotion ? 'none' : isRevealed ? 'translateY(0)' : 'translateY(32px)',
+        transition: `opacity 1.1s cubic-bezier(0.16, 1, 0.3, 1) ${index * 0.14}s, transform 1.1s cubic-bezier(0.16, 1, 0.3, 1) ${index * 0.14}s`,
+      }}
+    >
+      {index > 0 && (
+        <div
+          className="pointer-events-none absolute inset-x-[var(--layout-padding)] top-0 h-px"
+          style={{ background: 'oklch(0.78 0.01 255 / 0.5)' }}
+        />
+      )}
+
+      <div
+        className="pointer-events-none absolute select-none font-display font-bold leading-[0.85] tracking-[-0.055em] text-[oklch(0.10_0.01_255)]"
+        style={{
+          right: 'clamp(0.5rem, 2vw, 2rem)',
+          bottom: '-1.5rem',
+          fontSize: 'clamp(7rem, 22vw, 18rem)',
+          opacity: 0.028,
+          zIndex: 0,
+          whiteSpace: 'nowrap',
+        }}
+        aria-hidden="true"
+      >
+        {chapter.era}
+      </div>
+
+      {/* TOP: title + chapter number */}
+      <div
+        style={{ gridColumn: '1 / -1', position: 'relative', zIndex: 2 }}
+        className="grid items-start"
+      >
+        <div className="grid items-start" style={{ gridTemplateColumns: 'var(--layout-cols)', columnGap: 'var(--layout-gap)' }}>
+          <div className="work-title-block flex flex-col" style={{ gridColumn: '1 / span 9', gap: 'clamp(1.25rem, 2.5vh, 2rem)' }}>
+            <h3
+              className="work-title m-0 font-display font-bold leading-[0.88] tracking-[-0.04em] text-[oklch(0.08_0.01_255)]"
+              style={{ fontSize: 'clamp(2.75rem, 8vw, 8rem)', textWrap: 'balance', overflowWrap: 'anywhere' }}
+            >
+              {chapter.title[0]}<br />{chapter.title[1]}
+            </h3>
+            <div className="flex flex-wrap items-center gap-x-[1.2rem] gap-y-3">
+              <span className="work-stamp inline-flex items-center border border-[oklch(0.74_0.01_255)] bg-transparent px-[0.7rem] py-[0.32rem] text-[9px] font-normal tracking-[0.2em] uppercase text-[oklch(0.40_0.01_255)] whitespace-nowrap">
+                {chapter.company}
+              </span>
+              <div className="flex items-center gap-[0.4rem] text-[10px] font-light tracking-[0.22em] uppercase text-[oklch(0.42_0.01_255)]">
+                <span>{chapter.periodFrom}</span>
+                <span className="opacity-45" aria-hidden="true">—</span>
+                <span className="text-[oklch(0.30_0.01_255)]">{chapter.periodTo}</span>
+              </div>
+            </div>
+          </div>
+          <span
+            className="work-chap-num m-0 select-none justify-self-end self-start font-display font-bold leading-[0.88] tracking-[-0.04em] text-[oklch(0.58_0.01_255/0.72)]"
+            style={{ gridColumn: '10 / -1', fontSize: 'clamp(3rem, 8vw, 8rem)' }}
+            aria-hidden="true"
+          >
+            {chapter.num}
+          </span>
+        </div>
+      </div>
+
+      {/* Divider */}
+      <div
+        className="relative z-2 h-px bg-[oklch(0.55_0.01_255/0.35)]"
+        style={{
+          gridColumn: '1 / -1',
+          marginTop: 'clamp(2.5rem, 5vh, 4rem)',
+          marginBottom: 'clamp(1.75rem, 3.5vh, 2.75rem)',
+        }}
+        aria-hidden="true"
+      />
+
+      {/* BODY: label | operative | keypoints */}
+      <div
+        className="relative z-2 grid items-start"
+        style={{
+          gridColumn: '1 / -1',
+          gridTemplateColumns: 'var(--layout-cols)',
+          columnGap: 'var(--layout-gap)',
+          rowGap: 'clamp(1.5rem, 3vh, 2.25rem)',
+        }}
+      >
+        <span
+          className="work-card-label self-start text-[10px] font-light tracking-[0.26em] uppercase text-[oklch(0.42_0.01_255)] leading-none pt-[0.35rem]"
+          style={{ gridColumn: '1 / span 2' }}
+        >
+          Mandate
+        </span>
+
+        <div className="work-card-text flex flex-col gap-[0.9rem]" style={{ gridColumn: '3 / span 3' }}>
+          {chapter.operative.map((text, i) => (
+            <p
+              key={i}
+              className="work-operative m-0 font-serif leading-[1.5] tracking-[0.004em] text-[oklch(0.18_0.01_255)]"
+              style={{ fontSize: 'clamp(15px, 1.15vw, 17px)', textWrap: 'pretty' }}
+            >
+              {text}
+            </p>
+          ))}
+        </div>
+
+        <div className="work-card-keys flex flex-col gap-5" style={{ gridColumn: '6 / span 3' }}>
+          <ul className="work-keys m-0 flex list-none flex-col gap-[0.7rem] p-0">
+            {chapter.keyPoints.map((point, i) => (
+              <li
+                key={i}
+                className="relative pl-5 font-sans font-light leading-[1.5] tracking-[0.004em] text-[oklch(0.22_0.01_255)]"
+                style={{ fontSize: 'clamp(13px, 0.95vw, 14.5px)' }}
+              >
+                <span className="absolute left-0 top-0 font-light text-[oklch(0.45_0.01_255)]">—</span>
+                {point}
+              </li>
+            ))}
+          </ul>
+          <div className="flex flex-wrap gap-x-[0.9rem] gap-y-[0.3rem]">
+            {chapter.signals.map((signal) => (
+              <span
+                key={signal}
+                className="text-[9px] font-light tracking-[0.16em] uppercase text-[oklch(0.42_0.01_255)] whitespace-nowrap"
+              >
+                [ {signal} ]
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* FOOTER: full brief */}
+      <div
+        className="relative z-2 border-t border-[oklch(0.55_0.01_255/0.25)]"
+        style={{
+          gridColumn: '3 / span 6',
+          marginTop: 'clamp(2rem, 4vh, 3rem)',
+          paddingTop: 'clamp(1.25rem, 2.5vh, 2rem)',
+        }}
+      >
+        <div className={`work-brief ${briefOpen ? 'is-open' : ''}`}>
+          <button
+            type="button"
+            className="work-brief-toggle inline-flex items-center gap-[0.6rem] border-0 bg-none p-[0.45rem_0] text-[10px] font-normal tracking-[0.22em] uppercase text-[oklch(0.32_0.01_255)] transition-colors duration-200 ease-linear select-none hover:text-[oklch(0.10_0.01_255)]"
+            onClick={() => setBriefOpen((prev) => !prev)}
+          >
+            Open full brief{' '}
+            <span
+              className="inline-block text-[16px] font-extralight leading-none transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
+              style={{ transform: briefOpen ? 'rotate(45deg)' : 'none' }}
+              aria-hidden="true"
+            >
+              +
+            </span>
+          </button>
+          <div
+            className="grid overflow-hidden"
+            style={{
+              gridTemplateRows: briefOpen ? '1fr' : '0fr',
+              opacity: briefOpen ? 1 : 0,
+              transition: 'grid-template-rows 0.36s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.22s ease 0.04s',
+            }}
+          >
+            <div className="min-h-0">
+              <div
+                className="mt-3 flex flex-col gap-3 border-l border-[oklch(0.55_0.01_255/0.3)]"
+                style={{ padding: '0.85rem 0 0.5rem clamp(0.75rem, 2vw, 1.5rem)' }}
+              >
+                <ul className="m-0 flex list-disc flex-col gap-[0.45rem] pl-[1.1rem] text-[0.86rem] font-light leading-[1.58] tracking-[0.004em] text-[oklch(0.22_0.01_255)]">
+                  {chapter.bullets.map((bullet, i) => (
+                    <li key={i}>{bullet}</li>
+                  ))}
+                </ul>
+                <div className="flex flex-wrap gap-x-[1.1rem] gap-y-[0.4rem] text-[9px] font-normal uppercase tracking-[0.18em] text-[oklch(0.34_0.01_255)]">
+                  {chapter.links.map((link) => (
+                    <a
+                      key={link.href}
+                      href={link.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="underline decoration-[oklch(0.55_0.01_255/0.5)] underline-offset-[3px] transition-colors duration-200 ease-linear hover:text-[oklch(0.08_0.01_255)]"
+                    >
+                      {link.label}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function useLiveDate(): string {
+  const [date, setDate] = useState('');
+  useEffect(() => {
+    try {
+      const language = document.documentElement.lang || undefined;
+      const fmt = new Intl.DateTimeFormat(language, { month: 'short', year: 'numeric' });
+      const parts = fmt.formatToParts(new Date());
+      const month = parts.find((p) => p.type === 'month')?.value ?? '';
+      const year = parts.find((p) => p.type === 'year')?.value ?? '';
+      setDate(month && year ? `${month}/${year}` : fmt.format(new Date()));
+    } catch {
+      setDate('');
+    }
+  }, []);
+  return date;
 }

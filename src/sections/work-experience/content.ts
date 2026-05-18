@@ -1,64 +1,88 @@
-import aboutImage from '../../assets/images/aboutus_image.JPG';
-import heroPortraitJpg from '../../assets/images/hero-portrait.jpg';
-import heroPortraitPng from '../../assets/images/hero-portrait.png';
-
 export const workExperienceContent = {
-  id: 'work-experience',
-  topLabel: 'WORK EXPERIENCE',
-  headline: ['Where', "I've worked."],
-  summary:
-    'A yearly snapshot of my operator journey across research, product, and fintech execution.',
-  roles: [
+  id: 'works',
+  headerLabel: 'Work Experience',
+  headline: ['Where', "I've", 'operated.'],
+  chapters: [
     {
-      years: 'Q1/2025 - Today',
-      quarter: 'Q1 2025 to Present',
-      title: 'BizOps Manager',
+      num: '01',
+      era: 'Q1·25',
+      title: ['Operation', 'Manager'],
       company: 'Basal Pay by AlphaTrue',
-      blurb: 'Driving business operations and scalable execution for payment growth.',
-      details: [
-        'One of the first team members incubating Basal Pay, a strategic venture under AlphaTrue, contributed from zero-to-one across product, operations, and compliance foundations.',
-        'Architected multi-chain custody framework across BSC and Polygon networks, implementing layered hot/cold wallet segregation and automated treasury rebalancing, eliminating single-point-of-failure and improving withdrawal reliability under peak load.',
-        'Monitored daily on-chain transaction flows using BscScan and PolygonScan, investigated and resolved stuck/pending transactions, ensuring timely deposit and withdrawal processing with defined resolution SLAs.',
-        'Collaborated with Security and Compliance teams to monitor internal alerts for high-risk transactions, implemented reactive and preventive measures aligned with AML/KYC policies and FATF Travel Rule requirements.',
-        'Standardized operational playbooks (incident response, reconciliation, dispute resolution) and instituted performance SLOs, improving on-time settlement consistency and audit readiness.',
-        'Orchestrated external partners (PSPs: 9Pay, GPay, KYC/AML vendors, banking partners) and internal squads (Tech, Compliance, Treasury) to maintain service reliability across 24/7 operations.',
-        'Built n8n automation workflows to eliminate manual reconciliation tasks including automated balance checks, transaction status alerts, and dispute ticketing, improving operational efficiency.',
+      periodFrom: 'Q1/2025',
+      periodTo: 'Today',
+      operative: [
+        'First operator on the ground — built the custody, compliance, and settlement backbone that keeps a live payment layer running 24/7.',
+        'Owned the zero-to-one playbook: multi-chain treasury, partner orchestration, and the operational discipline a regulated fintech needs to scale without breaking trust.',
       ],
-      images: [heroPortraitPng, heroPortraitJpg],
+      keyPoints: [
+        'Architected multi-chain custody across BSC & Polygon — layered hot/cold wallet segregation eliminating single-point-of-failure under peak load.',
+        'Standardized incident, reconciliation, and dispute playbooks; instituted SLOs that improved settlement consistency and audit readiness.',
+        'Orchestrated PSP, KYC/AML, and banking partners alongside Tech, Compliance & Treasury squads across 24/7 operations.',
+      ],
+      signals: ['Multi-chain custody', 'AML / KYC', '24/7 ops'],
+      bullets: [
+        'One of the first team members incubating Basal Pay — a strategic venture under AlphaTrue — contributing from zero-to-one across product, operations, and compliance foundations.',
+        'Architected multi-chain custody framework across BSC and Polygon networks, implementing layered hot/cold wallet segregation and automated treasury rebalancing, eliminating single-point-of-failure under peak load.',
+        'Monitored daily on-chain transaction flows via BscScan and PolygonScan; investigated and resolved stuck/pending transactions against defined resolution SLAs.',
+        'Collaborated with Security and Compliance teams on high-risk transaction monitoring aligned to AML/KYC policies and FATF Travel Rule requirements.',
+        'Standardized operational playbooks (incident response, reconciliation, dispute resolution) and instituted SLOs improving settlement consistency and audit readiness.',
+        'Orchestrated external partners (PSPs: 9Pay, GPay, KYC/AML vendors, banking) and internal squads (Tech, Compliance, Treasury) across 24/7 operations.',
+        'Built n8n automation workflows eliminating manual reconciliation — automated balance checks, transaction alerts, and dispute ticketing.',
+      ],
       links: [
         { label: 'Basal Pay', href: 'https://basalpay.com' },
         { label: 'AlphaTrue', href: 'https://alphatrue.io' },
       ],
     },
     {
-      years: 'Q3/2024 - Q1/2025',
-      quarter: 'Q3 2024 to Q1 2025',
-      title: 'Product Development Executive',
+      num: '02',
+      era: 'Q3·24',
+      title: ['Product Dev', 'Executive'],
       company: 'AlphaTrue',
-      blurb: 'Shaped early product bets and execution plans for fintech-related growth lanes.',
-      details: [
+      periodFrom: 'Q3/2024',
+      periodTo: 'Q1/2025',
+      operative: [
+        'Shaped the product bets that seeded AlphaTrue\'s fintech expansion — translating business ambition into scoped, sequenced delivery.',
+        'Sat at the seam between business intent and engineering execution, keeping product tracks honest to scope, sequence, and the realities of a live market.',
+      ],
+      keyPoints: [
+        'Owned discovery-to-delivery workflows for selected product tracks — from problem definition through scoped release sequencing.',
+        'Aligned business priorities with product scope and release sequencing across multiple cross-functional pods.',
+        'Supported go-to-market coordination — sequencing launches with operations, compliance, and partner readiness.',
+      ],
+      signals: ['Discovery → delivery', 'Go-to-market', 'Fintech product'],
+      bullets: [
         'Owned discovery-to-delivery workflows for selected product tracks.',
         'Aligned business priorities with product scope and release sequencing.',
         'Supported go-to-market coordination across cross-functional teams.',
       ],
-      images: [heroPortraitJpg],
       links: [
         { label: 'AlphaTrue', href: 'https://alphatrue.io' },
         { label: 'Product Portfolio', href: 'https://www.linkedin.com' },
       ],
     },
     {
-      years: 'Q1/2024 - Q1/2025',
-      quarter: 'Q1 2024 to Q1 2025',
-      title: 'Web3 Research Lead',
+      num: '03',
+      era: 'Q1·24',
+      title: ['Web3', 'Research Lead'],
       company: 'Vietnam Blockchain Association',
-      blurb: 'Led policy-focused market research and ecosystem mapping for Vietnam Web3 initiatives.',
-      details: [
+      periodFrom: 'Q1/2024',
+      periodTo: 'Q1/2025',
+      operative: [
+        'Turned Vietnam\'s fragmented Web3 signals into policy-grade intelligence that moved multi-stakeholder conversations forward.',
+        'Sat between operators, regulators, and ecosystem builders — translating ground-truth into reports that practitioners and policymakers could actually act on.',
+      ],
+      keyPoints: [
+        'Built strategic reports used in multi-stakeholder working sessions across regulators, operators, and ecosystem builders.',
+        'Translated fragmented ecosystem signals into actionable fintech and policy intelligence for Vietnam\'s Web3 landscape.',
+        'Coordinated domain experts, operators, and policy-side partners across long-running research cycles.',
+      ],
+      signals: ['Ecosystem mapping', 'Policy research', 'Web3 Vietnam'],
+      bullets: [
         'Built strategic reports used in multi-stakeholder working sessions.',
         'Translated fragmented ecosystem signals into actionable fintech insights.',
         'Coordinated domain experts, operators, and policy-side partners.',
       ],
-      images: [aboutImage, heroPortraitJpg, heroPortraitPng],
       links: [
         { label: 'VBA', href: 'https://vba.org.vn' },
         { label: 'Research Notes', href: 'https://www.linkedin.com' },
