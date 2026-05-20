@@ -21,10 +21,10 @@ export const itemVariants = {
 };
 
 export const bgVariants = {
-  hidden: { scale: 1.08, opacity: 0 },
+  hidden: { scale: 1.06, opacity: 0 },
   visible: {
     scale: 1,
     opacity: 1,
-    transition: { duration: 1.4, ease: ease.quintOut },
+    transition: { duration: 1.6, ease: ease.quintOut },
   },
 };

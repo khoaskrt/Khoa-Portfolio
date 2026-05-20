@@ -1,5 +1,186 @@
 @layer utilities {
   /* ============================================================
+     PRELOADER — Cinematic loading experience
+  ============================================================ */
+  .preloader {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--night-base);
+    overflow: hidden;
+  }
+
+  .preloader__wipe {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    background: var(--night-base);
+    will-change: transform;
+  }
+
+  .preloader__content {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(1rem, 2vw, 1.5rem);
+    will-change: transform, opacity, filter;
+  }
+
+  .preloader__letter-wrap {
+    position: relative;
+    width: clamp(72px, 12vw, 120px);
+    will-change: transform, opacity;
+  }
+
+  .preloader__letter-svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .preloader__letter-glow {
+    position: absolute;
+    inset: -30%;
+    z-index: -1;
+    background: radial-gradient(circle, rgb(245 248 252 / 0.06) 0%, transparent 70%);
+    pointer-events: none;
+    filter: blur(20px);
+  }
+
+  .preloader__status {
+    font-family: var(--font-sans);
+    font-size: clamp(9px, 0.9vw, 11px);
+    font-weight: 300;
+    letter-spacing: 0.24em;
+    color: rgb(245 248 252 / 0.4);
+    text-transform: uppercase;
+  }
+
+  .preloader__track {
+    position: relative;
+    width: clamp(140px, 20vw, 260px);
+    height: 1px;
+    background: rgb(255 255 255 / 0.06);
+    overflow: visible;
+    transform-origin: center;
+    will-change: transform, opacity;
+  }
+
+  .preloader__bar {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgb(245 248 252 / 0.2), rgb(245 248 252 / 0.6));
+    transform-origin: left center;
+    will-change: transform;
+  }
+
+  .preloader__glow {
+    position: absolute;
+    top: -3px;
+    width: 5px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.85);
+    box-shadow:
+      0 0 6px rgb(255 255 255 / 0.5),
+      0 0 16px rgb(255 255 255 / 0.2);
+    transform: translateX(-50%);
+  }
+
+  .preloader__info-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    width: clamp(140px, 20vw, 260px);
+  }
+
+  .preloader__counter {
+    display: flex;
+    align-items: baseline;
+    gap: 0.12em;
+    font-family: var(--font-sans);
+    font-size: clamp(10px, 1vw, 13px);
+    font-weight: 300;
+    letter-spacing: 0.24em;
+    color: rgb(245 248 252 / 0.48);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .preloader__number {
+    font-weight: 300;
+  }
+
+  .preloader__percent {
+    font-size: 0.7em;
+    opacity: 0.5;
+  }
+
+  .preloader__clock {
+    font-family: var(--font-sans);
+    font-size: clamp(9px, 0.85vw, 11px);
+    font-weight: 300;
+    letter-spacing: 0.18em;
+    color: rgb(245 248 252 / 0.25);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .preloader__corner {
+    position: absolute;
+    z-index: 3;
+    width: clamp(18px, 2.5vw, 28px);
+    height: clamp(18px, 2.5vw, 28px);
+    pointer-events: none;
+  }
+
+  .preloader__corner--tl {
+    top: clamp(20px, 4vh, 40px);
+    left: clamp(20px, 4vw, 40px);
+    border-top: 1px solid rgb(255 255 255 / 0.18);
+    border-left: 1px solid rgb(255 255 255 / 0.18);
+  }
+
+  .preloader__corner--tr {
+    top: clamp(20px, 4vh, 40px);
+    right: clamp(20px, 4vw, 40px);
+    border-top: 1px solid rgb(255 255 255 / 0.18);
+    border-right: 1px solid rgb(255 255 255 / 0.18);
+  }
+
+  .preloader__corner--bl {
+    bottom: clamp(20px, 4vh, 40px);
+    left: clamp(20px, 4vw, 40px);
+    border-bottom: 1px solid rgb(255 255 255 / 0.18);
+    border-left: 1px solid rgb(255 255 255 / 0.18);
+  }
+
+  .preloader__corner--br {
+    bottom: clamp(20px, 4vh, 40px);
+    right: clamp(20px, 4vw, 40px);
+    border-bottom: 1px solid rgb(255 255 255 / 0.18);
+    border-right: 1px solid rgb(255 255 255 / 0.18);
+  }
+
+  .preloader__noise {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    opacity: 0.022;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='4' height='4' fill='%23000'/%3E%3Crect width='1' height='1' x='1' y='0' fill='%23111'/%3E%3Crect width='1' height='1' x='3' y='2' fill='%23111'/%3E%3Crect width='1' height='1' x='0' y='3' fill='%23222'/%3E%3C/svg%3E");
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .preloader {
+      display: none;
+    }
+  }
+
+  /* ============================================================
      ABOUT — Shell & Orbs
   ============================================================ */
   .about-section {
@@ -12,17 +193,11 @@
       oklch(0.105 0.013 254 / 0.98) 62%,
       oklch(0.1 0.012 253 / 1) 100%
     );
-    padding-top: 3rem;
-    padding-bottom: 9rem;
-    display: grid;
-    grid-template-columns: var(--layout-cols);
-    column-gap: var(--layout-gap);
-    align-content: start;
+    padding-top: clamp(3rem, 5vw, 5rem);
+    padding-bottom: clamp(9rem, 16vw, 16rem);
+    display: flex;
+    flex-direction: column;
   }
-
-  @media (min-width: 640px) { .about-section { padding-block: 4rem 11rem; } }
-  @media (min-width: 768px) { .about-section { padding-block: 4rem 13rem; } }
-  @media (min-width: 1024px) { .about-section { padding-block: 5rem 16rem; } }
 
   .about-flow-bg {
     background:
@@ -181,12 +356,12 @@
   .hero-cta:hover {
     letter-spacing: 0.22em;
     background-color: rgba(255, 255, 255, 0.16);
-    border-color: #f87171;
-    color: #fca5a5;
+    border-color: var(--signal-red);
+    color: var(--signal-red-hover);
   }
 
   [data-header-theme="light"] .hero-cta:hover {
-    background-color: rgb(239 68 68 / 0.06);
+    background-color: oklch(0.637 0.237 25.3 / 0.06);
     border-color: var(--signal-red);
     color: var(--signal-red);
   }
@@ -247,17 +422,17 @@
 
   .about-quote-mark {
     display: block;
-    transform: translateY(clamp(-0.55rem, -0.8vw, -0.25rem));
+    transform: translateY(clamp(-0.45rem, -0.8vw, -0.25rem));
     color: rgb(255 255 255 / 0.44);
     font-family: var(--font-quote);
-    font-size: clamp(2.7rem, 5.2vw, 4.4rem);
+    font-size: clamp(2.25rem, 5.2vw, 4.4rem);
     font-weight: 500;
     line-height: 0.7;
     letter-spacing: -0.06em;
   }
 
   .about-quote-copy {
-    font-family: var(--font-serif);
+    font-family: var(--font-body);
     color: rgb(132 132 132 / 0.92);
     text-wrap: balance;
   }
@@ -270,80 +445,33 @@
     position: absolute;
     right: 50%;
     transform: translateX(50%);
-    bottom: clamp(8.2rem, 11vw, 12.2rem);
-    max-width: 31ch;
+    bottom: clamp(5.4rem, 11vw, 12.2rem);
+    max-width: clamp(25ch, 30vw, 31ch);
     color: rgb(235 241 248 / 0.55);
     font-family: var(--font-quote);
-    font-size: clamp(0.9rem, 1.1vw, 1.2rem);
+    font-size: clamp(0.82rem, 1.1vw, 1.2rem);
     font-weight: 400;
     line-height: 1.25;
     text-align: right;
     letter-spacing: 0.01em;
   }
 
-  @media (max-width: 1023px) {
-    .about-quote-mark {
-      transform: translateY(clamp(-0.45rem, -0.8vw, -0.18rem));
-      font-size: clamp(2.25rem, 7vw, 3.4rem);
-    }
-
-    .about-transition-note {
-      right: 50%;
-      transform: translateX(50%);
-      bottom: clamp(5.4rem, 12vw, 8rem);
-      max-width: 25ch;
-      font-size: clamp(0.82rem, 2.2vw, 1rem);
-    }
-  }
-
-  @media (max-width: 767px) {
-    .about-section {
-      --about-orb-size: clamp(274px, 86vw, 430px);
-      --about-orb-top: clamp(-88px, -16vw, -28px);
-    }
-
-    .about-quote-stage {
-      column-gap: clamp(0.38rem, 1.1vw, 0.66rem);
-    }
-
-    .about-flow-orb {
-      right: clamp(-190px, -36vw, -94px);
-    }
-  }
-
   /* ============================================================
      WORK EXPERIENCE — Responsive collapses for chapter cards
   ============================================================ */
-  @media (max-width: 1080px) {
-    .work-title-block { grid-column: 1 / span 8 !important; }
-    .work-chap-num { grid-column: 9 / -1 !important; }
-    .work-card-text { grid-column: 3 / span 5 !important; }
-    .work-card-keys { grid-column: 8 / -1 !important; }
-  }
-
   @media (max-width: 720px) {
     .work-chapter { padding-block: clamp(2.5rem, 6vh, 4rem) !important; }
-    .work-title-block { grid-column: 1 / -1 !important; }
     .work-title { font-size: clamp(2.5rem, 12vw, 4.5rem) !important; }
     .work-chap-num {
-      grid-column: 1 / -1 !important;
-      justify-self: start !important;
       font-size: clamp(2rem, 9vw, 3rem) !important;
       color: oklch(0.55 0.01 255 / 0.8) !important;
-      margin-top: 0.5rem !important;
     }
-    .work-card-label { grid-column: 1 / -1 !important; padding-top: 0 !important; }
-    .work-card-text { grid-column: 1 / -1 !important; }
-    .work-card-keys { grid-column: 1 / -1 !important; }
-  }
-
-  /* ============================================================
-     CREDENTIALS — Responsive grid
-  ============================================================ */
-  @media (max-width: 1023px) {
-    .creds-frame + .creds-frame + .creds-frame {
-      /* 2-column fallback */
+    .work-card-body {
+      flex-direction: column !important;
+      gap: clamp(1.5rem, 3vh, 2.25rem) !important;
     }
+    .work-card-body > * { width: 100% !important; }
+    .work-card-brief { max-width: 100% !important; }
   }
 
   /* ============================================================
@@ -371,6 +499,34 @@
   .gallery-frame:hover .gallery-frame-img {
     transform: scale(1.0);
     filter: grayscale(0.18) contrast(1.06) brightness(0.93);
+  }
+
+  /* ============================================================
+     SIGN-OFF — Wordmark scroll-reveal (matches our-revolution.com)
+  ============================================================ */
+  @keyframes up-zoom {
+    from { transform: translateY(100%) translateY(1px) translateZ(0); }
+    to   { transform: scale(1.25) translateZ(0); }
+  }
+
+  @keyframes from-small-up-zoom {
+    from { transform: translateY(100%) translateY(1px) scale(0.75) translateZ(0); }
+    to   { transform: scale(1) translateZ(0); }
+  }
+
+  .signoff-mark-inner {
+    animation: up-zoom both paused 750ms cubic-bezier(0.16, 1, 0.3, 1);
+    transform-origin: center bottom;
+  }
+
+  .signoff-mark-inner.is-revealed {
+    animation-play-state: running;
+  }
+
+  @media (max-width: 960px) {
+    .signoff-mark-inner {
+      animation-name: from-small-up-zoom;
+    }
   }
 
   /* ============================================================
@@ -407,7 +563,7 @@
     .signoff-cluster { order: 1; }
   }
 
-  @media (max-width: 640px) {
+  @media (max-width: 768px) {
     .signoff-cluster {
       grid-template-columns: repeat(2, 1fr) !important;
       row-gap: 2.25rem;
@@ -419,6 +575,19 @@
       align-items: center !important;
       justify-content: space-between;
     }
+  }
+
+  /* ============================================================
+     MOBILE DRAWER — hamburger nav overlay
+  ============================================================ */
+  @keyframes drawer-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @keyframes drawer-link-in {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 
   /* ============================================================
@@ -453,6 +622,11 @@
     }
     .gallery-frame-img {
       transform: scale(1) !important;
+    }
+
+    .signoff-mark-inner {
+      animation: none !important;
+      transform: none !important;
     }
   }
 }

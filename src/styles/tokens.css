@@ -1,8 +1,8 @@
 @theme {
-  --font-sans: 'Satoshi', ui-sans-serif, system-ui, sans-serif;
-  --font-display: 'Cabinet Grotesk', sans-serif;
-  --font-serif: 'Sentient', Georgia, serif;
-  --font-quote: 'Sentient', serif;
+  --font-sans: 'General Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'General Sans', sans-serif;
+  --font-body: 'General Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-quote: 'General Sans', ui-sans-serif, system-ui, sans-serif;
 }
 
 @layer base {
@@ -13,30 +13,53 @@
     --z-work: 30;
     --z-ui: 40;
 
-    /* Colors */
+    /* Colors — Night phase */
     --night-base: oklch(0.1 0.012 253);
+    --night-deep: oklch(0.06 0.01 253);
     --night-overlay: oklch(0.112 0.012 255 / 0.55);
-    --mist-line: oklch(0.94 0.01 255);
+    --frost-text: oklch(0.97 0.005 255);
+    --frost-dim: oklch(0.97 0.005 255 / 0.55);
+
+    /* Colors — Day phase */
     --day-surface: oklch(0.93 0.005 255);
+    --day-surface-warm: oklch(0.96 0.003 255);
     --day-ink: oklch(0.12 0.01 255);
+    --day-heading: oklch(0.10 0.01 255);
+    --day-body: oklch(0.19 0.01 255);
+    --day-secondary: oklch(0.22 0.01 255);
     --day-muted: oklch(0.34 0.01 255);
-    --frost-text: #f5f8fc;
-    --signal-red: #ef4444;
-    --signal-red-deep: #dc2626;
+    --day-meta: oklch(0.48 0.01 255);
+    --day-faint: oklch(0.50 0.01 255);
+    --day-signal-text: oklch(0.42 0.01 255);
+    --mist-line: oklch(0.94 0.01 255);
+
+    /* Colors — Signal */
+    --signal-red: oklch(0.637 0.237 25.3);
+    --signal-red-deep: oklch(0.577 0.245 27.3);
+    --signal-red-hover: oklch(0.70 0.20 25.3);
+
+    /* Colors — Borders */
+    --border-frost-soft: oklch(1 0 0 / 0.10);
+    --border-frost-mid: oklch(1 0 0 / 0.30);
+    --border-day: oklch(0.82 0.01 255);
+    --border-day-strong: oklch(0.85 0.01 255);
+    --border-day-faint: oklch(0.88 0.005 255);
+
+    /* Colors — Stamps & badges */
+    --day-stamp-bg: oklch(0.91 0.005 255);
+    --day-stamp-border: oklch(0.83 0.01 255);
 
     /* Type scale */
     --text-hero: clamp(52px, 11vw, 156px);
     --text-display: clamp(40px, 7vw, 100px);
+    --text-headline: clamp(2.75rem, 8vw, 8rem);
     --text-section: clamp(28px, 4vw, 56px);
     --text-meta: clamp(11px, 1vw, 13px);
     --text-body: clamp(15px, 1.2vw, 17px);
     --text-quote: clamp(18px, 2vw, 28px);
 
-    /* Layout */
-    --layout-padding: clamp(20px, 6vw, 96px);
-    --layout-cols: repeat(12, 1fr);
-    --layout-gap: clamp(12px, 2vw, 24px);
-    --content-span: 2 / 12;
+    /* Layout — editorial full-bleed: no container, padding controls breathing room */
+    --layout-padding: clamp(1.25rem, 6vw, 8vw);
 
     /* Easing */
     --transition-line-color: oklch(0.94 0.01 255);
@@ -52,14 +75,15 @@
   }
 
   body {
-    @apply bg-black text-white;
+    background: var(--night-base);
+    color: var(--frost-text);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
   ::selection {
-    background: rgba(239, 68, 68, 0.35);
-    color: #fff;
+    background: oklch(0.637 0.237 25.3 / 0.35);
+    color: var(--frost-text);
   }
 
   @media (prefers-reduced-motion: reduce) {

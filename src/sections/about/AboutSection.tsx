@@ -63,8 +63,8 @@ export function AboutSection({ transitionProgress = 0 }: AboutSectionProps) {
     <motion.section
       id={aboutContent.id}
       ref={sectionRef}
-      className="about-section relative isolate z-[var(--z-about)] min-h-[135vh] overflow-hidden sm:min-h-[145vh] md:min-h-[152vh] lg:min-h-[162vh]"
-      style={{ paddingInline: 'var(--layout-padding)' }}
+      className="about-section relative isolate z-[var(--z-about)] overflow-hidden"
+      style={{ paddingInline: 'var(--layout-padding)', minHeight: 'clamp(135vh, 140vh + 5vw, 162vh)' }}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.2 }}
@@ -82,10 +82,10 @@ export function AboutSection({ transitionProgress = 0 }: AboutSectionProps) {
 
       <aside
         aria-label="About section progress"
-        className="pointer-events-none absolute top-1/2 right-2 z-30 hidden -translate-y-1/2 items-center gap-3 md:flex lg:right-4"
-        style={{ opacity: aboutRailOpacity }}
+        className="pointer-events-none absolute top-1/2 z-30 hidden -translate-y-1/2 items-center gap-3 md:flex"
+        style={{ right: 'clamp(0.5rem, 1.5vw, 1rem)', opacity: aboutRailOpacity }}
       >
-        <div className="relative h-[16.5rem] w-[2px] overflow-hidden rounded-full bg-white/24 lg:h-[19rem]">
+        <div className="relative w-[2px] overflow-hidden rounded-full bg-white/24" style={{ height: 'clamp(16.5rem, 18vw, 19rem)' }}>
           <span className="absolute -top-1 left-1/2 h-[5px] w-[5px] -translate-x-1/2 rounded-full bg-white/45" />
           <span className="absolute -bottom-1 left-1/2 h-[5px] w-[5px] -translate-x-1/2 rounded-full bg-white/45" />
           <motion.span
@@ -100,17 +100,19 @@ export function AboutSection({ transitionProgress = 0 }: AboutSectionProps) {
         </div>
       </aside>
 
-      <header className="about-header flex min-h-11 w-full items-center justify-between gap-4 text-[var(--text-meta)] font-light uppercase tracking-[0.16em] text-white/86 sm:tracking-[0.2em] md:tracking-[0.24em]"
-        style={{ gridColumn: 'var(--content-span)' }}
+      <header
+        className="about-header flex min-h-11 w-full items-center justify-between gap-4 text-[var(--text-meta)] font-light uppercase text-white/86"
+        style={{ letterSpacing: 'clamp(0.16em, 0.5vw, 0.24em)' }}
       >
         <span className="whitespace-nowrap">{aboutContent.eyebrow}</span>
-        <a href="#hero" className="about-header-link inline-flex min-h-11 items-center px-3 transition-colors duration-200 ease-[var(--ease-quart-out)] hover:text-red-300 sm:px-4">
+        <a href="#hero" className="about-header-link inline-flex min-h-11 items-center transition-colors duration-200 ease-[var(--ease-quart-out)] hover:text-[var(--signal-red-hover)]" style={{ paddingInline: 'clamp(0.75rem, 1.5vw, 1rem)' }}>
           Back to top
         </a>
       </header>
 
-      <div className="mt-6 grid min-h-[540px] w-full grid-cols-1 gap-10 lg:mt-8 lg:grid-cols-[1.25fr_0.95fr] lg:gap-8"
-        style={{ gridColumn: 'var(--content-span)' }}
+      <div
+        className="grid w-full grid-cols-[1.25fr_0.95fr]"
+        style={{ marginTop: 'clamp(1.5rem, 3vw, 2rem)', minHeight: '540px', gap: 'clamp(2rem, 4vw, 2.5rem)' }}
       >
         <motion.div variants={aboutItemVariants} className="relative h-full">
           <h2 className="pointer-events-none absolute left-0 top-16 select-none font-display text-[var(--text-display)] font-semibold uppercase leading-[0.82] tracking-tight text-white/78">
@@ -124,14 +126,15 @@ export function AboutSection({ transitionProgress = 0 }: AboutSectionProps) {
           </span>
         </motion.div>
 
-        <motion.div variants={aboutItemVariants} className="relative z-10 pt-14 lg:pt-24">
+        <motion.div variants={aboutItemVariants} className="relative z-10" style={{ paddingTop: 'clamp(3.5rem, 6vw, 6rem)' }}>
           <figure className="about-figure group relative max-w-[37ch] overflow-hidden border border-white/25 bg-white/[0.03] p-2 shadow-[0_16px_42px_rgba(0,0,0,0.42)]">
             <span aria-hidden="true" className="pointer-events-none absolute inset-0 border border-white/8" />
             <span aria-hidden="true" className="pointer-events-none absolute inset-x-2 top-2 h-px bg-white/20" />
             <img
               src={aboutUsImage}
               alt={aboutContent.imageAlt}
-              className="about-figure-img h-[280px] w-full border border-white/12 object-cover grayscale-[8%] contrast-[1.04] brightness-[0.98]"
+              className="about-figure-img w-full max-h-[360px] border border-white/12 object-cover grayscale-[8%] contrast-[1.04] brightness-[0.98]"
+              style={{ aspectRatio: '16 / 11' }}
               loading="lazy"
             />
           </figure>
@@ -141,8 +144,8 @@ export function AboutSection({ transitionProgress = 0 }: AboutSectionProps) {
       <motion.article
         ref={narrativeRef}
         variants={aboutItemVariants}
-        className="about-copy-wrap mt-8 w-full pb-20 sm:pb-24 md:mt-10 md:pb-28 lg:mt-12 lg:pb-36"
-        style={{ gridColumn: 'var(--content-span)' }}
+        className="about-copy-wrap w-full"
+        style={{ marginTop: 'clamp(2rem, 3.5vw, 3rem)', paddingBottom: 'clamp(5rem, 9vw, 9rem)' }}
       >
         <motion.p
           className="about-transition-note"
@@ -156,7 +159,7 @@ export function AboutSection({ transitionProgress = 0 }: AboutSectionProps) {
             ,,
           </span>
           <motion.p
-            className="about-reading-glow about-quote-copy w-full max-w-none text-[var(--text-quote)] font-light leading-[1.35] tracking-[-0.004em]"
+            className="about-reading-glow about-quote-copy w-full max-w-none text-[var(--text-quote)] font-normal leading-[1.35] tracking-[-0.004em]"
             style={{ opacity: prefersReducedMotion ? 0.95 : quoteOpacity, y: prefersReducedMotion ? 0 : quoteY }}
           >
             {quoteLines.map((line, index) => (

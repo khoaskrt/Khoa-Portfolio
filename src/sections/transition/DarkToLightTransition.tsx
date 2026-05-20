@@ -80,7 +80,8 @@ export function DarkToLightTransition({ onRevealReadyChange, onProgressChange }:
       ref={bandRef}
       aria-hidden="true"
       data-phase={`phase-${phase}`}
-      className="relative isolate z-[var(--z-transition)] h-[clamp(15rem,42dvh,22rem)] min-h-[240px] max-h-[352px] overflow-hidden bg-[oklch(0.1_0.012_253)] [contain:layout_paint] sm:h-[clamp(18rem,48dvh,27rem)] sm:min-h-[288px] sm:max-h-[432px] md:h-[clamp(21rem,54dvh,32rem)] md:min-h-[336px] md:max-h-[512px] lg:h-[clamp(24rem,58dvh,38rem)] lg:min-h-[384px] lg:max-h-[608px]"
+      className="relative isolate z-[var(--z-transition)] overflow-hidden bg-[oklch(0.1_0.012_253)] [contain:layout_paint]"
+      style={{ height: 'clamp(15rem, 52dvh, 38rem)', minHeight: 'clamp(240px, 30vw, 384px)', maxHeight: 'clamp(352px, 48vw, 608px)' }}
     >
       <motion.div
         aria-hidden="true"
@@ -115,7 +116,8 @@ export function DarkToLightTransition({ onRevealReadyChange, onProgressChange }:
 
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-[clamp(4rem,9vh,7rem)] bg-gradient-to-b from-[oklch(0.93_0.005_255/0)] via-[oklch(0.93_0.005_255/0.62)] to-[oklch(0.93_0.005_255)] sm:h-[clamp(4.5rem,10vh,7.5rem)]"
+        className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-b from-[oklch(0.93_0.005_255/0)] via-[oklch(0.93_0.005_255/0.62)] to-[oklch(0.93_0.005_255)]"
+        style={{ height: 'clamp(4rem, 9vh, 7.5rem)' }}
       />
     </section>
   );
