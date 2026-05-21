@@ -14,8 +14,8 @@ colors:
   day-faint: "oklch(0.50 0.01 255)"
   signal-red: "oklch(0.637 0.237 25.3)"
   signal-red-deep: "oklch(0.577 0.245 27.3)"
-  frost-text: "oklch(0.97 0.005 255)"
-  frost-dim: "oklch(0.97 0.005 255 / 0.55)"
+  frost-text: "#ffffff"
+  frost-dim: "#ffffff"
   border-frost-soft: "oklch(1 0 0 / 0.10)"
   border-frost-mid: "oklch(1 0 0 / 0.30)"
   border-day: "oklch(0.82 0.01 255)"
@@ -162,12 +162,12 @@ Tinted neutrals dominate both phases. Signal red is the single accent, held belo
 - **Night Base** (`oklch(0.1 0.012 253)`): Primary dark foundation. Not pure black; blue-tinted for depth.
 - **Night Deep** (`oklch(0.06 0.01 253)`): Deepest tone for vignettes and gradients within dark sections.
 - **Night Overlay** (`oklch(0.112 0.012 255 / 0.55)`): Atmospheric layer. Preserves depth without card stacking.
-- **Frost Text** (`oklch(0.97 0.005 255)`): High-contrast foreground on dark surfaces. Blue-tinted, never pure white.
-- **Frost Dim** (`oklch(0.97 0.005 255 / 0.55)`): Secondary text, timestamps, muted metadata on dark.
+- **Frost Text** (`#ffffff`): Pure white foreground on dark surfaces. Maximum contrast for readability.
+- **Frost Dim** (`#ffffff`): Secondary text on dark surfaces. Same pure white as primary text.
 
-### Day Phase (Work Experience, Credentials, Gallery)
+### Day Phase (Work Experience, Moment Recap, Credentials)
 - **Day Surface** (`oklch(0.93 0.005 255)`): Primary light background. Warm enough to feel confident, not washed out.
-- **Day Surface Warm** (`oklch(0.96 0.003 255)`): Lighter variant for featured content framing (credential images, gallery).
+- **Day Surface Warm** (`oklch(0.96 0.003 255)`): Lighter variant for featured content framing (credential images, moment recap).
 - **Day Ink** (`oklch(0.12 0.01 255)`): Primary text. Nearly black, blue-tinted.
 - **Day Secondary** (`oklch(0.22 0.01 255)`): Body copy and supporting text.
 - **Day Muted** (`oklch(0.34 0.01 255)`): Metadata, timestamps, operational language.
@@ -197,7 +197,7 @@ General Sans is a geometric sans-serif that carries the full typographic range. 
 | Role | Weight | Size | Line-height | Tracking | Usage |
 |---|---|---|---|---|---|
 | **Display** | 700 | `clamp(3.5rem, 14vw, 12rem)` | 0.82 | -0.02em | Hero name, identity statements |
-| **Headline** | 700 | `clamp(2.75rem, 8vw, 8rem)` | 0.88 | -0.04em | Section headings (Work, Gallery) |
+| **Headline** | 700 | `clamp(2.75rem, 8vw, 8rem)` | 0.88 | -0.04em | Section headings (Work, Moment Recap) |
 | **Section** | 700 | `clamp(1.75rem, 4vw, 3.5rem)` | 0.88 | -0.04em | Sub-section heads (Credentials) |
 | **Title** | 500 | `clamp(1.34rem, 1.62vw, 1.92rem)` | 1.1 | -0.02em | Role titles, credential names |
 | **Body** | 400 | `clamp(0.875rem, 1.1vw, 1rem)` | 1.45 | 0.004em | Supporting copy, narrative |
@@ -222,22 +222,22 @@ Every section spans 100vw. No `max-width` container wraps content. Text width is
 - **Font sizes:** vw-based `clamp()` values self-scale. No breakpoint font overrides.
 - **Spacing:** `clamp()` for all padding, margins, and gaps. Fluid, not stepped.
 - **Images:** `object-fit: cover` on fixed-ratio containers (`aspect-ratio: 16/11`, `1/1`).
-- **Structural breakpoints:** Kept to the minimum needed for content stacking (mobile column collapse for work cards, gallery frames, signoff cluster). No sizing-only breakpoints.
+- **Structural breakpoints:** Kept to the minimum needed for content stacking (mobile column collapse for work cards, moment recap frames, signoff cluster). No sizing-only breakpoints.
 
 ### Spatial Rhythm (forward-looking target)
 The sirnik.co reference uses dramatically varied spacing. Sections should NOT have uniform padding. Target rhythm:
 - **Hero:** Full-viewport, no top/bottom padding visible. Content pushed to edges.
 - **About:** Generous vertical space (clamp 3rem-5rem top, clamp 9rem-16rem bottom). The scroll distance IS the narrative pacing.
 - **Transition:** Variable height, scroll-driven. Not a section; a bridge.
-- **Work/Credentials/Gallery:** Moderate, consistent padding. The content density provides rhythm; spacing stays calm.
+- **Work/Moment Recap/Credentials:** Moderate, consistent padding. The content density provides rhythm; spacing stays calm.
 - **SignOff:** Compressed top, generous internal spacing. The wordmark IS the spatial statement.
 
 ### Grid Within Full-Bleed
 Individual sections use CSS grid or flexbox for internal layout. No global grid columns. Each section owns its own internal structure:
 - **About:** 2-column (1.25fr / 0.95fr) for wall-title + image
 - **Work chapters:** Full-width cards with flex-wrap body (label | operative | keypoints)
+- **Moment Recap:** 2-column frames (media | content), stacking to 1-column on mobile
 - **Credentials:** Featured credential as 2-column, compact rows as single-column
-- **Gallery:** 2-column frames (media | content), stacking to 1-column on mobile
 - **SignOff:** 2-column (wordmark | cluster grid)
 
 ## Elevation
@@ -248,7 +248,7 @@ Depth through overlays and tonal gradients, not card stacking. Most surfaces are
 - **Signal Halo** (`0 0 10px rgb(255 255 255 / 0.3)`): Active rail-dot emphasis.
 - **Frame Depth** (`0 16px 42px rgb(0 0 0 / 0.42)`): Image grounding on dark surfaces.
 - **Orb Ambient** (`0 16px 80px rgb(0 0 0 / 0.38)`): Background-orb separation.
-- **Light Frame** (`0 4px 28px oklch(0.12 0.01 255 / 0.07)`): Credential/gallery image framing on day surfaces.
+- **Light Frame** (`0 4px 28px oklch(0.12 0.01 255 / 0.07)`): Credential/moment recap image framing on day surfaces.
 
 **The Flat Surface Rule.** Elevation appears only to anchor key imagery or indicate active state. Never decorative.
 
@@ -263,7 +263,7 @@ Depth through overlays and tonal gradients, not card stacking. Most surfaces are
 ### Motion Vocabulary
 | Pattern | Properties | Duration | Easing | Usage |
 |---|---|---|---|---|
-| **Section reveal** | opacity, translateY | 900-1200ms | expo-out | Work cards, gallery frames, credentials |
+| **Section reveal** | opacity, translateY | 900-1200ms | expo-out | Work cards, moment recap frames, credentials |
 | **Hero entrance** | opacity, translateY, blur | 1500ms | expo-out | h1/h2 staggered reveal after preloader |
 | **Hover shift** | color, border-color, letter-spacing | 200-450ms | quart-out | Nav links, CTAs, interactive elements |
 | **Scroll-linked** | scaleY, scaleX, opacity | continuous | transform-driven | Transition band, about rail progress |
@@ -290,7 +290,7 @@ Elements within a section stagger by 60-140ms per item. Never more than 5 stagge
 ### Image Frames
 - **Treatment:** 1px border, subtle inner highlight line at top edge. No rounded corners.
 - **Filter:** Light desaturation (`grayscale 3-8%`), micro contrast boost (`contrast 1.02-1.06`).
-- **Aspect:** Fixed ratios (`16/11` for portraits/certs, `1/1` for gallery).
+- **Aspect:** Fixed ratios (`16/11` for portraits/certs, `1/1` for moment recap).
 - **Behavior:** `object-fit: cover`. No cropping breakpoint logic.
 
 ### Section Headers

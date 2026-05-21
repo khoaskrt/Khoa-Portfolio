@@ -97,12 +97,7 @@ export function PortfolioHeader() {
             ))}
           </nav>
 
-          <a
-            href="#signoff"
-            className="hero-cta inline-flex min-h-11 items-center justify-center whitespace-nowrap border border-white/45 bg-white/10 px-4 py-2 text-[var(--text-label)] font-medium tracking-[0.14em] text-[var(--frost-text)] sm:px-4 sm:py-2.5 sm:tracking-[0.18em]"
-          >
-            {headerContent.ctaLabel}
-          </a>
+
         </div>
       </header>
 
@@ -147,7 +142,7 @@ export function PortfolioHeader() {
           </div>
 
           {/* Drawer links */}
-          <nav className="flex flex-1 flex-col items-start justify-center gap-8 px-8" aria-label="Main menu">
+          <nav className="flex flex-1 flex-col items-start justify-center gap-6 overflow-y-auto px-8 py-4" aria-label="Main menu">
             {headerContent.navLinks.map((link, i) => (
               <a
                 key={link.href}
@@ -169,7 +164,7 @@ export function PortfolioHeader() {
           </nav>
 
           {/* Drawer footer */}
-          <div className="px-8 pb-8 text-[var(--text-meta)] font-light uppercase tracking-[0.2em] text-white/40">
+          <div className="safe-area-pad px-8 pb-6 text-[var(--text-meta)] font-light uppercase tracking-[0.2em] text-white">
             {headerContent.subtitleYear} {headerContent.subtitleLabel}
           </div>
         </div>

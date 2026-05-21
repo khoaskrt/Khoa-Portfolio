@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
-import { galleryContent } from './content';
-import { galleryMotion } from './motion';
+import { momentRecapContent } from './content';
+import { momentRecapMotion } from './motion';
 import './styles.css';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
@@ -36,11 +36,11 @@ function ScrollHint({ parentTween }: { parentTween: gsap.core.Tween | null }) {
   return (
     <div
       ref={hintRef}
-      className="gallery-scroll-hint"
+      className="moment-recap-scroll-hint"
       aria-hidden="true"
     >
-      <span className="gallery-scroll-hint-label">Scroll</span>
-      <svg viewBox="0 0 24 12" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="square" className="gallery-scroll-hint-arrow">
+      <span className="moment-recap-scroll-hint-label">Scroll</span>
+      <svg viewBox="0 0 24 12" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="square" className="moment-recap-scroll-hint-arrow">
         <line x1="0" y1="6" x2="20" y2="6" />
         <polyline points="15 1 20 6 15 11" />
       </svg>
@@ -65,7 +65,7 @@ function useReducedMotion(): boolean {
   return reduced;
 }
 
-export function GallerySection() {
+export function MomentRecapSection() {
   const reducedMotion = useReducedMotion();
 
   const sectionRef = useRef<HTMLElement>(null);
@@ -78,37 +78,6 @@ export function GallerySection() {
   const horizontalTweenRef = useRef<gsap.core.Tween | null>(null);
   const [tweenReady, setTweenReady] = useState(false);
 
-  const transitionZoneRef = useRef<HTMLDivElement>(null);
-  const transitionLineRef = useRef<HTMLDivElement>(null);
-
-  const bridgeRef = useRef<HTMLDivElement>(null);
-  const bridgeLineRef = useRef<HTMLDivElement>(null);
-
-  // Transition zone — chapter-break line expands from center
-  useEffect(() => {
-    if (reducedMotion) return;
-    const zone = transitionZoneRef.current;
-    const line = transitionLineRef.current;
-    if (!zone || !line) return;
-
-    gsap.set(line, { scaleX: 0, transformOrigin: 'center center' });
-
-    const tween = gsap.to(line, {
-      scaleX: 1,
-      ease: 'power3.inOut',
-      scrollTrigger: {
-        trigger: zone,
-        start: 'top 75%',
-        end: 'center 40%',
-        scrub: 1,
-      },
-    });
-
-    return () => {
-      tween.scrollTrigger?.kill();
-      tween.kill();
-    };
-  }, [reducedMotion]);
 
   // Horizontal scroll — pin + scrub
   useEffect(() => {
@@ -118,6 +87,9 @@ export function GallerySection() {
     if (!section || !wrapper) return;
 
     const scrollDistance = () => wrapper.scrollWidth - window.innerWidth;
+    const scrollMultiplier = 1.5;
+
+    const cardCount = momentRecapContent.frames.length;
 
     const tween = gsap.to(wrapper, {
       x: () => -scrollDistance(),
@@ -125,11 +97,17 @@ export function GallerySection() {
       scrollTrigger: {
         trigger: section,
         pin: true,
-        scrub: 1.2,
+        scrub: 2.8,
         anticipatePin: 1,
         start: 'top top',
-        end: () => '+=' + scrollDistance(),
+        end: () => '+=' + scrollDistance() * scrollMultiplier,
         invalidateOnRefresh: true,
+        snap: {
+          snapTo: 1 / (cardCount - 1),
+          duration: { min: 0.6, max: 1.4 },
+          delay: 0.12,
+          ease: 'power3.inOut',
+        },
       },
     });
 
@@ -143,28 +121,6 @@ export function GallerySection() {
     };
   }, [reducedMotion]);
 
-  // Exit bridge — gradient from light to dark after pin releases
-  useEffect(() => {
-    if (reducedMotion) return;
-    const bridge = bridgeRef.current;
-    const line = bridgeLineRef.current;
-    if (!bridge || !line) return;
-
-    gsap.set(line, { scaleX: 0, transformOrigin: 'center center' });
-
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: bridge,
-        start: 'top 80%',
-        end: 'bottom 30%',
-        scrub: 1,
-      },
-    });
-
-    tl.to(line, { scaleX: 1, ease: 'power3.inOut' });
-
-    return () => { tl.kill(); };
-  }, [reducedMotion]);
 
   // Intro reveal — stagger header elements before pin engages
   useEffect(() => {
@@ -177,7 +133,7 @@ export function GallerySection() {
     if (bufferLine) {
       gsap.set(bufferLine, { scaleX: 0, transformOrigin: 'left center' });
     }
-    gsap.set(els, { opacity: 0, y: galleryMotion.intro.y });
+    gsap.set(els, { opacity: 0, y: momentRecapMotion.intro.y });
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -193,34 +149,22 @@ export function GallerySection() {
     tl.to(els, {
       opacity: 1,
       y: 0,
-      duration: galleryMotion.intro.duration,
-      ease: galleryMotion.ease.expoOut,
-      stagger: galleryMotion.intro.stagger,
+      duration: momentRecapMotion.intro.duration,
+      ease: momentRecapMotion.ease.expoOut,
+      stagger: momentRecapMotion.intro.stagger,
     }, bufferLine ? '-=0.55' : 0);
 
     return () => { tl.kill(); };
   }, [reducedMotion]);
 
   return (
-    <>
-      <div
-        ref={transitionZoneRef}
-        className="gallery-chapter-break"
-        style={{ background: 'var(--day-surface)' }}
-        aria-hidden="true"
-      >
-        <div
-          ref={transitionLineRef}
-          className="gallery-chapter-line"
-        />
-      </div>
-      <section
+    <section
         ref={sectionRef}
-        id={galleryContent.id}
-        className="gallery-section relative isolate text-[var(--day-body)]"
+        id={momentRecapContent.id}
+        className="moment-recap-section relative isolate text-[var(--day-body)]"
         style={{ background: 'var(--day-surface)' }}
       >
-        <div ref={headerWrapperRef} className="gallery-header" style={{ paddingInline: 'var(--layout-padding)' }}>
+        <div ref={headerWrapperRef} className="moment-recap-header" style={{ paddingInline: 'var(--layout-padding)' }}>
           <div
             ref={bufferLineRef}
             className="h-px w-full bg-[var(--border-day)]"
@@ -234,25 +178,19 @@ export function GallerySection() {
             ref={headerRef}
             className="flex w-full items-center justify-between gap-4 text-[var(--text-meta)] font-light leading-none tracking-[0.24em] uppercase text-[var(--day-meta)]"
           >
-            <p className="m-0">{galleryContent.headerLabel}</p>
+            <p className="m-0">{momentRecapContent.headerLabel}</p>
           </header>
 
           <div
             ref={leadRef}
-            className="flex w-full flex-wrap items-end justify-between gap-x-8 gap-y-4"
             style={{ marginTop: 'clamp(1.5rem, 3vh, 2.5rem)' }}
           >
             <h2
               className="m-0 font-display font-bold leading-[0.88] tracking-[-0.04em] text-[var(--day-heading)]"
               style={{ fontSize: 'var(--text-section)' }}
             >
-              {galleryContent.headline[0]}<br />{galleryContent.headline[1]}
+              {momentRecapContent.headline}
             </h2>
-            <div className="flex items-center gap-[0.6rem] pb-2 text-[var(--text-label)] font-light tracking-[0.2em] uppercase text-[var(--day-faint)]">
-              <span>{galleryContent.leadMeta.count}</span>
-              <span className="opacity-40" aria-hidden="true">·</span>
-              <span>{galleryContent.leadMeta.range}</span>
-            </div>
           </div>
 
           <div
@@ -265,11 +203,11 @@ export function GallerySection() {
 
         <div
           ref={slidesWrapperRef}
-          className="gallery-slides-wrapper"
+          className="moment-recap-slides-wrapper"
           style={{ flexDirection: reducedMotion ? 'column' : 'row' }}
         >
-          {galleryContent.frames.map((frame, index) => (
-            <GalleryFrame
+          {momentRecapContent.frames.map((frame, index) => (
+            <MomentRecapFrame
               key={frame.number}
               frame={frame}
               index={index}
@@ -282,29 +220,19 @@ export function GallerySection() {
         {!reducedMotion && (
           <ScrollHint parentTween={tweenReady ? horizontalTweenRef.current : null} />
         )}
-      </section>
-
-      {/* Light-to-dark bridge — smooth exit into signoff */}
-      <div
-        ref={bridgeRef}
-        className="gallery-exit-bridge"
-        aria-hidden="true"
-      >
-        <div ref={bridgeLineRef} className="gallery-exit-bridge-line" />
-      </div>
-    </>
+    </section>
   );
 }
 
-type GalleryFrameProps = {
+type MomentRecapFrameProps = {
   key?: string;
-  frame: (typeof galleryContent.frames)[number];
+  frame: (typeof momentRecapContent.frames)[number];
   index: number;
   reducedMotion: boolean;
   parentTween: gsap.core.Tween | null;
 };
 
-function GalleryFrame({ frame, index, reducedMotion, parentTween }: GalleryFrameProps) {
+function MomentRecapFrame({ frame, index, reducedMotion, parentTween }: MomentRecapFrameProps) {
   const titleRef = useRef<HTMLHeadingElement>(null);
 
   // SplitText character stagger on title
@@ -315,14 +243,14 @@ function GalleryFrame({ frame, index, reducedMotion, parentTween }: GalleryFrame
 
     const split = new SplitText(titleEl, { type: 'chars' });
 
-    gsap.set(split.chars, { y: galleryMotion.splitText.y, opacity: 0 });
+    gsap.set(split.chars, { y: momentRecapMotion.splitText.y, opacity: 0 });
 
     const tween = gsap.to(split.chars, {
       y: 0,
       opacity: 1,
-      duration: galleryMotion.splitText.duration,
-      ease: galleryMotion.ease.quadOut,
-      stagger: galleryMotion.splitText.stagger,
+      duration: momentRecapMotion.splitText.duration,
+      ease: momentRecapMotion.ease.quadOut,
+      stagger: momentRecapMotion.splitText.stagger,
       scrollTrigger: {
         trigger: titleEl,
         containerAnimation: parentTween,
@@ -340,12 +268,12 @@ function GalleryFrame({ frame, index, reducedMotion, parentTween }: GalleryFrame
 
   return (
     <article
-      className="gallery-slide gallery-frame group"
+      className="moment-recap-slide moment-recap-frame group"
       style={{ width: reducedMotion ? 'auto' : '100vw' }}
     >
       {/* Media */}
       <div
-        className="gallery-frame-media relative isolate overflow-hidden bg-[var(--day-surface-warm)]"
+        className="moment-recap-frame-media relative isolate overflow-hidden bg-[var(--day-surface-warm)]"
       >
         <div className="pointer-events-none absolute inset-0 z-2 border border-[var(--night-deep)]/5" />
         <span
@@ -359,7 +287,7 @@ function GalleryFrame({ frame, index, reducedMotion, parentTween }: GalleryFrame
             src={frame.image}
             alt={frame.alt}
             loading={index === 0 ? 'eager' : 'lazy'}
-            className="absolute inset-0 block h-full w-full object-cover grayscale-[0.55] contrast-[1.04] brightness-[0.97]"
+            className="absolute inset-0 block h-full w-full object-cover"
             style={{
               transform: 'scale(1.035)',
               transformOrigin: 'center center',
@@ -375,7 +303,7 @@ function GalleryFrame({ frame, index, reducedMotion, parentTween }: GalleryFrame
 
       {/* Content */}
       <div
-        className="gallery-frame-content flex flex-col"
+        className="moment-recap-frame-content flex flex-col"
         style={{ gap: 'clamp(1rem, 2vh, 1.6rem)' }}
       >
         <p className="m-0 flex items-center gap-[0.6rem] font-sans text-[var(--text-meta)] font-light tracking-[0.26em] uppercase text-[var(--day-meta)]">
@@ -398,60 +326,7 @@ function GalleryFrame({ frame, index, reducedMotion, parentTween }: GalleryFrame
         </p>
       </div>
 
-      {/* Meta table */}
-      <dl
-        className="gallery-frame-meta grid border-t border-[var(--border-day)]"
-        style={{
-          marginTop: 'clamp(1rem, 2vh, 1.5rem)',
-          gridTemplateColumns: 'minmax(90px, 1fr) minmax(0, 3fr)',
-          columnGap: 'clamp(0.75rem, 1.5vw, 1.5rem)',
-        }}
-      >
-        {frame.meta.map((item) => (
-          <MetaRow key={item.label} item={item} />
-        ))}
-      </dl>
     </article>
   );
 }
 
-type MetaRowProps = {
-  key?: string;
-  item: { label: string; value: string; stamps?: string[]; tags?: string[] };
-};
-
-function MetaRow({ item }: MetaRowProps) {
-  const cellStyle = {
-    margin: 0,
-    padding: 'clamp(0.85rem, 1.6vh, 1.1rem) 0',
-    borderBottom: '1px solid var(--border-day)',
-    fontFamily: 'var(--font-sans)',
-    fontWeight: 300,
-    fontSize: 'var(--text-meta)',
-    lineHeight: 1.45,
-  };
-
-  return (
-    <>
-      <dt style={{ ...cellStyle, letterSpacing: '0.22em', textTransform: 'uppercase' as const, color: 'var(--day-faint)' }}>
-        {item.label}
-      </dt>
-      <dd style={{ ...cellStyle, color: 'var(--day-secondary)', letterSpacing: '0.04em', display: 'flex', flexWrap: 'wrap' as const, gap: '0.3rem 1rem' }}>
-        {item.tags?.map((tag) => (
-          <span key={tag} className="text-[var(--text-label)] font-light tracking-[0.16em] uppercase text-[var(--day-signal-text)] whitespace-nowrap">
-            [ {tag} ]
-          </span>
-        ))}
-        {item.stamps?.map((stamp) => (
-          <span
-            key={stamp}
-            className="inline-flex items-center border border-[var(--day-stamp-border)] bg-[var(--day-stamp-bg)] px-2 py-[0.18rem] text-[var(--text-label)] font-normal tracking-[0.20em] uppercase text-[var(--day-secondary)] whitespace-nowrap"
-          >
-            {stamp}
-          </span>
-        ))}
-        {!item.tags && !item.stamps && item.value}
-      </dd>
-    </>
-  );
-}

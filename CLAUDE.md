@@ -7,7 +7,8 @@ src/
 ├── app/
 │   ├── App.tsx                        # Section composer — minimal logic
 │   └── hooks/useTransitionState.ts    # Shared transition state hook
-├── components/                        # Shared UI (PortfolioHeader, PreLoader)
+├── components/                        # Shared UI (PortfolioHeader, PreLoader, CustomCursor)
+│   ├── CustomCursor.tsx
 │   ├── PortfolioHeader.tsx
 │   ├── header-content.ts
 │   └── PreLoader.tsx
@@ -22,8 +23,8 @@ src/
     ├── about/
     ├── transition/
     ├── work-experience/
+    ├── moment-recap/
     ├── credentials/
-    ├── gallery/
     └── signoff/
 docs/                                  # PRODUCT.md, DESIGN.md, DESIGN.json, typography.md
 ```
@@ -51,7 +52,7 @@ When multiple agents work on the same codebase in parallel chat sessions, follow
 |---|---|---|
 | **Section zone** | `src/sections/<name>/*` | **Exclusive** — only the agent assigned to that section may edit files in it. Other agents must not read-then-write these files. |
 | **Shared read-only zone** | `src/styles/tokens.css`, `src/styles/utilities.css`, `src/motion/easing.ts` | **Read only** — consume CSS variables and easing values, never add/modify/delete entries. |
-| **Shared components zone** | `src/components/*` | **Add only** — agents may create NEW files here, but must NOT modify existing files (`PortfolioHeader.tsx`, `PreLoader.tsx`, `header-content.ts`). |
+| **Shared components zone** | `src/components/*` | **Add only** — agents may create NEW files here, but must NOT modify existing files (`CustomCursor.tsx`, `PortfolioHeader.tsx`, `PreLoader.tsx`, `header-content.ts`). |
 | **App composer zone** | `src/app/App.tsx`, `src/app/hooks/*` | **Restricted** — only touch when adding/removing a section. Changes must be limited to import + JSX line. Never add logic or state here. |
 | **Design system zone** | `docs/DESIGN.md`, `docs/DESIGN.json`, `src/styles/tokens.css` | **Locked** — only a dedicated design-system task may modify these. Section agents must not edit. |
 

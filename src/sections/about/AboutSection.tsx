@@ -187,7 +187,7 @@ export function AboutSection({ transitionProgress = 0 }: AboutSectionProps) {
 
       <header
         ref={headerRef}
-        className="about-header flex min-h-11 w-full items-center justify-between gap-4 text-[var(--text-meta)] font-light uppercase text-white/86"
+        className="about-header flex min-h-11 w-full items-center justify-between gap-4 text-[var(--text-meta)] font-light uppercase text-white"
         style={{ letterSpacing: 'clamp(0.16em, 0.5vw, 0.24em)' }}
       >
         <span className="whitespace-nowrap">{aboutContent.eyebrow}</span>
@@ -204,15 +204,15 @@ export function AboutSection({ transitionProgress = 0 }: AboutSectionProps) {
         <div className="relative h-full">
           <h2
             ref={titleRef}
-            className="about-title m-0 font-display font-bold uppercase leading-[0.88] tracking-[-0.04em] text-white/78"
+            className="about-title m-0 font-display font-bold uppercase leading-[0.88] tracking-[-0.04em] text-white"
             style={{ fontSize: 'var(--text-display)', top: aboutMotion.title.stickyTop }}
           >
             {aboutContent.wallTitleFirst}
             <br />
-            <span className="font-light text-white/70">{aboutContent.wallTitleSecond}</span>
+            <span className="font-light text-white">{aboutContent.wallTitleSecond}</span>
           </h2>
 
-          <span className="pointer-events-none absolute left-[46%] top-[62%] -translate-x-1/2 text-[80px] font-thin leading-none text-white/55">
+          <span className="pointer-events-none absolute left-[46%] top-[62%] hidden -translate-x-1/2 text-[80px] font-thin leading-none text-white md:block">
             +
           </span>
         </div>

@@ -78,11 +78,11 @@ export function HeroSection({ preloaderDone = true }: HeroSectionProps) {
         <footer className="w-full">
           <motion.nav
             variants={itemVariants}
-            className="hero-stagger flex min-h-11 flex-wrap items-center justify-between border-t border-white/10 font-light uppercase"
-            style={{ paddingTop: 'clamp(1.25rem, 2.5vw, 1.5rem)', fontSize: 'var(--text-meta)', letterSpacing: 'clamp(0.14em, 0.6vw, 0.32em)', gap: 'clamp(0.75rem, 1.5vw, 1.25rem) clamp(0.75rem, 2vw, 1.25rem)' }}
+            className="hero-stagger hero-footer-nav flex min-h-11 flex-wrap items-center justify-between border-t border-white/10 font-light uppercase"
+            style={{ paddingTop: 'clamp(1rem, 2.5vw, 1.5rem)', fontSize: 'var(--text-meta)', letterSpacing: 'clamp(0.10em, 0.4vw, 0.32em)', gap: 'clamp(0.5rem, 1.5vw, 1.25rem) clamp(0.5rem, 1.5vw, 1.25rem)' }}
           >
             {heroContent.footerWords.map((word, i) => (
-              <div key={word} className={i >= 2 && i <= 3 ? 'opacity-85' : ''}>
+              <div key={word} className={`whitespace-nowrap ${i >= 2 && i <= 3 ? 'opacity-85 hidden sm:block' : ''}`}>
                 {word}
               </div>
             ))}

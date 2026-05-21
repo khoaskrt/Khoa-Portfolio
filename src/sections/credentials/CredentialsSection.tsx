@@ -24,20 +24,39 @@ export function CredentialsSection() {
       const content = el.querySelector('.creds-sticky-content');
       if (!content) return;
 
-      const tl = gsap.timeline({
+      gsap.set(content, { opacity: 0, yPercent: 6 });
+
+      const enterTl = gsap.timeline({
         scrollTrigger: {
           trigger: el,
-          start: 'bottom 75%',
-          end: isLast ? 'bottom 50%' : 'bottom 40%',
-          scrub: 1,
+          start: 'top 85%',
+          end: 'top 45%',
+          scrub: 1.2,
         },
       });
-      tl.to(content, {
-        opacity: 0,
-        yPercent: -8,
+      enterTl.to(content, {
+        opacity: 1,
+        yPercent: 0,
         ease: 'none',
       });
-      if (tl.scrollTrigger) triggers.push(tl.scrollTrigger);
+      if (enterTl.scrollTrigger) triggers.push(enterTl.scrollTrigger);
+
+      if (!isLast) {
+        const exitTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: el,
+            start: 'bottom 85%',
+            end: 'bottom 30%',
+            scrub: 1.2,
+          },
+        });
+        exitTl.to(content, {
+          opacity: 0,
+          yPercent: -6,
+          ease: 'none',
+        });
+        if (exitTl.scrollTrigger) triggers.push(exitTl.scrollTrigger);
+      }
     });
 
     return () => {
@@ -53,8 +72,8 @@ export function CredentialsSection() {
       style={{
         background: 'var(--day-surface)',
         paddingInline: 'var(--layout-padding)',
-        paddingTop: 'clamp(5rem, 9vh, 8rem)',
-        paddingBottom: 'clamp(4rem, 8vh, 7rem)',
+        paddingTop: 'clamp(3rem, 9vh, 8rem)',
+        paddingBottom: 'clamp(2.5rem, 8vh, 7rem)',
       }}
     >
       <header

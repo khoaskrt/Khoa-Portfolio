@@ -1,4 +1,4 @@
-export const galleryMotion = {
+export const momentRecapMotion = {
   ease: {
     expoOut: 'power4.out',
     quartOut: 'power3.out',

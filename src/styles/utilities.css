@@ -392,6 +392,22 @@
     }
   }
 
+  @media (max-width: 639px) {
+    .about-flow-orb {
+      display: none;
+    }
+    .about-flow-bg {
+      background: none;
+    }
+  }
+
+  @media (min-width: 640px) and (max-width: 768px) {
+    .about-flow-orb {
+      --about-orb-size: clamp(200px, 30vw, 320px);
+      opacity: 0.5;
+    }
+  }
+
   /* ============================================================
      WORK EXPERIENCE — Responsive collapses for chapter cards
   ============================================================ */
@@ -410,29 +426,34 @@
     .work-card-brief { max-width: 100% !important; }
   }
 
-  /* ============================================================
-     GALLERY — Responsive frame stacking
-  ============================================================ */
-  @media (max-width: 899px) {
-    .gallery-frame {
-      grid-template-columns: minmax(0, 1fr) !important;
-      grid-template-rows: auto auto auto !important;
+  @media (max-width: 639px) {
+    .work-stamp {
+      font-size: var(--text-label) !important;
     }
-    .gallery-frame > *:nth-child(1) { grid-column: 1 !important; grid-row: 1 !important; }
-    .gallery-frame > *:nth-child(2) {
-      grid-column: 1 !important;
-      grid-row: 2 !important;
-      align-self: start !important;
-      margin-top: clamp(1.25rem, 3vh, 2rem);
-      padding-bottom: 0 !important;
-    }
-    .gallery-frame > *:nth-child(3) { grid-column: 1 !important; grid-row: 3 !important; }
   }
 
   /* ============================================================
-     GALLERY — Image hover effect
+     MOMENT RECAP — Responsive frame stacking
   ============================================================ */
-  .gallery-frame:hover .gallery-frame-img {
+  @media (max-width: 899px) {
+    .moment-recap-frame {
+      grid-template-columns: minmax(0, 1fr) !important;
+      grid-template-rows: auto auto !important;
+    }
+    .moment-recap-frame > *:nth-child(1) { grid-column: 1 !important; grid-row: 1 !important; }
+    .moment-recap-frame > *:nth-child(2) {
+      grid-column: 1 !important;
+      grid-row: 2 !important;
+      align-self: start !important;
+      margin-top: clamp(0.75rem, 2vh, 1.5rem);
+      padding-bottom: 0 !important;
+    }
+  }
+
+  /* ============================================================
+     MOMENT RECAP — Image hover effect
+  ============================================================ */
+  .moment-recap-frame:hover .moment-recap-frame-img {
     transform: scale(1.0);
     filter: grayscale(0.18) contrast(1.06) brightness(0.93);
   }
@@ -486,7 +507,7 @@
      SIGN-OFF — Responsive
   ============================================================ */
   @media (max-width: 960px) {
-    .signoff-section > .relative:nth-child(3) {
+    .signoff-main-grid {
       grid-template-columns: 1fr !important;
       grid-template-rows: auto auto !important;
       row-gap: clamp(2.5rem, 6vw, 4rem);
@@ -513,6 +534,17 @@
     }
   }
 
+  @media (max-width: 480px) {
+    .signoff-cluster {
+      grid-template-columns: 1fr 1fr !important;
+      row-gap: 2rem;
+      column-gap: 1.25rem !important;
+    }
+    .signoff-mark {
+      font-size: clamp(3.5rem, calc(0.56rem + 7.84vw), 6rem) !important;
+    }
+  }
+
   /* ============================================================
      MOBILE DRAWER — hamburger nav overlay
   ============================================================ */
@@ -524,6 +556,66 @@
   @keyframes drawer-link-in {
     from { opacity: 0; transform: translateY(18px); }
     to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ============================================================
+     LANDSCAPE MOBILE — prevent content overflow on short viewports
+  ============================================================ */
+  @media (max-height: 500px) and (orientation: landscape) {
+    .hero-section {
+      min-height: 100dvh;
+    }
+
+    .hero-section .hero-h1-reveal,
+    .hero-section .hero-h2-reveal {
+      font-size: clamp(2rem, 8vw, 5rem) !important;
+    }
+
+    .about-section {
+      padding-top: clamp(1.5rem, 3vw, 2.5rem) !important;
+      padding-bottom: clamp(4rem, 8vw, 8rem) !important;
+    }
+
+    .moment-recap-frame-media {
+      max-height: 70vh;
+      aspect-ratio: 16 / 9;
+    }
+
+    .signoff-mark {
+      font-size: clamp(3rem, 8vw, 6rem) !important;
+    }
+  }
+
+  /* ============================================================
+     ULTRA-WIDE (≥2560px) — prevent excessive stretching
+  ============================================================ */
+  @media (min-width: 2560px) {
+    .about-figure {
+      max-width: 32ch;
+    }
+
+    .work-card-brief {
+      max-width: 55%;
+    }
+
+    .moment-recap-frame-content {
+      max-width: 38ch;
+    }
+  }
+
+  /* ============================================================
+     VERY SMALL SCREENS (≤375px) — tighten everything
+  ============================================================ */
+  @media (max-width: 375px) {
+    .about-snap-list li {
+      padding-block: clamp(1rem, 2vh, 1.5rem);
+      font-size: clamp(0.9rem, calc(0.8rem + 0.4vw), 1.1rem);
+    }
+
+    .signoff-cluster {
+      grid-template-columns: 1fr !important;
+      row-gap: 1.75rem;
+    }
   }
 
   /* ============================================================
@@ -548,15 +640,15 @@
       transition: none !important;
     }
 
-    .gallery-frame,
-    .gallery-frame-img {
+    .moment-recap-frame,
+    .moment-recap-frame-img {
       transition: none !important;
       transform: none !important;
     }
-    .gallery-frame {
+    .moment-recap-frame {
       opacity: 1 !important;
     }
-    .gallery-frame-img {
+    .moment-recap-frame-img {
       transform: scale(1) !important;
     }
 

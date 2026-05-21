@@ -1,24 +1,6 @@
-/* Gallery — horizontal scroll layout */
+/* Moment Recap — horizontal scroll layout */
 
-.gallery-chapter-break {
-  position: relative;
-  height: clamp(8rem, 16vh, 12rem);
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-}
-
-.gallery-chapter-line {
-  position: absolute;
-  left: var(--layout-padding);
-  right: var(--layout-padding);
-  top: 50%;
-  height: 1px;
-  background: var(--border-day);
-  transform-origin: center center;
-}
-
-.gallery-section {
+.moment-recap-section {
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -26,20 +8,20 @@
   height: 100dvh;
 }
 
-.gallery-header {
+.moment-recap-header {
   flex-shrink: 0;
   padding-top: clamp(3rem, 6vh, 5rem);
   padding-bottom: clamp(1.5rem, 3vh, 2.5rem);
 }
 
-.gallery-slides-wrapper {
+.moment-recap-slides-wrapper {
   display: flex;
   flex-wrap: nowrap;
   flex: 1;
   min-height: 0;
 }
 
-.gallery-slide {
+.moment-recap-slide {
   width: 100vw;
   height: 100%;
   flex-shrink: 0;
@@ -48,19 +30,20 @@
 }
 
 /* Frame slide — 2-col: portrait image left, content right */
-.gallery-frame {
+.moment-recap-frame {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  grid-template-rows: 1fr auto;
+  grid-template-rows: 1fr;
   height: 100%;
   box-sizing: border-box;
   padding-block: clamp(1rem, 2vh, 2rem);
   column-gap: clamp(2rem, 4vw, 4rem);
 }
 
-.gallery-frame-media {
+.moment-recap-frame-media {
   grid-column: 1;
-  grid-row: 1 / -1;
+  grid-row: 1;
+  width: 100%;
   aspect-ratio: 9 / 16;
   min-height: 0;
   max-height: 100%;
@@ -68,56 +51,11 @@
   justify-self: end;
 }
 
-.gallery-frame-content {
+.moment-recap-frame-content {
   grid-column: 2;
   grid-row: 1;
   align-self: center;
   min-height: 0;
-}
-
-.gallery-frame-meta {
-  grid-column: 2;
-  grid-row: 2;
-}
-
-/* ═══════════════════════════════════════════
-   Exit bridge — gallery → signoff
-   ═══════════════════════════════════════════ */
-
-.gallery-exit-bridge {
-  position: relative;
-  display: flex;
-  align-items: center;
-  height: clamp(12rem, 22vh, 20rem);
-  background: linear-gradient(
-    to bottom,
-    var(--day-surface) 0%,
-    oklch(0.78 0.008 255) 22%,
-    oklch(0.55 0.01 255) 48%,
-    oklch(0.30 0.012 255) 72%,
-    oklch(0.14 0.012 253) 90%,
-    var(--night-base) 100%
-  );
-  overflow: hidden;
-}
-
-.gallery-exit-bridge-line {
-  position: absolute;
-  left: var(--layout-padding);
-  right: var(--layout-padding);
-  top: 50%;
-  height: 1px;
-  background: linear-gradient(
-    to right,
-    transparent 0%,
-    oklch(1 0 0 / 0.12) 15%,
-    oklch(1 0 0 / 0.28) 40%,
-    oklch(1 0 0 / 0.28) 60%,
-    oklch(1 0 0 / 0.12) 85%,
-    transparent 100%
-  );
-  transform-origin: center center;
-  will-change: transform;
 }
 
 /* ═══════════════════════════════════════════
@@ -125,29 +63,36 @@
    ═══════════════════════════════════════════ */
 
 @media (max-width: 639px) {
-  .gallery-frame {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto;
-    gap: clamp(1rem, 3vw, 1.5rem);
+  .moment-recap-header {
+    padding-top: clamp(2rem, 4vh, 3rem);
+    padding-bottom: clamp(1rem, 2vh, 1.5rem);
   }
 
-  .gallery-frame-media {
+  .moment-recap-frame {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: clamp(0.75rem, 2vw, 1.25rem);
+    padding-block: clamp(0.5rem, 1vh, 1rem);
+  }
+
+  .moment-recap-frame-media {
     grid-column: 1;
     grid-row: 1;
-    aspect-ratio: 9 / 16;
-    max-height: 50vh;
+    aspect-ratio: 3 / 4;
+    max-height: 42vh;
     justify-self: center;
+    width: auto;
+    max-width: 75vw;
   }
 
-  .gallery-frame-content {
+  .moment-recap-frame-content {
     grid-column: 1;
     grid-row: 2;
     align-self: start;
   }
 
-  .gallery-frame-meta {
-    grid-column: 1;
-    grid-row: 3;
+  .moment-recap-frame-content h3 {
+    font-size: clamp(1.5rem, calc(0.56rem + 3.17vw), 2.5rem) !important;
   }
 }
 
@@ -156,8 +101,12 @@
    ═══════════════════════════════════════════ */
 
 @media (min-width: 640px) and (max-width: 1023px) {
-  .gallery-frame {
+  .moment-recap-frame {
     column-gap: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  .moment-recap-frame-media {
+    aspect-ratio: 9 / 14;
   }
 }
 
@@ -165,7 +114,7 @@
    Scroll hint — touch devices only
    ═══════════════════════════════════════════ */
 
-.gallery-scroll-hint {
+.moment-recap-scroll-hint {
   display: none;
   position: absolute;
   bottom: clamp(1rem, 2vh, 2rem);
@@ -176,7 +125,7 @@
   pointer-events: none;
 }
 
-.gallery-scroll-hint-label {
+.moment-recap-scroll-hint-label {
   font-family: var(--font-sans);
   font-size: 9px;
   font-weight: 300;
@@ -184,7 +133,7 @@
   text-transform: uppercase;
 }
 
-.gallery-scroll-hint-arrow {
+.moment-recap-scroll-hint-arrow {
   width: 20px;
   height: 10px;
   animation: hint-nudge 2.4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
@@ -196,7 +145,7 @@
 }
 
 @media (hover: none) and (pointer: coarse) {
-  .gallery-scroll-hint {
+  .moment-recap-scroll-hint {
     display: flex;
   }
 }
@@ -206,25 +155,18 @@
    ═══════════════════════════════════════════ */
 
 @media (prefers-reduced-motion: reduce) {
-  .gallery-section {
+  .moment-recap-section {
     height: auto;
   }
 
-  .gallery-slides-wrapper {
+  .moment-recap-slides-wrapper {
     flex-direction: column;
     transform: none !important;
   }
 
-  .gallery-slide {
+  .moment-recap-slide {
     width: auto;
     height: auto;
   }
 
-  .gallery-exit-bridge-line {
-    transform: scaleX(1) !important;
-  }
-
-  .gallery-chapter-line {
-    transform: scaleX(1) !important;
-  }
 }

@@ -1,39 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
+import { useEffect, useState } from 'react';
 
 export function SignOffSection() {
-  const footerRef = useRef<HTMLElement>(null);
-  const [isRevealed, setIsRevealed] = useState(false);
   const [year, setYear] = useState('2026');
-
-  const reducedMotion = typeof window !== 'undefined'
-    ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    : false;
 
   useEffect(() => {
     setYear(String(new Date().getFullYear()));
   }, []);
-
-  useEffect(() => {
-    if (reducedMotion) {
-      setIsRevealed(true);
-      return;
-    }
-    const el = footerRef.current;
-    if (!el) return;
-
-    const st = ScrollTrigger.create({
-      trigger: el,
-      start: 'top 68%',
-      once: true,
-      onEnter: () => setIsRevealed(true),
-    });
-
-    return () => st.kill();
-  }, [reducedMotion]);
 
   const handleScrollTop = () => {
     const prefersReduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
@@ -44,26 +16,16 @@ export function SignOffSection() {
     }
   };
 
-  const revealStyle = (delay: number) =>
-    reducedMotion
-      ? {}
-      : {
-          opacity: isRevealed ? 1 : 0,
-          transform: isRevealed ? 'translateY(0)' : 'translateY(28px)',
-          transition: `opacity 900ms var(--ease-expo-out) ${delay}ms, transform 900ms var(--ease-expo-out) ${delay}ms`,
-        };
-
   return (
     <footer
       id="signoff"
-      ref={footerRef}
       className="signoff-section relative overflow-hidden font-sans"
       style={{
         background: 'var(--night-base)',
         color: 'var(--frost-text)',
         paddingInline: 'var(--layout-padding)',
         paddingTop: 'clamp(4rem, 9vw, 9rem)',
-        paddingBottom: 'clamp(1.75rem, 3vw, 3rem)',
+        paddingBottom: 'clamp(3rem, 6vw, 6rem)',
         isolation: 'isolate',
       }}
     >
@@ -85,7 +47,7 @@ export function SignOffSection() {
 
       {/* Main row */}
       <div
-        className="relative z-2 grid items-end"
+        className="signoff-main-grid relative z-2 grid items-end"
         style={{
           marginTop: 'clamp(2.5rem, 5vw, 5rem)',
           gridTemplateColumns: 'minmax(0, 1.05fr) minmax(0, 1fr)',
@@ -101,7 +63,7 @@ export function SignOffSection() {
           }}
         >
           <div
-            className={`signoff-mark-inner flex flex-col font-display font-bold leading-[0.82] tracking-[-0.04em]${isRevealed ? ' is-revealed' : ''}`}
+            className="signoff-mark-inner flex flex-col font-display font-bold leading-[0.82] tracking-[-0.04em] is-revealed"
             style={{
               color: 'var(--frost-text)',
               textShadow: '0 1px 0 rgba(255,255,255,0.10), 0 0 24px rgba(255,255,255,0.06), 0 2px 18px rgba(0,0,0,0.55)',
@@ -119,19 +81,18 @@ export function SignOffSection() {
         <div
           className="signoff-cluster grid items-start pb-2"
           style={{
-            ...revealStyle(220),
             gridTemplateColumns: 'repeat(3, minmax(0, 1fr)) auto',
             columnGap: 'clamp(1.25rem, 3vw, 3rem)',
           }}
         >
           {/* Credits */}
           <div className="flex flex-col gap-[1.1rem]">
-            <span className="font-sans font-light text-[var(--text-meta)] tracking-[0.24em] uppercase text-white/50">
+            <span className="font-sans font-light text-[var(--text-meta)] tracking-[0.24em] uppercase text-white">
               Credits
             </span>
-            <div className="font-sans font-normal text-white/78 tracking-[0.02em] leading-[1.45]" style={{ fontSize: 'var(--text-small)' }}>
+            <div className="font-sans font-medium text-white tracking-[0.02em] leading-[1.45]" style={{ fontSize: 'var(--text-small)' }}>
               © Ryan Do — {year}
-              <span className="mt-[0.45rem] block text-[var(--text-meta)] tracking-[0.2em] uppercase text-white/42">
+              <span className="mt-[0.45rem] block text-[var(--text-meta)] tracking-[0.2em] uppercase text-white">
                 All records held by author
               </span>
             </div>
@@ -139,10 +100,10 @@ export function SignOffSection() {
 
           {/* Menu */}
           <nav className="flex flex-col gap-[1.1rem]" aria-label="Site menu">
-            <span className="font-sans font-light text-[var(--text-meta)] tracking-[0.24em] uppercase text-white/50">
+            <span className="font-sans font-light text-[var(--text-meta)] tracking-[0.24em] uppercase text-white">
               Menu
             </span>
-            <ul className="m-0 flex list-none flex-col gap-[0.55rem] p-0 font-sans font-normal tracking-[0.02em] text-white/88" style={{ fontSize: 'var(--text-small)' }}>
+            <ul className="m-0 flex list-none flex-col gap-[0.55rem] p-0 font-sans font-medium tracking-[0.02em] text-white" style={{ fontSize: 'var(--text-small)' }}>
               <li><a href="#about" className="signoff-link relative inline-flex items-baseline gap-[0.4rem] transition-colors duration-[var(--duration-hover)] ease-[var(--ease-quart-out)] hover:text-[var(--signal-red)] focus-visible:outline-1 focus-visible:outline-[var(--signal-red)] focus-visible:outline-offset-4">About</a></li>
               <li><a href="#works" className="signoff-link relative inline-flex items-baseline gap-[0.4rem] transition-colors duration-[var(--duration-hover)] ease-[var(--ease-quart-out)] hover:text-[var(--signal-red)] focus-visible:outline-1 focus-visible:outline-[var(--signal-red)] focus-visible:outline-offset-4">Work</a></li>
               <li><a href="#credentials" className="signoff-link relative inline-flex items-baseline gap-[0.4rem] transition-colors duration-[var(--duration-hover)] ease-[var(--ease-quart-out)] hover:text-[var(--signal-red)] focus-visible:outline-1 focus-visible:outline-[var(--signal-red)] focus-visible:outline-offset-4">Credentials</a></li>
@@ -151,13 +112,13 @@ export function SignOffSection() {
 
           {/* Contact */}
           <div className="flex flex-col gap-[1.1rem]">
-            <span className="font-sans font-light text-[var(--text-meta)] tracking-[0.24em] uppercase text-white/50">
+            <span className="font-sans font-light text-[var(--text-meta)] tracking-[0.24em] uppercase text-white">
               Contact
             </span>
-            <ul className="m-0 flex list-none flex-col gap-[0.55rem] p-0 font-sans font-normal tracking-[0.02em] text-white/88" style={{ fontSize: 'var(--text-small)' }}>
+            <ul className="m-0 flex list-none flex-col gap-[0.55rem] p-0 font-sans font-medium tracking-[0.02em] text-white" style={{ fontSize: 'var(--text-small)' }}>
               <li>
                 <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" className="signoff-link relative inline-flex items-baseline gap-[0.4rem] transition-colors duration-[var(--duration-hover)] ease-[var(--ease-quart-out)] hover:text-[var(--signal-red)] focus-visible:outline-1 focus-visible:outline-[var(--signal-red)] focus-visible:outline-offset-4">
-                  LinkedIn <span className="font-sans font-light text-[var(--text-label)] tracking-[0.18em] text-white/35 -translate-y-[0.15em]" aria-hidden="true">↗</span>
+                  LinkedIn <span className="font-sans font-light text-[var(--text-label)] tracking-[0.18em] text-white -translate-y-[0.15em]" aria-hidden="true">↗</span>
                 </a>
               </li>
               <li>
@@ -167,7 +128,7 @@ export function SignOffSection() {
               </li>
               <li>
                 <a href="https://t.me/" target="_blank" rel="noopener noreferrer" className="signoff-link relative inline-flex items-baseline gap-[0.4rem] transition-colors duration-[var(--duration-hover)] ease-[var(--ease-quart-out)] hover:text-[var(--signal-red)] focus-visible:outline-1 focus-visible:outline-[var(--signal-red)] focus-visible:outline-offset-4">
-                  Telegram <span className="font-sans font-light text-[var(--text-label)] tracking-[0.18em] text-white/35 -translate-y-[0.15em]" aria-hidden="true">↗</span>
+                  Telegram <span className="font-sans font-light text-[var(--text-label)] tracking-[0.18em] text-white -translate-y-[0.15em]" aria-hidden="true">↗</span>
                 </a>
               </li>
             </ul>
@@ -180,7 +141,7 @@ export function SignOffSection() {
             className="signoff-top group flex flex-col items-end gap-[1.1rem] self-start cursor-pointer bg-transparent border-0 p-0 focus-visible:outline-1 focus-visible:outline-[var(--signal-red)] focus-visible:outline-offset-4"
             aria-label="Back to top"
           >
-            <span className="font-sans font-light text-[var(--text-meta)] tracking-[0.24em] uppercase text-white/55 transition-colors duration-[var(--duration-hover)] ease-[var(--ease-quart-out)] group-hover:text-[var(--signal-red)]">
+            <span className="font-sans font-light text-[var(--text-meta)] tracking-[0.24em] uppercase text-white transition-colors duration-[var(--duration-hover)] ease-[var(--ease-quart-out)] group-hover:text-[var(--signal-red)]">
               Back to top
             </span>
             <span
@@ -197,19 +158,6 @@ export function SignOffSection() {
         </div>
       </div>
 
-      {/* Bottom rail */}
-      <div
-        className="relative z-2 mt-[clamp(3rem,6vw,6rem)] flex flex-wrap items-baseline justify-between gap-6 border-t border-white/10 pt-[clamp(1.25rem,2vw,2rem)] font-sans font-light text-[var(--text-meta)] tracking-[0.24em] uppercase text-white/55"
-        style={revealStyle(360)}
-      >
-        <div className="flex flex-wrap gap-[clamp(0.75rem,1.6vw,1.4rem)]">
-          <span>BUSINESS</span>
-          <span>OPERATION</span>
-          <span>FINTECH</span>
-          <span>PRODUCT</span>
-        </div>
-        <span className="text-white/38">v1.0 — {year}</span>
-      </div>
     </footer>
   );
 }

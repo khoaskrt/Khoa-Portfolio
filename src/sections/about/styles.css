@@ -14,7 +14,7 @@
   margin: 0;
   padding-block: clamp(2.5rem, 5vh, 4rem);
   font-family: var(--font-quote);
-  font-weight: 400;
+  font-weight: 500;
   font-size: var(--text-quote);
   line-height: 1.40;
   letter-spacing: -0.004em;
@@ -27,8 +27,38 @@
   display: inline-block;
 }
 
-/* ── Mobile: stack grid, reduce snap item spacing ── */
-@media (max-width: 768px) {
+/* ── Mobile ≤639px: single column, tighter rhythm ── */
+@media (max-width: 639px) {
+  .about-grid {
+    grid-template-columns: 1fr !important;
+    min-height: auto !important;
+    gap: clamp(1rem, 2vw, 1.5rem) !important;
+  }
+
+  .about-grid-figure {
+    padding-top: clamp(1rem, 2vw, 1.5rem) !important;
+  }
+
+  .about-figure {
+    max-width: 100% !important;
+  }
+
+  .about-figure-img {
+    max-height: 280px !important;
+  }
+
+  .about-snap-list li {
+    padding-block: clamp(1.25rem, 2.5vh, 2rem);
+    font-size: clamp(1rem, calc(0.85rem + 0.5vw), 1.25rem);
+  }
+
+  .about-snap-container {
+    padding-bottom: clamp(3rem, 6vw, 5rem) !important;
+  }
+}
+
+/* ── Mobile-landscape & small tablets: 640–768px ── */
+@media (min-width: 640px) and (max-width: 768px) {
   .about-grid {
     grid-template-columns: 1fr !important;
     min-height: auto !important;
@@ -38,15 +68,20 @@
     padding-top: clamp(1.5rem, 3vw, 2.5rem) !important;
   }
 
+  .about-figure {
+    max-width: 28ch;
+  }
+
   .about-snap-list li {
     padding-block: clamp(1.5rem, 3vh, 2.5rem);
   }
 }
 
-/* ── Tablet: narrower gap, adjust figure ── */
-@media (max-width: 1024px) and (min-width: 769px) {
+/* ── Tablet: 769–1024px ── */
+@media (min-width: 769px) and (max-width: 1024px) {
   .about-grid {
     min-height: 400px !important;
+    grid-template-columns: 1.1fr 0.9fr !important;
   }
 }
 

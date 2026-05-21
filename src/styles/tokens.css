@@ -17,8 +17,8 @@
     --night-base: oklch(0.1 0.012 253);
     --night-deep: oklch(0.06 0.01 253);
     --night-overlay: oklch(0.112 0.012 255 / 0.55);
-    --frost-text: oklch(0.97 0.005 255);
-    --frost-dim: oklch(0.97 0.005 255 / 0.55);
+    --frost-text: #ffffff;
+    --frost-dim: #ffffff;
 
     /* Colors — Day phase */
     --day-surface: oklch(0.93 0.005 255);
@@ -124,6 +124,18 @@
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
+    }
+  }
+
+  @media (max-width: 639px) {
+    :root {
+      --layout-padding: clamp(1rem, 5vw, 1.5rem);
+    }
+  }
+
+  @media (min-width: 640px) and (max-width: 1024px) {
+    :root {
+      --layout-padding: clamp(1.25rem, 5vw, 3rem);
     }
   }
 }

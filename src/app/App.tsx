@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { ReactLenis, useLenis } from 'lenis/react';
+import type Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { CustomCursor } from '../components/CustomCursor';
@@ -7,10 +8,11 @@ import { PreLoader } from '../components/PreLoader';
 import { PortfolioHeader } from '../components/PortfolioHeader';
 import { AboutSection } from '../sections/about/AboutSection';
 import { CredentialsSection } from '../sections/credentials/CredentialsSection';
-import { GallerySection } from '../sections/gallery/GallerySection';
+import { MomentRecapSection } from '../sections/moment-recap/MomentRecapSection';
 import { HeroSection } from '../sections/hero/HeroSection';
 import { SignOffSection } from '../sections/signoff/SignOffSection';
 import { DarkToLightTransition } from '../sections/transition/DarkToLightTransition';
+import { FooterSlideTransition } from '../sections/transition/FooterSlideTransition';
 import { WorkExperienceSection } from '../sections/work-experience/WorkExperienceSection';
 import { useTransitionState } from './hooks/useTransitionState';
 
@@ -22,6 +24,18 @@ const prefersReducedMotion =
 
 function LenisScrollTriggerSync() {
   useLenis(() => { ScrollTrigger.update(); });
+
+  const lenis = useLenis() as Lenis | undefined;
+  useEffect(() => {
+    if (!lenis) return;
+
+    gsap.ticker.lagSmoothing(0);
+    const tickHandler = (time: number) => { lenis.raf(time * 1000); };
+    gsap.ticker.add(tickHandler);
+
+    return () => { gsap.ticker.remove(tickHandler); };
+  }, [lenis]);
+
   return null;
 }
 
@@ -38,7 +52,7 @@ export default function App() {
     smoothWheel: !prefersReducedMotion,
     wheelMultiplier: 0.9,
     touchMultiplier: 1.5,
-    autoRaf: true,
+    autoRaf: false,
   }), []);
 
   useEffect(() => {
@@ -67,10 +81,12 @@ export default function App() {
         <AboutSection transitionProgress={transitionProgress} />
         <DarkToLightTransition onRevealReadyChange={setWorkRevealReady} onProgressChange={setTransitionProgress} />
         <WorkExperienceSection revealReady={workRevealReady} transitionProgress={transitionProgress} />
+        <MomentRecapSection />
         <CredentialsSection />
-        <GallerySection />
       </main>
-      <SignOffSection />
+      <FooterSlideTransition>
+        <SignOffSection />
+      </FooterSlideTransition>
     </ReactLenis>
   );
 }

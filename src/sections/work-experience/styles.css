@@ -29,31 +29,22 @@
 }
 
 /* ═══════════════════════════════════════════
-   2. Header interaction
-   ═══════════════════════════════════════════ */
-
-.work-chapter-header {
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  user-select: none;
-}
-
-/* ═══════════════════════════════════════════
    3. Responsive — Mobile: < 640px
    ═══════════════════════════════════════════ */
 
 @media (max-width: 639px) {
   .work-chapter {
+    min-height: auto !important;
     padding-top: clamp(2.5rem, 6vh, 4rem);
     padding-bottom: clamp(2rem, 4vh, 3rem);
   }
 
   .work-title-block h3.work-title {
-    font-size: clamp(2rem, calc(0.37rem + 4.34vw), 3.2rem);
+    font-size: clamp(1.75rem, calc(0.37rem + 4.34vw), 3.2rem);
   }
 
   .work-chap-num {
-    font-size: clamp(2.2rem, calc(0.28rem + 5.12vw), 3.5rem) !important;
+    font-size: clamp(1.8rem, calc(0.28rem + 4.06vw), 2.8rem) !important;
     align-self: flex-start;
   }
 
@@ -84,8 +75,12 @@
     margin-left: 0;
   }
 
-  .work-brief-toggle {
-    font-size: var(--text-label);
+  .work-header {
+    padding-top: clamp(4rem, 8vh, 6rem) !important;
+  }
+
+  .work-lead h2 {
+    font-size: clamp(2rem, calc(0.39rem + 4.29vw), 3.5rem) !important;
   }
 }
 
@@ -94,6 +89,12 @@
    ═══════════════════════════════════════════ */
 
 @media (min-width: 640px) and (max-width: 1023px) {
+  .work-chapter {
+    min-height: auto !important;
+    padding-top: clamp(3rem, 7vh, 5rem);
+    padding-bottom: clamp(2.5rem, 5vh, 3.5rem);
+  }
+
   .work-title-block h3.work-title {
     font-size: clamp(2.5rem, calc(1.18rem + 3.31vw), 4.5rem);
   }
