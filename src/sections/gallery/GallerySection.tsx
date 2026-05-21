@@ -8,52 +8,6 @@ import './styles.css';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
-function GalleryBuffer({ reducedMotion }: { reducedMotion: boolean }) {
-  const bufferRef = useRef<HTMLDivElement>(null);
-  const lineRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (reducedMotion) return;
-    const buffer = bufferRef.current;
-    const line = lineRef.current;
-    if (!buffer || !line) return;
-
-    gsap.set(line, { scaleX: 0, transformOrigin: 'left center' });
-
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: buffer,
-        start: 'top 85%',
-        end: 'bottom 60%',
-        scrub: 1.2,
-      },
-    });
-
-    tl.to(line, { scaleX: 1, ease: 'power2.out' });
-
-    return () => { tl.kill(); };
-  }, [reducedMotion]);
-
-  return (
-    <div
-      ref={bufferRef}
-      className="gallery-buffer"
-      style={{
-        paddingInline: 'var(--layout-padding)',
-        paddingBlock: 'clamp(3rem, 6vh, 5rem)',
-        background: 'var(--day-surface)',
-      }}
-    >
-      <div
-        ref={lineRef}
-        className="h-px w-full bg-[var(--border-day)]"
-        style={reducedMotion ? {} : { transform: 'scaleX(0)' }}
-        aria-hidden="true"
-      />
-    </div>
-  );
-}
-
 function ScrollHint({ parentTween }: { parentTween: gsap.core.Tween | null }) {
   const hintRef = useRef<HTMLDivElement>(null);
   const dismissedRef = useRef(false);
@@ -94,18 +48,64 @@ function ScrollHint({ parentTween }: { parentTween: gsap.core.Tween | null }) {
   );
 }
 
+function useReducedMotion(): boolean {
+  const [reduced, setReduced] = useState(() =>
+    typeof window !== 'undefined'
+      ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      : false,
+  );
+
+  useEffect(() => {
+    const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const handler = (e: MediaQueryListEvent) => setReduced(e.matches);
+    mql.addEventListener('change', handler);
+    return () => mql.removeEventListener('change', handler);
+  }, []);
+
+  return reduced;
+}
+
 export function GallerySection() {
-  const reducedMotion = typeof window !== 'undefined'
-    ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    : false;
+  const reducedMotion = useReducedMotion();
 
   const sectionRef = useRef<HTMLElement>(null);
   const slidesWrapperRef = useRef<HTMLDivElement>(null);
+  const headerWrapperRef = useRef<HTMLDivElement>(null);
+  const bufferLineRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLElement>(null);
   const leadRef = useRef<HTMLDivElement>(null);
   const ruleRef = useRef<HTMLDivElement>(null);
   const horizontalTweenRef = useRef<gsap.core.Tween | null>(null);
   const [tweenReady, setTweenReady] = useState(false);
+
+  const transitionZoneRef = useRef<HTMLDivElement>(null);
+  const transitionLineRef = useRef<HTMLDivElement>(null);
+
+  // Transition zone — chapter-break line expands from center
+  useEffect(() => {
+    if (reducedMotion) return;
+    const zone = transitionZoneRef.current;
+    const line = transitionLineRef.current;
+    if (!zone || !line) return;
+
+    gsap.set(line, { scaleX: 0, transformOrigin: 'center center' });
+
+    const tween = gsap.to(line, {
+      scaleX: 1,
+      ease: 'power3.inOut',
+      scrollTrigger: {
+        trigger: zone,
+        start: 'top 75%',
+        end: 'center 40%',
+        scrub: 1,
+      },
+    });
+
+    return () => {
+      tween.scrollTrigger?.kill();
+      tween.kill();
+    };
+  }, [reducedMotion]);
 
   // Horizontal scroll — pin + scrub
   useEffect(() => {
@@ -114,17 +114,17 @@ export function GallerySection() {
     const wrapper = slidesWrapperRef.current;
     if (!section || !wrapper) return;
 
-    const totalWidth = wrapper.scrollWidth;
+    const scrollDistance = () => wrapper.scrollWidth - window.innerWidth;
 
     const tween = gsap.to(wrapper, {
-      x: () => -(totalWidth - window.innerWidth),
+      x: () => -scrollDistance(),
       ease: 'none',
       scrollTrigger: {
         trigger: section,
         pin: true,
-        scrub: galleryMotion.scrub,
-        start: 'top top+=60',
-        end: () => '+=' + totalWidth,
+        scrub: 1.2,
+        start: 'top top',
+        end: () => '+=' + scrollDistance(),
         invalidateOnRefresh: true,
       },
     });
@@ -139,69 +139,89 @@ export function GallerySection() {
     };
   }, [reducedMotion]);
 
-  // Intro reveal
+  // Intro reveal — stagger header elements before pin engages
   useEffect(() => {
     if (reducedMotion) return;
+    const headerWrapper = headerWrapperRef.current;
+    const bufferLine = bufferLineRef.current;
     const els = [headerRef.current, leadRef.current, ruleRef.current].filter(Boolean) as HTMLElement[];
-    if (els.length === 0) return;
+    if (!headerWrapper || els.length === 0) return;
 
+    if (bufferLine) {
+      gsap.set(bufferLine, { scaleX: 0, transformOrigin: 'left center' });
+    }
     gsap.set(els, { opacity: 0, y: galleryMotion.intro.y });
 
     const tl = gsap.timeline({
       scrollTrigger: {
-        trigger: sectionRef.current,
-        start: 'top 80%',
+        trigger: headerWrapper,
+        start: 'top 85%',
         once: true,
       },
     });
 
+    if (bufferLine) {
+      tl.to(bufferLine, { scaleX: 1, duration: 0.9, ease: 'power3.out' });
+    }
     tl.to(els, {
       opacity: 1,
       y: 0,
       duration: galleryMotion.intro.duration,
       ease: galleryMotion.ease.expoOut,
       stagger: galleryMotion.intro.stagger,
-    });
+    }, bufferLine ? '-=0.55' : 0);
 
     return () => { tl.kill(); };
   }, [reducedMotion]);
 
   return (
     <>
-    <GalleryBuffer reducedMotion={reducedMotion} />
-    <section
-      ref={sectionRef}
-      id={galleryContent.id}
-      className="gallery-section relative isolate text-[var(--day-body)]"
-      style={{ background: 'var(--day-surface)' }}
-    >
       <div
-        ref={slidesWrapperRef}
-        className="gallery-slides-wrapper"
-        style={{ flexDirection: reducedMotion ? 'column' : 'row' }}
+        ref={transitionZoneRef}
+        className="gallery-chapter-break"
+        style={{ background: 'var(--day-surface)' }}
+        aria-hidden="true"
       >
-        {/* Slide 0: Intro */}
-        <div className="gallery-slide gallery-intro">
+        <div
+          ref={transitionLineRef}
+          className="gallery-chapter-line"
+        />
+      </div>
+      <section
+        ref={sectionRef}
+        id={galleryContent.id}
+        className="gallery-section relative isolate text-[var(--day-body)]"
+        style={{ background: 'var(--day-surface)' }}
+      >
+        <div ref={headerWrapperRef} className="gallery-header" style={{ paddingInline: 'var(--layout-padding)' }}>
+          <div
+            ref={bufferLineRef}
+            className="h-px w-full bg-[var(--border-day)]"
+            style={{
+              marginBottom: 'clamp(2rem, 4vh, 3.5rem)',
+              ...(reducedMotion ? {} : { transform: 'scaleX(0)' }),
+            }}
+            aria-hidden="true"
+          />
           <header
             ref={headerRef}
             className="flex w-full items-center justify-between gap-4 text-[var(--text-meta)] font-light leading-none tracking-[0.24em] uppercase text-[var(--day-meta)]"
           >
             <p className="m-0">{galleryContent.headerLabel}</p>
-            <p className="m-0" />
           </header>
 
           <div
             ref={leadRef}
             className="flex w-full flex-wrap items-end justify-between gap-x-8 gap-y-4"
-            style={{ marginTop: 'clamp(2rem, 4.5vh, 3.5rem)' }}
+            style={{ marginTop: 'clamp(1.5rem, 3vh, 2.5rem)' }}
           >
             <h2
               className="m-0 font-display font-bold leading-[0.88] tracking-[-0.04em] text-[var(--day-heading)]"
-              style={{ fontSize: 'clamp(24px, 3vw, 44px)' }}
+              style={{ fontSize: 'var(--text-section)' }}
             >
               {galleryContent.headline[0]}<br />{galleryContent.headline[1]}
             </h2>
-            <div className="flex items-center gap-[0.6rem] pb-2 text-[10px] font-light tracking-[0.2em] uppercase text-[var(--day-faint)]">
+            <div className="flex items-center gap-[0.6rem] pb-2 text-[var(--text-label)] font-light tracking-[0.2em] uppercase text-[var(--day-faint)]">
               <span>{galleryContent.leadMeta.count}</span>
               <span className="opacity-40" aria-hidden="true">·</span>
               <span>{galleryContent.leadMeta.range}</span>
@@ -211,27 +231,31 @@ export function GallerySection() {
           <div
             ref={ruleRef}
             className="h-px w-full bg-[var(--border-day)]"
-            style={{ marginTop: 'clamp(1.5rem, 3vh, 2.5rem)' }}
+            style={{ marginTop: 'clamp(1.25rem, 2.5vh, 2rem)' }}
             aria-hidden="true"
           />
-
-          {!reducedMotion && (
-            <ScrollHint parentTween={tweenReady ? horizontalTweenRef.current : null} />
-          )}
         </div>
 
-        {/* Slides 1–4: Frames */}
-        {galleryContent.frames.map((frame, index) => (
-          <GalleryFrame
-            key={frame.number}
-            frame={frame}
-            index={index}
-            reducedMotion={reducedMotion}
-            parentTween={tweenReady ? horizontalTweenRef.current : null}
-          />
-        ))}
-      </div>
-    </section>
+        <div
+          ref={slidesWrapperRef}
+          className="gallery-slides-wrapper"
+          style={{ flexDirection: reducedMotion ? 'column' : 'row' }}
+        >
+          {galleryContent.frames.map((frame, index) => (
+            <GalleryFrame
+              key={frame.number}
+              frame={frame}
+              index={index}
+              reducedMotion={reducedMotion}
+              parentTween={tweenReady ? horizontalTweenRef.current : null}
+            />
+          ))}
+        </div>
+
+        {!reducedMotion && (
+          <ScrollHint parentTween={tweenReady ? horizontalTweenRef.current : null} />
+        )}
+      </section>
     </>
   );
 }
@@ -285,12 +309,11 @@ function GalleryFrame({ frame, index, reducedMotion, parentTween }: GalleryFrame
     >
       {/* Media */}
       <div
-        className="gallery-frame-media relative isolate overflow-hidden bg-[oklch(0.86_0.005_255)]"
-        style={{ aspectRatio: '1 / 1' }}
+        className="gallery-frame-media relative isolate overflow-hidden bg-[var(--day-surface-warm)]"
       >
-        <div className="pointer-events-none absolute inset-0 z-2 border border-[oklch(0.06_0.012_253/0.05)]" />
+        <div className="pointer-events-none absolute inset-0 z-2 border border-[var(--night-deep)]/5" />
         <span
-          className="absolute z-3 font-sans text-[9px] font-normal tracking-[0.22em] uppercase text-[rgba(245,248,252,0.78)] mix-blend-difference whitespace-nowrap"
+          className="absolute z-3 inline-flex items-center bg-[var(--night-overlay)] px-[0.5em] py-[0.2em] font-sans text-[var(--text-label)] font-normal tracking-[0.22em] uppercase text-[var(--frost-text)] whitespace-nowrap"
           style={{ top: 'clamp(0.7rem, 1.2vw, 1rem)', left: 'clamp(0.7rem, 1.2vw, 1rem)' }}
         >
           {frame.stamp}
@@ -299,6 +322,7 @@ function GalleryFrame({ frame, index, reducedMotion, parentTween }: GalleryFrame
           <img
             src={frame.image}
             alt={frame.alt}
+            loading={index === 0 ? 'eager' : 'lazy'}
             className="absolute inset-0 block h-full w-full object-cover grayscale-[0.55] contrast-[1.04] brightness-[0.97]"
             style={{
               transform: 'scale(1.035)',
@@ -307,7 +331,7 @@ function GalleryFrame({ frame, index, reducedMotion, parentTween }: GalleryFrame
             }}
           />
         ) : (
-          <div className="absolute inset-0 flex items-center justify-center text-[var(--text-meta)] font-light tracking-[0.2em] uppercase text-[oklch(0.55_0.01_255)]">
+          <div className="absolute inset-0 flex items-center justify-center text-[var(--text-meta)] font-light tracking-[0.2em] uppercase text-[var(--day-faint)]">
             Open slot
           </div>
         )}
@@ -316,7 +340,7 @@ function GalleryFrame({ frame, index, reducedMotion, parentTween }: GalleryFrame
       {/* Content */}
       <div
         className="gallery-frame-content flex flex-col"
-        style={{ gap: 'clamp(0.9rem, 2vh, 1.6rem)', paddingBottom: 'clamp(0.25rem, 0.8vh, 0.6rem)' }}
+        style={{ gap: 'clamp(1rem, 2vh, 1.6rem)' }}
       >
         <p className="m-0 flex items-center gap-[0.6rem] font-sans text-[var(--text-meta)] font-light tracking-[0.26em] uppercase text-[var(--day-meta)]">
           <span>{frame.year}</span>
@@ -325,14 +349,14 @@ function GalleryFrame({ frame, index, reducedMotion, parentTween }: GalleryFrame
         </p>
         <h3
           ref={titleRef}
-          className="m-0 font-display font-medium leading-[0.88] tracking-[-0.035em] text-[var(--day-ink)]"
-          style={{ fontSize: 'clamp(44px, 6.5vw, 104px)' }}
+          className="m-0 font-display font-bold leading-[0.88] tracking-[-0.04em] text-[var(--day-ink)]"
+          style={{ fontSize: 'clamp(2.25rem, calc(0.4rem + 4.8vw), 5rem)' }}
         >
           {frame.title[0]}<br />{frame.title[1]}
         </h3>
         <p
-          className="m-0 max-w-[38ch] font-body italic leading-[1.45] tracking-[0.004em] text-[var(--day-muted)]"
-          style={{ fontSize: 'clamp(16px, 1.4vw, 20px)' }}
+          className="m-0 max-w-[34ch] font-body leading-[1.5] tracking-[0.004em] text-[var(--day-secondary)]"
+          style={{ fontSize: 'var(--text-body)' }}
         >
           {frame.subtitle}
         </p>
@@ -342,9 +366,9 @@ function GalleryFrame({ frame, index, reducedMotion, parentTween }: GalleryFrame
       <dl
         className="gallery-frame-meta grid border-t border-[var(--border-day)]"
         style={{
-          marginTop: 'clamp(1.5rem, 3vh, 2.5rem)',
-          gridTemplateColumns: 'minmax(110px, 1fr) minmax(0, 3fr)',
-          columnGap: 'clamp(1rem, 2vw, 2rem)',
+          marginTop: 'clamp(1rem, 2vh, 1.5rem)',
+          gridTemplateColumns: 'minmax(90px, 1fr) minmax(0, 3fr)',
+          columnGap: 'clamp(0.75rem, 1.5vw, 1.5rem)',
         }}
       >
         {frame.meta.map((item) => (
@@ -367,7 +391,7 @@ function MetaRow({ item }: MetaRowProps) {
     borderBottom: '1px solid var(--border-day)',
     fontFamily: 'var(--font-sans)',
     fontWeight: 300,
-    fontSize: 'clamp(11px, 0.9vw, 12.5px)',
+    fontSize: 'var(--text-meta)',
     lineHeight: 1.45,
   };
 
@@ -378,14 +402,14 @@ function MetaRow({ item }: MetaRowProps) {
       </dt>
       <dd style={{ ...cellStyle, color: 'var(--day-secondary)', letterSpacing: '0.04em', display: 'flex', flexWrap: 'wrap' as const, gap: '0.3rem 1rem' }}>
         {item.tags?.map((tag) => (
-          <span key={tag} className="text-[10px] font-light tracking-[0.16em] uppercase text-[var(--day-signal-text)] whitespace-nowrap">
+          <span key={tag} className="text-[var(--text-label)] font-light tracking-[0.16em] uppercase text-[var(--day-signal-text)] whitespace-nowrap">
             [ {tag} ]
           </span>
         ))}
         {item.stamps?.map((stamp) => (
           <span
             key={stamp}
-            className="inline-flex items-center border border-[var(--day-stamp-border)] bg-[var(--day-stamp-bg)] px-2 py-[0.18rem] text-[9px] font-normal tracking-[0.20em] uppercase text-[oklch(0.28_0.01_255)] whitespace-nowrap"
+            className="inline-flex items-center border border-[var(--day-stamp-border)] bg-[var(--day-stamp-bg)] px-2 py-[0.18rem] text-[var(--text-label)] font-normal tracking-[0.20em] uppercase text-[var(--day-secondary)] whitespace-nowrap"
           >
             {stamp}
           </span>

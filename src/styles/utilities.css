@@ -54,7 +54,7 @@
 
   .preloader__status {
     font-family: var(--font-sans);
-    font-size: clamp(9px, 0.9vw, 11px);
+    font-size: var(--text-label);
     font-weight: 300;
     letter-spacing: 0.24em;
     color: rgb(245 248 252 / 0.4);
@@ -104,7 +104,7 @@
     align-items: baseline;
     gap: 0.12em;
     font-family: var(--font-sans);
-    font-size: clamp(10px, 1vw, 13px);
+    font-size: var(--text-meta);
     font-weight: 300;
     letter-spacing: 0.24em;
     color: rgb(245 248 252 / 0.48);
@@ -122,7 +122,7 @@
 
   .preloader__clock {
     font-family: var(--font-sans);
-    font-size: clamp(9px, 0.85vw, 11px);
+    font-size: var(--text-label);
     font-weight: 300;
     letter-spacing: 0.18em;
     color: rgb(245 248 252 / 0.25);
@@ -199,6 +199,11 @@
     flex-direction: column;
   }
 
+  .about-title {
+    position: sticky;
+    will-change: transform, opacity;
+  }
+
   .about-flow-bg {
     background:
       radial-gradient(circle at 78% 22%, rgb(255 255 255 / 0.02), transparent 36%),
@@ -223,27 +228,6 @@
   .about-flow-orb-one { top: var(--about-orb-top); }
   .about-flow-orb-two { top: calc(var(--about-orb-top) + var(--about-orb-size) - 2px); }
   .about-flow-orb-three { top: calc(var(--about-orb-top) + var(--about-orb-size) * 2 - 4px); }
-
-  .about-rail-dot {
-    height: 0.625rem;
-    width: 0.625rem;
-    border-radius: 999px;
-    border: 1px solid rgb(255 255 255 / 0.34);
-    background: rgb(255 255 255 / 0.34);
-    box-shadow: 0 0 0 rgb(255 255 255 / 0);
-    transition:
-      background-color var(--duration-hover) var(--ease-quart-out),
-      border-color var(--duration-hover) var(--ease-quart-out),
-      box-shadow var(--duration-interaction) var(--ease-expo-out),
-      transform var(--duration-hover) var(--ease-quart-out);
-  }
-
-  .about-rail-dot.is-active {
-    border-color: rgb(255 255 255 / 0.72);
-    background: rgb(255 255 255 / 0.9);
-    box-shadow: 0 0 10px rgb(255 255 255 / 0.3);
-    transform: scale(1.06);
-  }
 
   .safe-area-pad {
     padding-top: max(1rem, env(safe-area-inset-top));
@@ -397,63 +381,15 @@
   .about-header-link:hover::after { transform: scaleX(1); }
 
   /* ============================================================
-     ABOUT — Reading glow + quote
+     ABOUT — Responsive scale-up for ≤1140px
   ============================================================ */
-  .about-reading-glow {
-    color: rgb(132 132 132 / 0.92);
-    text-shadow: none;
-    filter: none;
-  }
-
-  .about-copy-wrap {
-    position: relative;
-    padding-inline: clamp(1rem, 3vw, 2rem);
-    display: grid;
-    justify-items: center;
-  }
-
-  .about-quote-stage {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    align-items: start;
-    column-gap: clamp(0.45rem, 0.9vw, 0.9rem);
-    width: min(100%, clamp(18.5rem, 44vw, 35rem));
-  }
-
-  .about-quote-mark {
-    display: block;
-    transform: translateY(clamp(-0.45rem, -0.8vw, -0.25rem));
-    color: rgb(255 255 255 / 0.44);
-    font-family: var(--font-quote);
-    font-size: clamp(2.25rem, 5.2vw, 4.4rem);
-    font-weight: 500;
-    line-height: 0.7;
-    letter-spacing: -0.06em;
-  }
-
-  .about-quote-copy {
-    font-family: var(--font-body);
-    color: rgb(132 132 132 / 0.92);
-    text-wrap: balance;
-  }
-
-  .about-quote-copy span {
-    margin-bottom: 0.28em;
-  }
-
-  .about-transition-note {
-    position: absolute;
-    right: 50%;
-    transform: translateX(50%);
-    bottom: clamp(5.4rem, 11vw, 12.2rem);
-    max-width: clamp(25ch, 30vw, 31ch);
-    color: rgb(235 241 248 / 0.55);
-    font-family: var(--font-quote);
-    font-size: clamp(0.82rem, 1.1vw, 1.2rem);
-    font-weight: 400;
-    line-height: 1.25;
-    text-align: right;
-    letter-spacing: 0.01em;
+  @media (max-width: 1140px) {
+    .about-figure {
+      max-width: 44ch;
+    }
+    .about-figure-img {
+      max-height: 432px;
+    }
   }
 
   /* ============================================================
@@ -461,9 +397,9 @@
   ============================================================ */
   @media (max-width: 720px) {
     .work-chapter { padding-block: clamp(2.5rem, 6vh, 4rem) !important; }
-    .work-title { font-size: clamp(2.5rem, 12vw, 4.5rem) !important; }
+    .work-title { font-size: clamp(2.5rem, calc(0.37rem + 5.68vw), 4.5rem) !important; }
     .work-chap-num {
-      font-size: clamp(2rem, 9vw, 3rem) !important;
+      font-size: clamp(2rem, calc(0.61rem + 3.71vw), 3rem) !important;
       color: oklch(0.55 0.01 255 / 0.8) !important;
     }
     .work-card-body {
@@ -558,7 +494,7 @@
     }
     .signoff-mark {
       order: 2;
-      font-size: clamp(4.5rem, 18vw, 9rem) !important;
+      font-size: clamp(4.5rem, calc(0.93rem + 9.52vw), 9rem) !important;
     }
     .signoff-cluster { order: 1; }
   }

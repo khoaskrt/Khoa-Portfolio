@@ -49,14 +49,16 @@
     --day-stamp-bg: oklch(0.91 0.005 255);
     --day-stamp-border: oklch(0.83 0.01 255);
 
-    /* Type scale */
-    --text-hero: clamp(52px, 11vw, 156px);
-    --text-display: clamp(40px, 7vw, 100px);
-    --text-headline: clamp(2.75rem, 8vw, 8rem);
-    --text-section: clamp(28px, 4vw, 56px);
-    --text-meta: clamp(11px, 1vw, 13px);
-    --text-body: clamp(15px, 1.2vw, 17px);
-    --text-quote: clamp(18px, 2vw, 28px);
+    /* Type scale — Utopia fluid (375→1440 reference range) */
+    --text-hero: clamp(3.25rem, calc(0.64rem + 6.96vw), 9.75rem);
+    --text-display: clamp(2.5rem, calc(0.39rem + 4.46vw), 6.25rem);
+    --text-headline: clamp(2.75rem, calc(0.82rem + 5.14vw), 8rem);
+    --text-section: clamp(1.75rem, calc(0.87rem + 2.35vw), 3.5rem);
+    --text-quote: clamp(1.125rem, calc(0.89rem + 0.63vw), 1.75rem);
+    --text-body: clamp(0.9375rem, calc(0.87rem + 0.18vw), 1.125rem);
+    --text-small: clamp(0.8125rem, calc(0.75rem + 0.16vw), 1rem);
+    --text-meta: clamp(0.6875rem, calc(0.64rem + 0.13vw), 0.8125rem);
+    --text-label: clamp(0.5625rem, calc(0.52rem + 0.11vw), 0.6875rem);
 
     /* Layout — editorial full-bleed: no container, padding controls breathing room */
     --layout-padding: clamp(1.25rem, 6vw, 8vw);
@@ -84,6 +86,34 @@
   ::selection {
     background: oklch(0.637 0.237 25.3 / 0.35);
     color: var(--frost-text);
+  }
+
+  @media (max-width: 320px) {
+    :root {
+      --text-hero: 3.25rem;
+      --text-display: 2.5rem;
+      --text-headline: 2.75rem;
+      --text-section: 1.75rem;
+      --text-quote: 1.125rem;
+      --text-body: 0.9375rem;
+      --text-small: 0.8125rem;
+      --text-meta: 0.6875rem;
+      --text-label: 0.5625rem;
+    }
+  }
+
+  @media (min-width: 2560px) {
+    :root {
+      --text-hero: 9.75rem;
+      --text-display: 6.25rem;
+      --text-headline: 8rem;
+      --text-section: 3.5rem;
+      --text-quote: 1.75rem;
+      --text-body: 1.125rem;
+      --text-small: 1rem;
+      --text-meta: 0.8125rem;
+      --text-label: 0.6875rem;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {

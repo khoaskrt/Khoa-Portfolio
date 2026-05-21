@@ -1,4 +1,5 @@
 import certUdemyDex from '../../assets/images/cert-udemy-dex.jpg';
+import certGooglePM from '../../assets/images/cert-google-pm.jpg';
 
 export type Credential = {
   era: string;
@@ -27,11 +28,11 @@ export const credentialsContent = {
     },
     {
       era: '2025',
-      image: null,
-      issuer: 'Coursera · Google',
-      date: '2025',
+      image: certGooglePM,
+      issuer: 'Google',
+      date: 'Jun 2025',
       title: ['Project', 'Management'],
-      subtitle: 'Google Project Management Professional Certificate',
+      subtitle: 'Google Project Management Professional Certificate · 7 courses',
       signals: ['Agile', 'Scrum', 'PM'],
     },
     {

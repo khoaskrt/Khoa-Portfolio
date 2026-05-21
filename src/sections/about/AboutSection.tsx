@@ -1,39 +1,29 @@
-import { motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from 'motion/react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import aboutUsImage from '../../assets/images/aboutus_image.JPG';
 import { aboutContent } from './content';
-import { aboutContainerVariants, aboutItemVariants } from './motion';
+import { aboutMotion } from './motion';
+import './styles.css';
+
+gsap.registerPlugin(ScrollTrigger);
 
 type AboutSectionProps = {
   transitionProgress?: number;
 };
 
+const prefersReducedMotion =
+  typeof window !== 'undefined' &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 export function AboutSection({ transitionProgress = 0 }: AboutSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
-  const narrativeRef = useRef<HTMLElement>(null);
-  const prefersReducedMotion = useReducedMotion();
-  const [activeDot, setActiveDot] = useState(0);
-  const { scrollYProgress: sectionProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start 92%', 'end 8%'],
-  });
-  const { scrollYProgress: railSectionProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start 92%', 'end 100%'],
-  });
-  const { scrollYProgress } = useScroll({
-    target: narrativeRef,
-    offset: ['start 82%', 'end 24%'],
-  });
-
-  const orbOneY = useTransform(sectionProgress, [0, 1], [40, -36]);
-  const orbTwoY = useTransform(sectionProgress, [0, 1], [52, -48]);
-  const orbThreeY = useTransform(sectionProgress, [0, 1], [32, -28]);
-  const railProgress = useTransform(railSectionProgress, [0.05, 0.95], [0, 1]);
-  const introOpacity = useTransform(sectionProgress, [0, 0.16, 0.38, 0.48], [0.88, 0.88, 0.2, 0]);
-  const introY = useTransform(sectionProgress, [0, 0.48], [0, -20]);
-  const quoteOpacity = useTransform(sectionProgress, [0.22, 0.48], [0, 1]);
-  const quoteY = useTransform(sectionProgress, [0.22, 0.52], [32, 0]);
+  const headerRef = useRef<HTMLElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const figureRef = useRef<HTMLDivElement>(null);
+  const orbRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const snapListRef = useRef<HTMLUListElement>(null);
 
   const descriptionLines = aboutContent.description
     .split('. ')
@@ -41,66 +31,162 @@ export function AboutSection({ transitionProgress = 0 }: AboutSectionProps) {
     .filter(Boolean)
     .map((line, index, all) => (index < all.length - 1 ? `${line}.` : line));
 
-  const introSentence = descriptionLines[0] ?? '';
-  const quoteLines = descriptionLines.slice(1);
-  const transitionFadeProgress = Math.min(Math.max((transitionProgress - 0.5) / 0.36, 0), 1);
-  const aboutOrnamentOpacity = prefersReducedMotion ? 1 : 1 - transitionFadeProgress * 0.88;
-  const aboutRailOpacity = prefersReducedMotion ? 1 : 1 - transitionFadeProgress * 0.7;
+  const orbFade = Math.min(Math.max(transitionProgress / 0.12, 0), 1);
+  const aboutOrnamentOpacity = prefersReducedMotion ? 1 : 1 - orbFade * 0.95;
 
-  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
-    if (latest < 0.33) {
-      setActiveDot(0);
-      return;
-    }
-    if (latest < 0.66) {
-      setActiveDot(1);
-      return;
-    }
-    setActiveDot(2);
-  });
+  const snapFade = prefersReducedMotion ? 0 : Math.min(Math.max(transitionProgress / 0.10, 0), 1);
+  const figureFade = prefersReducedMotion ? 0 : Math.min(Math.max((transitionProgress - 0.02) / 0.10, 0), 1);
+
+  // Section entrance reveal
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+    const section = sectionRef.current;
+    const els = [headerRef.current, gridRef.current].filter(Boolean) as HTMLElement[];
+    if (!section || els.length === 0) return;
+
+    gsap.set(els, { opacity: 0, y: aboutMotion.intro.y });
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 80%',
+        once: true,
+      },
+    });
+
+    tl.to(els, {
+      opacity: 1,
+      y: 0,
+      duration: aboutMotion.intro.duration,
+      ease: aboutMotion.ease.expoOut,
+      stagger: aboutMotion.intro.stagger,
+    });
+
+    return () => { tl.kill(); };
+  }, []);
+
+  // Orb parallax
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+    const section = sectionRef.current;
+    const orbs = orbRefs.current.filter(Boolean) as HTMLElement[];
+    if (!section || orbs.length === 0) return;
+
+    const tweens = orbs.map((orb, i) => {
+      const range = aboutMotion.orb.ranges[i];
+      gsap.set(orb, { y: range.from });
+      return gsap.to(orb, {
+        y: range.to,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: aboutMotion.orb.scrub,
+        },
+      });
+    });
+
+    return () => {
+      tweens.forEach((t) => {
+        t.scrollTrigger?.kill();
+        t.kill();
+      });
+    };
+  }, []);
+
+  // Title sticky fade — fades out as snap container scrolls in
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+    const title = titleRef.current;
+    const snapContainer = snapListRef.current?.closest('.about-snap-container') as HTMLElement | null;
+    if (!title || !snapContainer) return;
+
+    const tween = gsap.to(title, {
+      opacity: 0,
+      y: -30,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: snapContainer,
+        start: 'top 85%',
+        end: 'top 40%',
+        scrub: 1,
+      },
+    });
+
+    return () => {
+      tween.scrollTrigger?.kill();
+      tween.kill();
+    };
+  }, []);
+
+  // Scroll-snap list animation (CodePen pattern)
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+    const list = snapListRef.current;
+    if (!list) return;
+
+    const items = list.querySelectorAll('li');
+    const spans = list.querySelectorAll<HTMLElement>('li > span');
+    if (spans.length === 0 || items.length === 0) return;
+
+    gsap.set(spans, { transformOrigin: '0 50%' });
+    const nonFirstSpans = Array.from(spans).slice(1);
+    const nonLastSpans = Array.from(spans).slice(0, -1);
+
+    gsap.set(nonFirstSpans, {
+      opacity: aboutMotion.snapList.dimOpacity,
+      scale: aboutMotion.snapList.dimScale,
+    });
+
+    const tl = gsap.timeline();
+    tl.to(nonFirstSpans, {
+      opacity: 1,
+      scale: 1,
+      stagger: aboutMotion.snapList.stagger,
+    });
+    tl.to(nonLastSpans, {
+      opacity: aboutMotion.snapList.dimOpacity,
+      scale: aboutMotion.snapList.dimScale,
+      stagger: aboutMotion.snapList.stagger,
+    }, 0);
+
+    const firstItem = items[0];
+    const lastItem = items[items.length - 1];
+    const st = ScrollTrigger.create({
+      trigger: firstItem,
+      start: 'center center',
+      endTrigger: lastItem,
+      end: 'center center',
+      animation: tl,
+      scrub: aboutMotion.snapList.scrub,
+    });
+
+    return () => {
+      st.kill();
+      tl.kill();
+    };
+  }, []);
 
   return (
-    <motion.section
+    <section
       id={aboutContent.id}
       ref={sectionRef}
-      className="about-section relative isolate z-[var(--z-about)] overflow-hidden"
-      style={{ paddingInline: 'var(--layout-padding)', minHeight: 'clamp(135vh, 140vh + 5vw, 162vh)' }}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.2 }}
-      variants={aboutContainerVariants}
+      className="about-section relative isolate z-[var(--z-about)] overflow-x-clip"
+      style={{ paddingInline: 'var(--layout-padding)' }}
     >
       <div
         aria-hidden="true"
         className="about-flow-bg pointer-events-none absolute inset-0 -z-10 overflow-hidden"
         style={{ opacity: aboutOrnamentOpacity }}
       >
-        <motion.div className="about-flow-orb about-flow-orb-one" style={{ y: prefersReducedMotion ? 0 : orbOneY }} />
-        <motion.div className="about-flow-orb about-flow-orb-two" style={{ y: prefersReducedMotion ? 0 : orbTwoY }} />
-        <motion.div className="about-flow-orb about-flow-orb-three" style={{ y: prefersReducedMotion ? 0 : orbThreeY }} />
+        <div ref={(el) => { orbRefs.current[0] = el; }} className="about-flow-orb about-flow-orb-one will-change-transform" />
+        <div ref={(el) => { orbRefs.current[1] = el; }} className="about-flow-orb about-flow-orb-two will-change-transform" />
+        <div ref={(el) => { orbRefs.current[2] = el; }} className="about-flow-orb about-flow-orb-three will-change-transform" />
       </div>
 
-      <aside
-        aria-label="About section progress"
-        className="pointer-events-none absolute top-1/2 z-30 hidden -translate-y-1/2 items-center gap-3 md:flex"
-        style={{ right: 'clamp(0.5rem, 1.5vw, 1rem)', opacity: aboutRailOpacity }}
-      >
-        <div className="relative w-[2px] overflow-hidden rounded-full bg-white/24" style={{ height: 'clamp(16.5rem, 18vw, 19rem)' }}>
-          <span className="absolute -top-1 left-1/2 h-[5px] w-[5px] -translate-x-1/2 rounded-full bg-white/45" />
-          <span className="absolute -bottom-1 left-1/2 h-[5px] w-[5px] -translate-x-1/2 rounded-full bg-white/45" />
-          <motion.span
-            className="absolute inset-0 origin-top rounded-full bg-white/90 shadow-[0_0_14px_rgba(255,255,255,0.34)]"
-            style={{ scaleY: railProgress }}
-          />
-        </div>
-        <div className="flex flex-col items-center gap-5">
-          <span className={`about-rail-dot ${activeDot === 0 ? 'is-active' : ''}`} />
-          <span className={`about-rail-dot ${activeDot === 1 ? 'is-active' : ''}`} />
-          <span className={`about-rail-dot ${activeDot === 2 ? 'is-active' : ''}`} />
-        </div>
-      </aside>
-
       <header
+        ref={headerRef}
         className="about-header flex min-h-11 w-full items-center justify-between gap-4 text-[var(--text-meta)] font-light uppercase text-white/86"
         style={{ letterSpacing: 'clamp(0.16em, 0.5vw, 0.24em)' }}
       >
@@ -111,11 +197,16 @@ export function AboutSection({ transitionProgress = 0 }: AboutSectionProps) {
       </header>
 
       <div
-        className="grid w-full grid-cols-[1.25fr_0.95fr]"
+        ref={gridRef}
+        className="about-grid grid w-full grid-cols-[1.25fr_0.95fr]"
         style={{ marginTop: 'clamp(1.5rem, 3vw, 2rem)', minHeight: '540px', gap: 'clamp(2rem, 4vw, 2.5rem)' }}
       >
-        <motion.div variants={aboutItemVariants} className="relative h-full">
-          <h2 className="pointer-events-none absolute left-0 top-16 select-none font-display text-[var(--text-display)] font-semibold uppercase leading-[0.82] tracking-tight text-white/78">
+        <div className="relative h-full">
+          <h2
+            ref={titleRef}
+            className="about-title m-0 font-display font-bold uppercase leading-[0.88] tracking-[-0.04em] text-white/78"
+            style={{ fontSize: 'var(--text-display)', top: aboutMotion.title.stickyTop }}
+          >
             {aboutContent.wallTitleFirst}
             <br />
             <span className="font-light text-white/70">{aboutContent.wallTitleSecond}</span>
@@ -124,9 +215,13 @@ export function AboutSection({ transitionProgress = 0 }: AboutSectionProps) {
           <span className="pointer-events-none absolute left-[46%] top-[62%] -translate-x-1/2 text-[80px] font-thin leading-none text-white/55">
             +
           </span>
-        </motion.div>
+        </div>
 
-        <motion.div variants={aboutItemVariants} className="relative z-10" style={{ paddingTop: 'clamp(3.5rem, 6vw, 6rem)' }}>
+        <div ref={figureRef} className="about-grid-figure relative z-10" style={{
+          paddingTop: 'clamp(3.5rem, 6vw, 6rem)',
+          opacity: 1 - figureFade * 0.6,
+          transform: `translateY(${figureFade * 12}px)`,
+        }}>
           <figure className="about-figure group relative max-w-[37ch] overflow-hidden border border-white/25 bg-white/[0.03] p-2 shadow-[0_16px_42px_rgba(0,0,0,0.42)]">
             <span aria-hidden="true" className="pointer-events-none absolute inset-0 border border-white/8" />
             <span aria-hidden="true" className="pointer-events-none absolute inset-x-2 top-2 h-px bg-white/20" />
@@ -138,82 +233,26 @@ export function AboutSection({ transitionProgress = 0 }: AboutSectionProps) {
               loading="lazy"
             />
           </figure>
-        </motion.div>
+        </div>
       </div>
 
-      <motion.article
-        ref={narrativeRef}
-        variants={aboutItemVariants}
-        className="about-copy-wrap w-full"
-        style={{ marginTop: 'clamp(2rem, 3.5vw, 3rem)', paddingBottom: 'clamp(5rem, 9vw, 9rem)' }}
+      <div
+        className="about-snap-container"
+        style={{
+          marginTop: 'clamp(2rem, 3.5vw, 3rem)',
+          paddingBottom: 'clamp(5rem, 9vw, 9rem)',
+          opacity: 1 - snapFade,
+          transform: `translateY(${snapFade * 16}px)`,
+        }}
       >
-        <motion.p
-          className="about-transition-note"
-          style={{ opacity: prefersReducedMotion ? 0.78 : introOpacity, y: prefersReducedMotion ? 0 : introY }}
-        >
-          {introSentence}
-        </motion.p>
-
-        <div className="about-quote-stage">
-          <span className="about-quote-mark" aria-hidden="true">
-            ,,
-          </span>
-          <motion.p
-            className="about-reading-glow about-quote-copy w-full max-w-none text-[var(--text-quote)] font-normal leading-[1.35] tracking-[-0.004em]"
-            style={{ opacity: prefersReducedMotion ? 0.95 : quoteOpacity, y: prefersReducedMotion ? 0 : quoteY }}
-          >
-            {quoteLines.map((line, index) => (
-              <ReadingLine
-                key={`${line}-${index}`}
-                line={line}
-                index={index}
-                reducedMotion={prefersReducedMotion}
-              />
-            ))}
-          </motion.p>
-        </div>
-      </motion.article>
-
-    </motion.section>
-  );
-}
-
-type ReadingLineProps = {
-  key?: string;
-  index: number;
-  line: string;
-  reducedMotion: boolean;
-};
-
-function ReadingLine({ line, index, reducedMotion }: ReadingLineProps) {
-  const lineRef = useRef<HTMLSpanElement>(null);
-  const isLeadLine = index === 0;
-  const { scrollYProgress: lineProgress } = useScroll({
-    target: lineRef,
-    offset: isLeadLine ? ['start 96%', 'end 18%'] : ['start 82%', 'end 28%'],
-  });
-  const emphasis = useTransform(
-    lineProgress,
-    isLeadLine ? [0, 0.28, 0.42, 0.62, 0.76, 1] : [0, 0.36, 0.48, 0.62, 0.78, 1],
-    [0, 0, 1, 1, 0, 0]
-  );
-  const lineColor = useTransform(emphasis, [0, 0.3, 0.5, 0.7, 1], [
-    'rgb(122 126 132)',
-    'rgb(122 126 132)',
-    'rgb(245 245 245)',
-    'rgb(245 245 245)',
-    'rgb(122 126 132)',
-  ]);
-
-  return (
-    <motion.span
-      ref={lineRef}
-      className="mb-[0.28em] block will-change-[color] last:mb-0"
-      style={{
-        color: reducedMotion ? 'rgb(235 235 235)' : lineColor,
-      }}
-    >
-      {line}
-    </motion.span>
+        <ul ref={snapListRef} className="about-snap-list">
+          {descriptionLines.map((line, index) => (
+            <li key={index}>
+              <span>{line}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
   );
 }

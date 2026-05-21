@@ -24,14 +24,17 @@ All font variables resolve to General Sans. Use variables, not raw font names.
 
 Differentiate levels through **weight + size + tracking**, not font family.
 
-| Level | Weight | Size | Line Height | Tracking | Use |
+| Level | Weight | Size (token) | Line Height | Tracking | Use |
 |---|---|---|---|---|---|
-| **Display** | 700 (Bold) | `clamp(3rem, 14vw, 10rem)` | 0.82 | `-0.02em` | Hero headlines, wall statements |
-| **Headline** | 700 (Bold) | `clamp(3.5rem, 9.2vw, 8.3rem)` | 0.90 | `-0.04em` | Section headings, work-experience titles |
-| **Title** | 500 (Medium) | `clamp(1.34rem, 1.62vw, 1.92rem)` | 1.10 | `-0.01em` | Role titles, card headings |
-| **Body** | 400 (Regular) | `clamp(0.875rem, 1.1vw, 1rem)` | 1.45 | `0.02em` | Supporting copy, paragraphs |
-| **Label** | 300 (Light) | `clamp(0.625rem, 0.9vw, 0.8125rem)` | 1.20 | `0.2em` uppercase | Navigation, timestamps, metadata |
-| **Quote** | 500 (Medium) italic | `clamp(18px, 2vw, 28px)` | 1.35 | `0.004em` | Pull-quotes, editorial passages |
+| **Hero** | 200 (Thin) / 700 (Bold) | `--text-hero` · `clamp(3.25rem, calc(0.64rem + 6.96vw), 9.75rem)` | 0.82 | `-0.012em` | Hero headlines |
+| **Display** | 700 (Bold) | `--text-display` · `clamp(2.5rem, calc(0.39rem + 4.46vw), 6.25rem)` | 0.82 | `-0.02em` | Wall statements |
+| **Headline** | 700 (Bold) | `--text-headline` · `clamp(2.75rem, calc(0.82rem + 5.14vw), 8rem)` | 0.88 | `-0.04em` | Section headings, work-experience titles |
+| **Section** | 700 (Bold) | `--text-section` · `clamp(1.75rem, calc(0.87rem + 2.35vw), 3.5rem)` | 0.88 | `-0.04em` | Sub-section headings |
+| **Quote** | 400 (Regular) italic | `--text-quote` · `clamp(1.125rem, calc(0.89rem + 0.63vw), 1.75rem)` | 1.35 | `-0.004em` | Pull-quotes, editorial passages |
+| **Body** | 400 (Regular) | `--text-body` · `clamp(0.9375rem, calc(0.87rem + 0.18vw), 1.125rem)` | 1.45 | `0.004em` | Supporting copy, paragraphs |
+| **Small** | 300-400 | `--text-small` · `clamp(0.8125rem, calc(0.75rem + 0.16vw), 1rem)` | 1.45 | `0.02em` | Credits, key points |
+| **Meta** | 300 (Light) | `--text-meta` · `clamp(0.6875rem, calc(0.64rem + 0.13vw), 0.8125rem)` | 1.20 | `0.2em` uppercase | Navigation, timestamps |
+| **Label** | 300 (Light) | `--text-label` · `clamp(0.5625rem, calc(0.52rem + 0.11vw), 0.6875rem)` | 1.20 | `0.2em` uppercase | Stamps, badges, metadata |
 
 ## Rules
 
@@ -43,5 +46,5 @@ Differentiate levels through **weight + size + tracking**, not font family.
 6. **Uppercase is reserved for labels and metadata.** Body and quote text stay sentence case.
 7. **Italic is reserved for quotes and editorial emphasis.** Do not use italic for labels or headings.
 8. **Use CSS custom properties.** Always reference `var(--font-sans)`, `var(--font-display)`, etc. Never hardcode `'General Sans'` in component styles.
-9. **Fluid sizing with clamp().** All font sizes use `clamp(min, preferred, max)` for responsive scaling. No fixed breakpoint overrides for font size unless layout demands it.
+9. **Fluid sizing with Utopia formula.** All font sizes use `clamp(min, calc(A·rem + B·vw), max)` with a 375→1440px reference range. The rem component provides baseline stability; the vw component provides proportional scaling. All levels scale at a consistent rate so ratios stay stable across viewports. Breakpoint guards at ≤320px and ≥2560px pin values to their min/max.
 10. **Anti-aliased rendering.** Both `-webkit-font-smoothing: antialiased` and `-moz-osx-font-smoothing: grayscale` are set globally on `body`.

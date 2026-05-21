@@ -9,9 +9,9 @@ type DarkToLightTransitionProps = {
 type TransitionPhase = 0 | 1 | 2 | 3;
 
 function resolvePhase(progress: number): TransitionPhase {
-  if (progress < 0.18) return 0;
-  if (progress < 0.62) return 1;
-  if (progress < 0.86) return 2;
+  if (progress < 0.14) return 0;
+  if (progress < 0.36) return 1;
+  if (progress < 0.80) return 2;
   return 3;
 }
 
@@ -23,18 +23,35 @@ export function DarkToLightTransition({ onRevealReadyChange, onProgressChange }:
 
   const { scrollYProgress } = useScroll({
     target: bandRef,
-    offset: ['start 94%', 'end -8%'],
+    offset: ['start 92%', 'end -12%'],
   });
 
-  const lineScaleY = useTransform(scrollYProgress, [0.04, 0.22], [0, 1]);
-  const lineOpacity = useTransform(scrollYProgress, [0, 0.14, 0.22, 0.58, 0.82], [0, 0.34, 0.86, 0.42, 0]);
-  const panelStart = 0.16;
-  const panelEnd = 0.64;
-  const panelScaleX = useTransform(scrollYProgress, [panelStart, panelEnd], [0, 1.45]);
-  const bridgeOpacity = useTransform(scrollYProgress, [0.46, 0.84], [0.14, 0.92]);
-  const darkFadeOpacity = useTransform(scrollYProgress, [0.46, 0.84], [0.82, 0]);
-  const revealOnThreshold = 0.8;
-  const revealOffThreshold = 0.72;
+  // ── Phase 0: Dark hold (0–0.14) ──
+  // Viewport is 100% dark, nothing moves
+
+  // ── Phase 1: Vertical seam draws (0.14–0.36) ──
+  const lineScaleY = useTransform(scrollYProgress, [0.14, 0.45], [0, 1]);
+  const lineOpacity = useTransform(scrollYProgress, [0.12, 0.18, 0.48, 0.60], [0, 0.9, 0.9, 0]);
+
+  // ── Phase 2: Panels part left/right (0.36–0.76) ──
+  const leftPanelX = useTransform(scrollYProgress, [0.36, 0.76], ['0vw', '-100vw']);
+  const rightPanelX = useTransform(scrollYProgress, [0.36, 0.76], ['0vw', '100vw']);
+  const panelShadowOpacity = useTransform(scrollYProgress, [0.36, 0.76], [1, 0]);
+
+  // Horizon line — appears as panels open
+  const horizonWidth = useTransform(scrollYProgress, [0.42, 0.68], ['0vw', '100vw']);
+  const horizonOpacity = useTransform(scrollYProgress, [0.38, 0.48], [0, 0.6]);
+
+  // Section marker
+  const markerOpacity = useTransform(scrollYProgress, [0.52, 0.62, 0.74, 0.82], [0, 0.7, 0.7, 0]);
+  const markerY = useTransform(scrollYProgress, [0.52, 0.62], [8, 0]);
+
+  // Bottom bridge gradient
+  const bridgeOpacity = useTransform(scrollYProgress, [0.60, 0.90], [0, 1]);
+
+  // Reveal thresholds
+  const revealOnThreshold = 0.74;
+  const revealOffThreshold = 0.66;
   const revealStateRef = useRef(false);
 
   useEffect(() => {
@@ -80,44 +97,107 @@ export function DarkToLightTransition({ onRevealReadyChange, onProgressChange }:
       ref={bandRef}
       aria-hidden="true"
       data-phase={`phase-${phase}`}
-      className="relative isolate z-[var(--z-transition)] overflow-hidden bg-[oklch(0.1_0.012_253)] [contain:layout_paint]"
-      style={{ height: 'clamp(15rem, 52dvh, 38rem)', minHeight: 'clamp(240px, 30vw, 384px)', maxHeight: 'clamp(352px, 48vw, 608px)' }}
+      className="relative isolate z-[var(--z-transition)] overflow-hidden [contain:layout_paint]"
+      style={{ height: 'clamp(24rem, 100dvh, 160rem)' }}
     >
-      <motion.div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[oklch(0.09_0.012_253/0.32)] via-[oklch(0.12_0.012_253/0.06)] to-[oklch(0.1_0.012_253/0)]"
-        style={{ opacity: prefersReducedMotion ? 0 : darkFadeOpacity }}
-      />
-
-      <motion.div
-        className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-[var(--transition-line-color)] will-change-transform"
-        style={{
-          scaleY: prefersReducedMotion ? 1 : lineScaleY,
-          opacity: prefersReducedMotion ? 0 : lineOpacity,
-          transformOrigin: 'center top',
-          boxShadow: 'var(--transition-line-glow)',
-        }}
-      />
-
-      <motion.div
-        className="absolute inset-y-0 left-1/2 w-[150vw] -translate-x-1/2 bg-[oklch(0.93_0.005_255)] will-change-transform"
-        style={{
-          scaleX: prefersReducedMotion ? 1 : panelScaleX,
-          opacity: 1,
-          transformOrigin: 'center center',
-        }}
-      />
-
-      <motion.div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[oklch(0.91_0.006_255/0)] via-[oklch(0.92_0.006_255/0.28)] to-[oklch(0.93_0.005_255/0.66)]"
-        style={{ opacity: prefersReducedMotion ? 1 : bridgeOpacity }}
-      />
-
+      {/* Light field — always present behind dark panels */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-b from-[oklch(0.93_0.005_255/0)] via-[oklch(0.93_0.005_255/0.62)] to-[oklch(0.93_0.005_255)]"
-        style={{ height: 'clamp(4rem, 9vh, 7.5rem)' }}
+        className="absolute inset-0 z-0"
+        style={{
+          background: 'radial-gradient(ellipse 80% 60% at 50% 40%, oklch(0.95 0.003 255), oklch(0.93 0.005 255))',
+        }}
+      />
+
+      {/* Left dark panel */}
+      <motion.div
+        aria-hidden="true"
+        className="absolute right-1/2 z-[2] w-[100vw] will-change-transform"
+        data-panel="left"
+        style={{
+          top: '-50%',
+          height: '200%',
+          x: prefersReducedMotion ? '-100vw' : leftPanelX,
+          background: 'oklch(0.1 0.012 253)',
+        }}
+      >
+        <motion.div
+          className="absolute inset-y-0 right-0 w-px"
+          style={{
+            opacity: prefersReducedMotion ? 0 : panelShadowOpacity,
+            boxShadow: '6px 0 28px oklch(0.06 0.01 253 / 0.5), 3px 0 12px oklch(0.06 0.01 253 / 0.3)',
+          }}
+        />
+      </motion.div>
+
+      {/* Right dark panel */}
+      <motion.div
+        aria-hidden="true"
+        className="absolute left-1/2 z-[2] w-[100vw] will-change-transform"
+        data-panel="right"
+        style={{
+          top: '-50%',
+          height: '200%',
+          x: prefersReducedMotion ? '100vw' : rightPanelX,
+          background: 'oklch(0.1 0.012 253)',
+        }}
+      >
+        <motion.div
+          className="absolute inset-y-0 left-0 w-px"
+          style={{
+            opacity: prefersReducedMotion ? 0 : panelShadowOpacity,
+            boxShadow: '-6px 0 28px oklch(0.06 0.01 253 / 0.5), -3px 0 12px oklch(0.06 0.01 253 / 0.3)',
+          }}
+        />
+      </motion.div>
+
+      {/* Vertical glowing seam — draws before panels split */}
+      <motion.div
+        className="absolute left-1/2 top-0 z-[3] h-full w-px -translate-x-1/2 will-change-transform"
+        style={{
+          scaleY: prefersReducedMotion ? 0 : lineScaleY,
+          opacity: prefersReducedMotion ? 0 : lineOpacity,
+          transformOrigin: 'center center',
+          background: 'oklch(0.94 0.005 255 / 0.85)',
+          boxShadow: '0 0 8px oklch(0.94 0.01 255 / 0.5), 0 0 28px oklch(0.94 0.01 255 / 0.2), 0 0 56px oklch(0.94 0.01 255 / 0.08)',
+        }}
+      />
+
+      {/* Horizon line — structural bridge */}
+      <motion.div
+        aria-hidden="true"
+        className="absolute left-1/2 top-1/2 z-[1] h-px -translate-x-1/2 -translate-y-1/2"
+        style={{
+          width: prefersReducedMotion ? '100vw' : horizonWidth,
+          opacity: prefersReducedMotion ? 0.6 : horizonOpacity,
+          background: 'oklch(0.82 0.01 255)',
+        }}
+      />
+
+      {/* Section index marker */}
+      <motion.span
+        aria-hidden="true"
+        className="absolute left-1/2 z-[1] -translate-x-1/2 select-none font-sans font-light leading-none tracking-[0.2em] uppercase"
+        style={{
+          top: 'calc(50% + 1.5rem)',
+          fontSize: 'var(--text-label)',
+          color: 'oklch(0.48 0.01 255)',
+          opacity: prefersReducedMotion ? 0 : markerOpacity,
+          y: prefersReducedMotion ? 0 : markerY,
+        }}
+      >
+        02
+      </motion.span>
+
+      {/* Bottom bridge gradient */}
+      <motion.div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[1]"
+        style={{
+          height: 'clamp(5rem, 10vh, 8rem)',
+          background: 'linear-gradient(180deg, oklch(0.93 0.005 255 / 0) 0%, oklch(0.93 0.005 255 / 0.62) 50%, oklch(0.93 0.005 255) 100%)',
+          opacity: prefersReducedMotion ? 1 : bridgeOpacity,
+        }}
       />
     </section>
   );

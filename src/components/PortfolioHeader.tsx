@@ -99,7 +99,7 @@ export function PortfolioHeader() {
 
           <a
             href="#signoff"
-            className="hero-cta inline-flex min-h-11 items-center justify-center whitespace-nowrap border border-white/45 bg-white/10 px-4 py-2 text-[10px] font-medium tracking-[0.14em] text-[var(--frost-text)] sm:px-4 sm:py-2.5 sm:text-[11px] sm:tracking-[0.18em] md:text-[12px]"
+            className="hero-cta inline-flex min-h-11 items-center justify-center whitespace-nowrap border border-white/45 bg-white/10 px-4 py-2 text-[var(--text-label)] font-medium tracking-[0.14em] text-[var(--frost-text)] sm:px-4 sm:py-2.5 sm:tracking-[0.18em]"
           >
             {headerContent.ctaLabel}
           </a>
@@ -152,7 +152,7 @@ export function PortfolioHeader() {
               <a
                 key={link.href}
                 href={link.href}
-                className="block font-display text-[clamp(2rem,8vw,3.5rem)] font-bold uppercase leading-[0.88] tracking-[-0.02em] text-[var(--frost-text)] transition-colors duration-200 ease-[var(--ease-quart-out)] hover:text-[var(--signal-red)] focus-visible:outline-1 focus-visible:outline-[var(--signal-red)] focus-visible:outline-offset-4"
+                className="block font-display text-[clamp(2rem,calc(0.56rem+3.84vw),3.5rem)] font-bold uppercase leading-[0.88] tracking-[-0.02em] text-[var(--frost-text)] transition-colors duration-200 ease-[var(--ease-quart-out)] hover:text-[var(--signal-red)] focus-visible:outline-1 focus-visible:outline-[var(--signal-red)] focus-visible:outline-offset-4"
                 onClick={closeDrawer}
                 style={
                   reducedMotion

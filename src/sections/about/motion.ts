@@ -1,26 +1,28 @@
-import { duration, ease } from '../../motion/easing';
-
-export const aboutContainerVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: duration.entrance,
-      ease: ease.expoOut,
-      staggerChildren: 0.1,
-    },
+export const aboutMotion = {
+  ease: {
+    expoOut: 'power4.out',
+    quartOut: 'power3.out',
   },
-};
-
-export const aboutItemVariants = {
-  hidden: { opacity: 0, y: 14 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: duration.reveal,
-      ease: ease.expoOut,
-    },
+  intro: {
+    y: 24,
+    duration: 0.9,
+    stagger: 0.1,
   },
-};
+  orb: {
+    scrub: 1.5,
+    ranges: [
+      { from: 40, to: -36 },
+      { from: 52, to: -48 },
+      { from: 32, to: -28 },
+    ] as const,
+  },
+  title: {
+    stickyTop: 'clamp(6rem, 10vw, 10rem)',
+  },
+  snapList: {
+    scrub: true,
+    dimOpacity: 0.2,
+    dimScale: 0.8,
+    stagger: 0.5,
+  },
+} as const;

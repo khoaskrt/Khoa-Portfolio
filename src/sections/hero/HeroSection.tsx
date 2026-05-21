@@ -50,13 +50,13 @@ export function HeroSection({ preloaderDone = true }: HeroSectionProps) {
             <h1>
               <span
                 className="hero-h1-reveal hero-cement hero-cement-soft block font-sans font-thin leading-[0.82] uppercase"
-                style={{ fontSize: 'clamp(56px, 12vw, 156px)', letterSpacing: 'clamp(0.08em, 0.4vw, 0.12em)' }}
+                style={{ fontSize: 'var(--text-hero)', letterSpacing: 'clamp(0.08em, 0.4vw, 0.12em)' }}
               >
                 {heroContent.headingPrimary}
               </span>
               <span
                 className="hero-h2-reveal hero-cement block font-display font-bold leading-[0.82] tracking-[-0.012em] uppercase"
-                style={{ fontSize: 'clamp(56px, 12vw, 156px)', marginTop: 'clamp(0.5rem, 1vw, 0.75rem)' }}
+                style={{ fontSize: 'var(--text-hero)', marginTop: 'clamp(0.5rem, 1vw, 0.75rem)' }}
               >
                 {heroContent.headingSecondary}
               </span>
@@ -65,7 +65,7 @@ export function HeroSection({ preloaderDone = true }: HeroSectionProps) {
             <motion.div
               variants={itemVariants}
               className="hero-stagger flex items-center justify-end gap-[0.6em] font-light"
-              style={{ marginTop: 'clamp(1.25rem, 2.5vw, 1.5rem)', fontSize: 'clamp(10px, 1vw, 12px)', letterSpacing: 'clamp(0.12em, 0.5vw, 0.22em)' }}
+              style={{ marginTop: 'clamp(1.25rem, 2.5vw, 1.5rem)', fontSize: 'var(--text-label)', letterSpacing: 'clamp(0.12em, 0.5vw, 0.22em)' }}
             >
               <div className="uppercase">{heroContent.subtitleYear}</div>
               <div className="opacity-38 tracking-[0.05em]">·</div>
@@ -79,7 +79,7 @@ export function HeroSection({ preloaderDone = true }: HeroSectionProps) {
           <motion.nav
             variants={itemVariants}
             className="hero-stagger flex min-h-11 flex-wrap items-center justify-between border-t border-white/10 font-light uppercase"
-            style={{ paddingTop: 'clamp(1.25rem, 2.5vw, 1.5rem)', fontSize: 'clamp(9px, 1.1vw, 13px)', letterSpacing: 'clamp(0.14em, 0.6vw, 0.32em)', gap: 'clamp(0.75rem, 1.5vw, 1.25rem) clamp(0.75rem, 2vw, 1.25rem)' }}
+            style={{ paddingTop: 'clamp(1.25rem, 2.5vw, 1.5rem)', fontSize: 'var(--text-meta)', letterSpacing: 'clamp(0.14em, 0.6vw, 0.32em)', gap: 'clamp(0.75rem, 1.5vw, 1.25rem) clamp(0.75rem, 2vw, 1.25rem)' }}
           >
             {heroContent.footerWords.map((word, i) => (
               <div key={word} className={i >= 2 && i <= 3 ? 'opacity-85' : ''}>

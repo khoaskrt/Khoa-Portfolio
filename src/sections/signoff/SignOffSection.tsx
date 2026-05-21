@@ -100,9 +100,9 @@ export function SignOffSection() {
       >
         {/* Wordmark */}
         <div
-          className="signoff-mark self-end overflow-hidden"
+          className="signoff-mark self-end"
           style={{
-            fontSize: 'clamp(5rem, 16vw, 17rem)',
+            fontSize: 'clamp(5rem, calc(1.56rem + 9.18vw), 17rem)',
           }}
         >
           <div
@@ -134,7 +134,7 @@ export function SignOffSection() {
             <span className="font-sans font-light text-[var(--text-meta)] tracking-[0.24em] uppercase text-white/50">
               Credits
             </span>
-            <div className="font-sans font-normal text-white/78 tracking-[0.02em] leading-[1.45]" style={{ fontSize: 'clamp(14px, 1.05vw, 16px)' }}>
+            <div className="font-sans font-normal text-white/78 tracking-[0.02em] leading-[1.45]" style={{ fontSize: 'var(--text-small)' }}>
               © Ryan Do — {year}
               <span className="mt-[0.45rem] block text-[var(--text-meta)] tracking-[0.2em] uppercase text-white/42">
                 All records held by author
@@ -147,7 +147,7 @@ export function SignOffSection() {
             <span className="font-sans font-light text-[var(--text-meta)] tracking-[0.24em] uppercase text-white/50">
               Menu
             </span>
-            <ul className="m-0 flex list-none flex-col gap-[0.55rem] p-0 font-sans font-normal tracking-[0.02em] text-white/88" style={{ fontSize: 'clamp(14px, 1.05vw, 16px)' }}>
+            <ul className="m-0 flex list-none flex-col gap-[0.55rem] p-0 font-sans font-normal tracking-[0.02em] text-white/88" style={{ fontSize: 'var(--text-small)' }}>
               <li><a href="#about" className="signoff-link relative inline-flex items-baseline gap-[0.4rem] transition-colors duration-[var(--duration-hover)] ease-[var(--ease-quart-out)] hover:text-[var(--signal-red)] focus-visible:outline-1 focus-visible:outline-[var(--signal-red)] focus-visible:outline-offset-4">About</a></li>
               <li><a href="#works" className="signoff-link relative inline-flex items-baseline gap-[0.4rem] transition-colors duration-[var(--duration-hover)] ease-[var(--ease-quart-out)] hover:text-[var(--signal-red)] focus-visible:outline-1 focus-visible:outline-[var(--signal-red)] focus-visible:outline-offset-4">Work</a></li>
               <li><a href="#credentials" className="signoff-link relative inline-flex items-baseline gap-[0.4rem] transition-colors duration-[var(--duration-hover)] ease-[var(--ease-quart-out)] hover:text-[var(--signal-red)] focus-visible:outline-1 focus-visible:outline-[var(--signal-red)] focus-visible:outline-offset-4">Credentials</a></li>
@@ -159,10 +159,10 @@ export function SignOffSection() {
             <span className="font-sans font-light text-[var(--text-meta)] tracking-[0.24em] uppercase text-white/50">
               Contact
             </span>
-            <ul className="m-0 flex list-none flex-col gap-[0.55rem] p-0 font-sans font-normal tracking-[0.02em] text-white/88" style={{ fontSize: 'clamp(14px, 1.05vw, 16px)' }}>
+            <ul className="m-0 flex list-none flex-col gap-[0.55rem] p-0 font-sans font-normal tracking-[0.02em] text-white/88" style={{ fontSize: 'var(--text-small)' }}>
               <li>
                 <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" className="signoff-link relative inline-flex items-baseline gap-[0.4rem] transition-colors duration-[var(--duration-hover)] ease-[var(--ease-quart-out)] hover:text-[var(--signal-red)] focus-visible:outline-1 focus-visible:outline-[var(--signal-red)] focus-visible:outline-offset-4">
-                  LinkedIn <span className="font-sans font-light text-[10px] tracking-[0.18em] text-white/35 -translate-y-[0.15em]" aria-hidden="true">↗</span>
+                  LinkedIn <span className="font-sans font-light text-[var(--text-label)] tracking-[0.18em] text-white/35 -translate-y-[0.15em]" aria-hidden="true">↗</span>
                 </a>
               </li>
               <li>
@@ -172,7 +172,7 @@ export function SignOffSection() {
               </li>
               <li>
                 <a href="https://t.me/" target="_blank" rel="noopener noreferrer" className="signoff-link relative inline-flex items-baseline gap-[0.4rem] transition-colors duration-[var(--duration-hover)] ease-[var(--ease-quart-out)] hover:text-[var(--signal-red)] focus-visible:outline-1 focus-visible:outline-[var(--signal-red)] focus-visible:outline-offset-4">
-                  Telegram <span className="font-sans font-light text-[10px] tracking-[0.18em] text-white/35 -translate-y-[0.15em]" aria-hidden="true">↗</span>
+                  Telegram <span className="font-sans font-light text-[var(--text-label)] tracking-[0.18em] text-white/35 -translate-y-[0.15em]" aria-hidden="true">↗</span>
                 </a>
               </li>
             </ul>

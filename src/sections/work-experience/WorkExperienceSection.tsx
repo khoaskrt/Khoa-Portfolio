@@ -20,7 +20,7 @@ const chapterBgs = [
 const EXPO_OUT = 'power4.out';
 const QUART_OUT = 'power3.out';
 
-export function WorkExperienceSection({ revealReady = false }: WorkExperienceSectionProps) {
+export function WorkExperienceSection({ revealReady = false, transitionProgress = 0 }: WorkExperienceSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLElement>(null);
   const leadRef = useRef<HTMLDivElement>(null);
@@ -37,7 +37,11 @@ export function WorkExperienceSection({ revealReady = false }: WorkExperienceSec
     const els = [headerRef.current, leadRef.current, ruleRef.current].filter(Boolean) as HTMLElement[];
     if (els.length === 0) return;
 
-    gsap.set(els, { opacity: 0, y: 24 });
+    const headerAndLead = [headerRef.current, leadRef.current].filter(Boolean) as HTMLElement[];
+    const rule = ruleRef.current;
+
+    gsap.set(headerAndLead, { opacity: 0, y: 32 });
+    if (rule) gsap.set(rule, { opacity: 0, scaleX: 0, transformOrigin: 'left center' });
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -47,13 +51,22 @@ export function WorkExperienceSection({ revealReady = false }: WorkExperienceSec
       },
     });
 
-    tl.to(els, {
+    tl.to(headerAndLead, {
       opacity: 1,
       y: 0,
-      duration: 0.9,
+      duration: 1.1,
       ease: EXPO_OUT,
-      stagger: 0.1,
+      stagger: 0.08,
     });
+
+    if (rule) {
+      tl.to(rule, {
+        opacity: 1,
+        scaleX: 1,
+        duration: 0.8,
+        ease: EXPO_OUT,
+      }, '-=0.7');
+    }
 
     return () => { tl.kill(); };
   }, [revealReady, prefersReducedMotion]);
@@ -75,6 +88,7 @@ export function WorkExperienceSection({ revealReady = false }: WorkExperienceSec
         style={{
           height: 'clamp(8rem, 14vh, 12rem)',
           background: 'linear-gradient(180deg, oklch(0.93 0.005 255 / 0.94), oklch(0.93 0.005 255 / 0.6) 50%, oklch(0.93 0.005 255 / 0))',
+          opacity: transitionProgress >= 1 ? 0 : 1 - Math.min(Math.max((transitionProgress - 0.6) / 0.4, 0), 1),
         }}
       />
 
@@ -99,7 +113,7 @@ export function WorkExperienceSection({ revealReady = false }: WorkExperienceSec
           {workExperienceContent.headline[1]}<br />
           {workExperienceContent.headline[2]}
         </h2>
-        <div className="flex items-center gap-[0.6rem] pb-2 text-[10px] font-light tracking-[0.2em] uppercase text-[var(--day-faint)]">
+        <div className="flex items-center gap-[0.6rem] pb-2 text-[var(--text-label)] font-light tracking-[0.2em] uppercase text-[var(--day-faint)]">
           <span>{workExperienceContent.chapters.length} roles</span>
           <span className="opacity-40" aria-hidden="true">·</span>
           <span>2024 — 2026</span>
@@ -307,15 +321,15 @@ function ChapterCard({ chapter, index, bgColor, revealReady, reducedMotion }: Ch
         <div className="work-title-block flex flex-col" style={{ gap: 'clamp(1.25rem, 2.5vh, 2rem)', flex: '1 1 0%' }}>
           <h3
             className="work-title m-0 font-display font-medium leading-[0.88] tracking-[-0.04em] text-[var(--day-heading)]"
-            style={{ fontSize: 'clamp(2.75rem, 8vw, 8rem)', textWrap: 'balance', overflowWrap: 'anywhere' }}
+            style={{ fontSize: 'var(--text-headline)', textWrap: 'balance', overflowWrap: 'anywhere' }}
           >
             {chapter.title[0]}<br />{chapter.title[1]}
           </h3>
           <div className="flex flex-wrap items-center gap-x-[1.2rem] gap-y-3">
-            <span className="work-stamp inline-flex items-center border border-[var(--day-stamp-border)] bg-transparent px-[0.7rem] py-[0.32rem] text-[9px] font-normal tracking-[0.2em] uppercase text-[var(--day-muted)] whitespace-nowrap">
+            <span className="work-stamp inline-flex items-center border border-[var(--day-stamp-border)] bg-transparent px-[0.7rem] py-[0.32rem] text-[var(--text-label)] font-normal tracking-[0.2em] uppercase text-[var(--day-muted)] whitespace-nowrap">
               {chapter.company}
             </span>
-            <div className="flex items-center gap-[0.4rem] text-[10px] font-light tracking-[0.22em] uppercase text-[var(--day-signal-text)]">
+            <div className="flex items-center gap-[0.4rem] text-[var(--text-label)] font-light tracking-[0.22em] uppercase text-[var(--day-signal-text)]">
               <span>{chapter.periodFrom}</span>
               <span className="opacity-45" aria-hidden="true">—</span>
               <span className="text-[var(--day-muted)]">{chapter.periodTo}</span>
@@ -325,7 +339,7 @@ function ChapterCard({ chapter, index, bgColor, revealReady, reducedMotion }: Ch
         <div className="flex shrink-0 items-start gap-4">
           <span
             className="work-chap-num m-0 select-none font-display font-bold leading-[0.88] tracking-[-0.04em] text-[oklch(0.58_0.01_255/0.72)]"
-            style={{ fontSize: 'clamp(3rem, 8vw, 8rem)' }}
+            style={{ fontSize: 'var(--text-headline)' }}
             aria-hidden="true"
           >
             {chapter.num}
@@ -366,7 +380,7 @@ function ChapterCard({ chapter, index, bgColor, revealReady, reducedMotion }: Ch
           <div className="work-card-body flex flex-wrap items-start">
             <span
               ref={setStaggerRef(1)}
-              className="work-card-label shrink-0 text-[10px] font-light tracking-[0.26em] uppercase text-[var(--day-signal-text)] leading-none"
+              className="work-card-label shrink-0 text-[var(--text-label)] font-light tracking-[0.26em] uppercase text-[var(--day-signal-text)] leading-none"
             >
               Mandate
             </span>
@@ -376,7 +390,7 @@ function ChapterCard({ chapter, index, bgColor, revealReady, reducedMotion }: Ch
                 <p
                   key={i}
                   className="work-operative m-0 font-body leading-[1.5] tracking-[0.004em] text-[var(--day-body)]"
-                  style={{ fontSize: 'clamp(15px, 1.15vw, 17px)', textWrap: 'pretty' }}
+                  style={{ fontSize: 'var(--text-body)', textWrap: 'pretty' }}
                 >
                   {text}
                 </p>
@@ -389,7 +403,7 @@ function ChapterCard({ chapter, index, bgColor, revealReady, reducedMotion }: Ch
                   <li
                     key={i}
                     className="relative pl-5 font-sans font-normal leading-[1.5] tracking-[0.004em] text-[var(--day-secondary)]"
-                    style={{ fontSize: 'clamp(13px, 0.95vw, 14.5px)' }}
+                    style={{ fontSize: 'var(--text-small)' }}
                   >
                     <span className="absolute left-0 top-0 font-light text-[oklch(0.45_0.01_255)]">—</span>
                     {point}
@@ -400,7 +414,7 @@ function ChapterCard({ chapter, index, bgColor, revealReady, reducedMotion }: Ch
                 {chapter.signals.map((signal) => (
                   <span
                     key={signal}
-                    className="text-[9px] font-light tracking-[0.16em] uppercase text-[var(--day-signal-text)] whitespace-nowrap"
+                    className="text-[var(--text-label)] font-light tracking-[0.16em] uppercase text-[var(--day-signal-text)] whitespace-nowrap"
                   >
                     [ {signal} ]
                   </span>
@@ -421,7 +435,7 @@ function ChapterCard({ chapter, index, bgColor, revealReady, reducedMotion }: Ch
             <div className={`work-brief ${briefOpen ? 'is-open' : ''}`}>
               <button
                 type="button"
-                className="work-brief-toggle inline-flex items-center gap-[0.6rem] border-0 bg-none p-[0.45rem_0] text-[10px] font-normal tracking-[0.22em] uppercase text-[var(--day-muted)] transition-colors duration-200 ease-linear select-none hover:text-[var(--day-heading)]"
+                className="work-brief-toggle inline-flex items-center gap-[0.6rem] border-0 bg-none p-[0.45rem_0] text-[var(--text-label)] font-normal tracking-[0.22em] uppercase text-[var(--day-muted)] transition-colors duration-200 ease-linear select-none hover:text-[var(--day-heading)]"
                 onClick={(e) => {
                   e.stopPropagation();
                   setBriefOpen((prev) => !prev);
@@ -454,7 +468,7 @@ function ChapterCard({ chapter, index, bgColor, revealReady, reducedMotion }: Ch
                         <li key={i}>{bullet}</li>
                       ))}
                     </ul>
-                    <div className="flex flex-wrap gap-x-[1.1rem] gap-y-[0.4rem] text-[9px] font-normal uppercase tracking-[0.18em] text-[var(--day-muted)]">
+                    <div className="flex flex-wrap gap-x-[1.1rem] gap-y-[0.4rem] text-[var(--text-label)] font-normal uppercase tracking-[0.18em] text-[var(--day-muted)]">
                       {chapter.links.map((link) => (
                         <a
                           key={link.href}

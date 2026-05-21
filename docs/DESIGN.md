@@ -21,49 +21,71 @@ colors:
   border-day: "oklch(0.82 0.01 255)"
   border-day-faint: "oklch(0.88 0.005 255)"
 typography:
+  hero:
+    fontFamily: "General Sans, sans-serif"
+    fontSize: "clamp(3.25rem, calc(0.64rem + 6.96vw), 9.75rem)"
+    fontWeight: 700
+    lineHeight: 0.82
+    letterSpacing: "-0.012em"
+    token: "--text-hero"
   display:
     fontFamily: "General Sans, sans-serif"
-    fontSize: "clamp(3.5rem, 14vw, 12rem)"
+    fontSize: "clamp(2.5rem, calc(0.39rem + 4.46vw), 6.25rem)"
     fontWeight: 700
     lineHeight: 0.82
     letterSpacing: "-0.02em"
+    token: "--text-display"
   headline:
     fontFamily: "General Sans, sans-serif"
-    fontSize: "clamp(2.75rem, 8vw, 8rem)"
+    fontSize: "clamp(2.75rem, calc(0.82rem + 5.14vw), 8rem)"
     fontWeight: 700
     lineHeight: 0.88
     letterSpacing: "-0.04em"
+    token: "--text-headline"
   section:
     fontFamily: "General Sans, sans-serif"
-    fontSize: "clamp(1.75rem, 4vw, 3.5rem)"
+    fontSize: "clamp(1.75rem, calc(0.87rem + 2.35vw), 3.5rem)"
     fontWeight: 700
     lineHeight: 0.88
     letterSpacing: "-0.04em"
-  title:
-    fontFamily: "General Sans, sans-serif"
-    fontSize: "clamp(1.34rem, 1.62vw, 1.92rem)"
-    fontWeight: 500
-    lineHeight: 1.1
-    letterSpacing: "-0.02em"
-  body:
-    fontFamily: "General Sans, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "clamp(0.875rem, 1.1vw, 1rem)"
-    fontWeight: 400
-    lineHeight: 1.45
-    letterSpacing: "0.004em"
+    token: "--text-section"
   quote:
     fontFamily: "General Sans, sans-serif"
-    fontSize: "clamp(1.125rem, 2vw, 1.75rem)"
+    fontSize: "clamp(1.125rem, calc(0.89rem + 0.63vw), 1.75rem)"
     fontWeight: 400
     lineHeight: 1.35
     letterSpacing: "-0.004em"
-  label:
+    token: "--text-quote"
+  body:
     fontFamily: "General Sans, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "clamp(0.5625rem, 0.9vw, 0.8125rem)"
+    fontSize: "clamp(0.9375rem, calc(0.87rem + 0.18vw), 1.125rem)"
+    fontWeight: 400
+    lineHeight: 1.45
+    letterSpacing: "0.004em"
+    token: "--text-body"
+  small:
+    fontFamily: "General Sans, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "clamp(0.8125rem, calc(0.75rem + 0.16vw), 1rem)"
+    fontWeight: 300
+    lineHeight: 1.45
+    letterSpacing: "0.02em"
+    token: "--text-small"
+  meta:
+    fontFamily: "General Sans, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "clamp(0.6875rem, calc(0.64rem + 0.13vw), 0.8125rem)"
     fontWeight: 300
     lineHeight: 1.2
     letterSpacing: "0.2em"
     textTransform: "uppercase"
+    token: "--text-meta"
+  label:
+    fontFamily: "General Sans, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "clamp(0.5625rem, calc(0.52rem + 0.11vw), 0.6875rem)"
+    fontWeight: 300
+    lineHeight: 1.2
+    letterSpacing: "0.2em"
+    textTransform: "uppercase"
+    token: "--text-label"
 rounded:
   none: "0px"
   hairline-round: "999px"
