@@ -80,6 +80,7 @@ export function WorkExperienceSection({ revealReady = false, transitionProgress 
         background: 'var(--day-surface)',
         paddingInline: 'var(--layout-padding)',
         paddingTop: 'clamp(7rem, 12vh, 10rem)',
+        paddingBottom: 'clamp(4rem, 8vh, 7rem)',
       }}
     >
       <div

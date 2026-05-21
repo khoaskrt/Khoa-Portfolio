@@ -81,6 +81,9 @@ export function GallerySection() {
   const transitionZoneRef = useRef<HTMLDivElement>(null);
   const transitionLineRef = useRef<HTMLDivElement>(null);
 
+  const bridgeRef = useRef<HTMLDivElement>(null);
+  const bridgeLineRef = useRef<HTMLDivElement>(null);
+
   // Transition zone — chapter-break line expands from center
   useEffect(() => {
     if (reducedMotion) return;
@@ -123,6 +126,7 @@ export function GallerySection() {
         trigger: section,
         pin: true,
         scrub: 1.2,
+        anticipatePin: 1,
         start: 'top top',
         end: () => '+=' + scrollDistance(),
         invalidateOnRefresh: true,
@@ -137,6 +141,29 @@ export function GallerySection() {
       tween.kill();
       horizontalTweenRef.current = null;
     };
+  }, [reducedMotion]);
+
+  // Exit bridge — gradient from light to dark after pin releases
+  useEffect(() => {
+    if (reducedMotion) return;
+    const bridge = bridgeRef.current;
+    const line = bridgeLineRef.current;
+    if (!bridge || !line) return;
+
+    gsap.set(line, { scaleX: 0, transformOrigin: 'center center' });
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: bridge,
+        start: 'top 80%',
+        end: 'bottom 30%',
+        scrub: 1,
+      },
+    });
+
+    tl.to(line, { scaleX: 1, ease: 'power3.inOut' });
+
+    return () => { tl.kill(); };
   }, [reducedMotion]);
 
   // Intro reveal — stagger header elements before pin engages
@@ -256,6 +283,15 @@ export function GallerySection() {
           <ScrollHint parentTween={tweenReady ? horizontalTweenRef.current : null} />
         )}
       </section>
+
+      {/* Light-to-dark bridge — smooth exit into signoff */}
+      <div
+        ref={bridgeRef}
+        className="gallery-exit-bridge"
+        aria-hidden="true"
+      >
+        <div ref={bridgeLineRef} className="gallery-exit-bridge-line" />
+      </div>
     </>
   );
 }

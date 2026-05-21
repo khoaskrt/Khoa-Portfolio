@@ -1,5 +1,6 @@
 import { motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
+import './styles.css';
 
 type DarkToLightTransitionProps = {
   onRevealReadyChange?: (ready: boolean) => void;
@@ -9,9 +10,9 @@ type DarkToLightTransitionProps = {
 type TransitionPhase = 0 | 1 | 2 | 3;
 
 function resolvePhase(progress: number): TransitionPhase {
-  if (progress < 0.14) return 0;
-  if (progress < 0.36) return 1;
-  if (progress < 0.80) return 2;
+  if (progress < 0.10) return 0;
+  if (progress < 0.34) return 1;
+  if (progress < 0.72) return 2;
   return 3;
 }
 
@@ -29,29 +30,29 @@ export function DarkToLightTransition({ onRevealReadyChange, onProgressChange }:
   // ── Phase 0: Dark hold (0–0.14) ──
   // Viewport is 100% dark, nothing moves
 
-  // ── Phase 1: Vertical seam draws (0.14–0.36) ──
-  const lineScaleY = useTransform(scrollYProgress, [0.14, 0.45], [0, 1]);
-  const lineOpacity = useTransform(scrollYProgress, [0.12, 0.18, 0.48, 0.60], [0, 0.9, 0.9, 0]);
+  // ── Phase 1: Vertical seam draws (0.10–0.30) ──
+  const lineScaleY = useTransform(scrollYProgress, [0.10, 0.30], [0, 1]);
+  const lineOpacity = useTransform(scrollYProgress, [0.08, 0.14, 0.42, 0.52], [0, 0.9, 0.9, 0]);
 
-  // ── Phase 2: Panels part left/right (0.36–0.76) ──
-  const leftPanelX = useTransform(scrollYProgress, [0.36, 0.76], ['0vw', '-100vw']);
-  const rightPanelX = useTransform(scrollYProgress, [0.36, 0.76], ['0vw', '100vw']);
-  const panelShadowOpacity = useTransform(scrollYProgress, [0.36, 0.76], [1, 0]);
+  // ── Phase 2: Panels part left/right (0.34–0.68) ──
+  const leftPanelX = useTransform(scrollYProgress, [0.34, 0.68], ['0vw', '-100vw']);
+  const rightPanelX = useTransform(scrollYProgress, [0.34, 0.68], ['0vw', '100vw']);
+  const panelShadowOpacity = useTransform(scrollYProgress, [0.34, 0.68], [1, 0]);
 
   // Horizon line — appears as panels open
-  const horizonWidth = useTransform(scrollYProgress, [0.42, 0.68], ['0vw', '100vw']);
-  const horizonOpacity = useTransform(scrollYProgress, [0.38, 0.48], [0, 0.6]);
+  const horizonWidth = useTransform(scrollYProgress, [0.40, 0.62], ['0vw', '100vw']);
+  const horizonOpacity = useTransform(scrollYProgress, [0.36, 0.44], [0, 0.6]);
 
   // Section marker
-  const markerOpacity = useTransform(scrollYProgress, [0.52, 0.62, 0.74, 0.82], [0, 0.7, 0.7, 0]);
-  const markerY = useTransform(scrollYProgress, [0.52, 0.62], [8, 0]);
+  const markerOpacity = useTransform(scrollYProgress, [0.50, 0.58, 0.68, 0.76], [0, 0.7, 0.7, 0]);
+  const markerY = useTransform(scrollYProgress, [0.50, 0.58], [8, 0]);
 
   // Bottom bridge gradient
-  const bridgeOpacity = useTransform(scrollYProgress, [0.60, 0.90], [0, 1]);
+  const bridgeOpacity = useTransform(scrollYProgress, [0.56, 0.82], [0, 1]);
 
   // Reveal thresholds
-  const revealOnThreshold = 0.74;
-  const revealOffThreshold = 0.66;
+  const revealOnThreshold = 0.68;
+  const revealOffThreshold = 0.60;
   const revealStateRef = useRef(false);
 
   useEffect(() => {
@@ -97,8 +98,7 @@ export function DarkToLightTransition({ onRevealReadyChange, onProgressChange }:
       ref={bandRef}
       aria-hidden="true"
       data-phase={`phase-${phase}`}
-      className="relative isolate z-[var(--z-transition)] overflow-hidden [contain:layout_paint]"
-      style={{ height: 'clamp(24rem, 100dvh, 160rem)' }}
+      className="transition-band relative isolate z-[var(--z-transition)] overflow-hidden [contain:layout_paint]"
     >
       {/* Light field — always present behind dark panels */}
       <div
@@ -122,10 +122,9 @@ export function DarkToLightTransition({ onRevealReadyChange, onProgressChange }:
         }}
       >
         <motion.div
-          className="absolute inset-y-0 right-0 w-px"
+          className="transition-panel-edge absolute inset-y-0 right-0 w-px"
           style={{
             opacity: prefersReducedMotion ? 0 : panelShadowOpacity,
-            boxShadow: '6px 0 28px oklch(0.06 0.01 253 / 0.5), 3px 0 12px oklch(0.06 0.01 253 / 0.3)',
           }}
         />
       </motion.div>
@@ -143,23 +142,22 @@ export function DarkToLightTransition({ onRevealReadyChange, onProgressChange }:
         }}
       >
         <motion.div
-          className="absolute inset-y-0 left-0 w-px"
+          className="transition-panel-edge absolute inset-y-0 left-0 w-px"
+          data-side="right"
           style={{
             opacity: prefersReducedMotion ? 0 : panelShadowOpacity,
-            boxShadow: '-6px 0 28px oklch(0.06 0.01 253 / 0.5), -3px 0 12px oklch(0.06 0.01 253 / 0.3)',
           }}
         />
       </motion.div>
 
       {/* Vertical glowing seam — draws before panels split */}
       <motion.div
-        className="absolute left-1/2 top-0 z-[3] h-full w-px -translate-x-1/2 will-change-transform"
+        className="transition-seam absolute left-1/2 top-0 z-[3] h-full w-px -translate-x-1/2 will-change-transform"
         style={{
           scaleY: prefersReducedMotion ? 0 : lineScaleY,
           opacity: prefersReducedMotion ? 0 : lineOpacity,
           transformOrigin: 'center center',
           background: 'oklch(0.94 0.005 255 / 0.85)',
-          boxShadow: '0 0 8px oklch(0.94 0.01 255 / 0.5), 0 0 28px oklch(0.94 0.01 255 / 0.2), 0 0 56px oklch(0.94 0.01 255 / 0.08)',
         }}
       />
 

@@ -1,4 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export function SignOffSection() {
   const footerRef = useRef<HTMLElement>(null);
@@ -20,19 +24,15 @@ export function SignOffSection() {
     }
     const el = footerRef.current;
     if (!el) return;
-    const obs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsRevealed(true);
-            obs.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.18, rootMargin: '0px 0px -8% 0px' },
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
+
+    const st = ScrollTrigger.create({
+      trigger: el,
+      start: 'top 68%',
+      once: true,
+      onEnter: () => setIsRevealed(true),
+    });
+
+    return () => st.kill();
   }, [reducedMotion]);
 
   const handleScrollTop = () => {
@@ -83,16 +83,11 @@ export function SignOffSection() {
         }}
       />
 
-      {/* Eyebrow */}
-      <div
-        className="relative z-2 flex justify-between items-baseline font-sans font-light text-[var(--text-meta)] tracking-[0.26em] uppercase text-white/55"
-        style={{ ...revealStyle(0), marginBottom: 'clamp(2.5rem, 5vw, 5rem)' }}
-      />
-
       {/* Main row */}
       <div
         className="relative z-2 grid items-end"
         style={{
+          marginTop: 'clamp(2.5rem, 5vw, 5rem)',
           gridTemplateColumns: 'minmax(0, 1.05fr) minmax(0, 1fr)',
           columnGap: 'clamp(2rem, 6vw, 6rem)',
           minHeight: 'clamp(18rem, 28vw, 28rem)',
@@ -179,23 +174,26 @@ export function SignOffSection() {
           </div>
 
           {/* Back to top */}
-          <div className="signoff-top flex flex-col items-end gap-[1.1rem] self-start">
+          <button
+            type="button"
+            onClick={handleScrollTop}
+            className="signoff-top group flex flex-col items-end gap-[1.1rem] self-start cursor-pointer bg-transparent border-0 p-0 focus-visible:outline-1 focus-visible:outline-[var(--signal-red)] focus-visible:outline-offset-4"
+            aria-label="Back to top"
+          >
             <span className="font-sans font-light text-[var(--text-meta)] tracking-[0.24em] uppercase text-white/55 transition-colors duration-[var(--duration-hover)] ease-[var(--ease-quart-out)] group-hover:text-[var(--signal-red)]">
               Back to top
             </span>
-            <button
-              type="button"
-              onClick={handleScrollTop}
-              className="signoff-top-btn inline-flex items-center justify-center border border-white/32 bg-white/[0.04] text-[var(--frost-text)] cursor-pointer transition-[border-color,color,background-color,transform] duration-[var(--duration-hover)] ease-[var(--ease-quart-out)] hover:border-[var(--signal-red)] hover:text-[var(--signal-red-hover)] hover:bg-[oklch(0.637_0.237_25.3/0.06)] focus-visible:outline-none focus-visible:border-[var(--signal-red)]"
+            <span
+              className="inline-flex items-center justify-center border border-white/32 bg-white/[0.04] text-[var(--frost-text)] transition-[border-color,color,background-color] duration-[var(--duration-hover)] ease-[var(--ease-quart-out)] group-hover:border-[var(--signal-red)] group-hover:text-[var(--signal-red)] group-hover:bg-[oklch(0.637_0.237_25.3/0.06)] group-focus-visible:border-[var(--signal-red)]"
               style={{ width: 'clamp(2.75rem, 4.5vw, 3.75rem)', height: 'clamp(2.75rem, 4.5vw, 3.75rem)' }}
-              aria-label="Back to top"
+              aria-hidden="true"
             >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="square" strokeLinejoin="miter" aria-hidden="true" className="w-[42%] h-[42%] transition-transform duration-[var(--duration-interaction)] ease-[var(--ease-expo-out)]">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="square" strokeLinejoin="miter" className="w-[42%] h-[42%]">
                 <line x1="12" y1="20" x2="12" y2="4" />
                 <polyline points="5 11 12 4 19 11" />
               </svg>
-            </button>
-          </div>
+            </span>
+          </button>
         </div>
       </div>
 
