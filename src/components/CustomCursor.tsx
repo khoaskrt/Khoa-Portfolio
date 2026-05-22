@@ -30,6 +30,7 @@ export function CustomCursor() {
     let rx = -100;
     let ry = -100;
     let visible = false;
+    let onDark = false;
     let rafId: number;
 
     const onMove = (e: MouseEvent) => {
@@ -39,6 +40,20 @@ export function CustomCursor() {
         visible = true;
         dot.style.opacity = '1';
         ring.style.opacity = '1';
+      }
+      const target = e.target as HTMLElement | null;
+      const dark = !!target?.closest('[data-cursor-dark]');
+      if (dark !== onDark) {
+        onDark = dark;
+        dot.style.mixBlendMode = dark ? 'normal' : 'difference';
+        dot.style.boxShadow = dark ? '0 0 6px 2px rgba(0,0,0,0.35)' : 'none';
+        ring.style.mixBlendMode = dark ? 'normal' : 'difference';
+        ring.style.borderColor = dark
+          ? 'rgba(255, 255, 255, 0.75)'
+          : 'rgba(255, 255, 255, 0.6)';
+        ring.style.boxShadow = dark
+          ? '0 0 4px 1px rgba(0,0,0,0.25)'
+          : 'none';
       }
     };
 
@@ -98,7 +113,7 @@ export function CustomCursor() {
           width: RING_SIZE,
           height: RING_SIZE,
           borderRadius: '50%',
-          border: '1px solid rgba(255, 255, 255, 0.45)',
+          border: '1.5px solid rgba(255, 255, 255, 0.6)',
           pointerEvents: 'none',
           zIndex: 9999,
           opacity: 0,

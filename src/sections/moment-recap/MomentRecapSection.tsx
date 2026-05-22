@@ -87,9 +87,7 @@ export function MomentRecapSection() {
     if (!section || !wrapper) return;
 
     const scrollDistance = () => wrapper.scrollWidth - window.innerWidth;
-    const scrollMultiplier = 1.5;
-
-    const cardCount = momentRecapContent.frames.length;
+    const scrollMultiplier = 1.2;
 
     const tween = gsap.to(wrapper, {
       x: () => -scrollDistance(),
@@ -97,17 +95,11 @@ export function MomentRecapSection() {
       scrollTrigger: {
         trigger: section,
         pin: true,
-        scrub: 2.8,
+        scrub: 1.2,
         anticipatePin: 1,
         start: 'top top',
         end: () => '+=' + scrollDistance() * scrollMultiplier,
         invalidateOnRefresh: true,
-        snap: {
-          snapTo: 1 / (cardCount - 1),
-          duration: { min: 0.6, max: 1.4 },
-          delay: 0.12,
-          ease: 'power3.inOut',
-        },
       },
     });
 
