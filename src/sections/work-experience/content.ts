@@ -100,6 +100,7 @@ export const workExperienceContent = {
         caption: 'Signals condensed into operator-grade narratives for policy and ecosystem dialogue.',
         metrics: ['reports', 'ecosystem map', 'working groups'],
         nodes: ['Signals', 'Synthesis', 'Stakeholders'],
+        showStage: false,
       },
       signals: ['Ecosystem mapping', 'Policy research', 'Web3 Vietnam'],
       bullets: [

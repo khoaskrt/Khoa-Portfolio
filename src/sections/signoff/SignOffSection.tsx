@@ -117,17 +117,17 @@ export function SignOffSection() {
             </span>
             <ul className="m-0 flex list-none flex-col gap-[0.55rem] p-0 font-sans font-medium tracking-[0.02em] text-white" style={{ fontSize: 'var(--text-small)' }}>
               <li>
-                <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" className="signoff-link relative inline-flex items-baseline gap-[0.4rem] transition-colors duration-[var(--duration-hover)] ease-[var(--ease-quart-out)] hover:text-[var(--signal-red)] focus-visible:outline-1 focus-visible:outline-[var(--signal-red)] focus-visible:outline-offset-4">
+                <a href="https://www.linkedin.com/in/khoa-do-blockchain" target="_blank" rel="noopener noreferrer" className="signoff-link relative inline-flex items-baseline gap-[0.4rem] transition-colors duration-[var(--duration-hover)] ease-[var(--ease-quart-out)] hover:text-[var(--signal-red)] focus-visible:outline-1 focus-visible:outline-[var(--signal-red)] focus-visible:outline-offset-4">
                   LinkedIn <span className="font-sans font-light text-[var(--text-label)] tracking-[0.18em] text-white -translate-y-[0.15em]" aria-hidden="true">↗</span>
                 </a>
               </li>
               <li>
-                <a href="mailto:hello@ryando.com" className="signoff-link relative inline-flex items-baseline gap-[0.4rem] transition-colors duration-[var(--duration-hover)] ease-[var(--ease-quart-out)] hover:text-[var(--signal-red)] focus-visible:outline-1 focus-visible:outline-[var(--signal-red)] focus-visible:outline-offset-4">
+                <a href="mailto:Khoado1205@gmail.com" className="signoff-link relative inline-flex items-baseline gap-[0.4rem] transition-colors duration-[var(--duration-hover)] ease-[var(--ease-quart-out)] hover:text-[var(--signal-red)] focus-visible:outline-1 focus-visible:outline-[var(--signal-red)] focus-visible:outline-offset-4">
                   Email
                 </a>
               </li>
               <li>
-                <a href="https://t.me/" target="_blank" rel="noopener noreferrer" className="signoff-link relative inline-flex items-baseline gap-[0.4rem] transition-colors duration-[var(--duration-hover)] ease-[var(--ease-quart-out)] hover:text-[var(--signal-red)] focus-visible:outline-1 focus-visible:outline-[var(--signal-red)] focus-visible:outline-offset-4">
+                <a href="https://t.me/RyanDo1212" target="_blank" rel="noopener noreferrer" className="signoff-link relative inline-flex items-baseline gap-[0.4rem] transition-colors duration-[var(--duration-hover)] ease-[var(--ease-quart-out)] hover:text-[var(--signal-red)] focus-visible:outline-1 focus-visible:outline-[var(--signal-red)] focus-visible:outline-offset-4">
                   Telegram <span className="font-sans font-light text-[var(--text-label)] tracking-[0.18em] text-white -translate-y-[0.15em]" aria-hidden="true">↗</span>
                 </a>
               </li>

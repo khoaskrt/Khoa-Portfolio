@@ -306,22 +306,24 @@ function ChapterCard({ chapter, index, bgColor }: ChapterCardProps) {
                 <span>{chapter.era}</span>
               </div>
 
-              <div className="work-visual-stage" aria-hidden="true">
-                <div className="work-visual-orbit work-visual-orbit-a" />
-                <div className="work-visual-orbit work-visual-orbit-b" />
-                <div className="work-visual-line work-visual-line-a" />
-                <div className="work-visual-line work-visual-line-b" />
+              {'showStage' in chapter.visual && chapter.visual.showStage === false ? null : (
+                <div className="work-visual-stage" aria-hidden="true">
+                  <div className="work-visual-orbit work-visual-orbit-a" />
+                  <div className="work-visual-orbit work-visual-orbit-b" />
+                  <div className="work-visual-line work-visual-line-a" />
+                  <div className="work-visual-line work-visual-line-b" />
 
-                {chapter.visual.nodes.map((node, nodeIndex) => (
-                  <div
-                    key={node}
-                    className={`work-visual-node work-visual-node-${nodeIndex + 1}`}
-                  >
-                    <span className="work-visual-node-dot" />
-                    <span>{node}</span>
-                  </div>
-                ))}
-              </div>
+                  {chapter.visual.nodes.map((node, nodeIndex) => (
+                    <div
+                      key={node}
+                      className={`work-visual-node work-visual-node-${nodeIndex + 1}`}
+                    >
+                      <span className="work-visual-node-dot" />
+                      <span>{node}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
 
               <div className="work-visual-metrics">
                 {chapter.visual.metrics.map((metric) => (
