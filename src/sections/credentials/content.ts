@@ -1,5 +1,6 @@
 import certUdemyDex from '../../assets/images/cert-udemy-dex.jpg';
 import certGooglePM from '../../assets/images/cert-google-pm.jpg';
+import certToeic from '../../assets/images/toeic.jpg';
 
 export type Credential = {
   era: string;
@@ -36,10 +37,10 @@ export const credentialsContent = {
       signals: ['Agile', 'Scrum', 'PM'],
     },
     {
-      era: '2024',
-      image: null,
+      era: '2025',
+      image: certToeic,
       issuer: 'ETS · TOEIC',
-      date: '2024',
+      date: '2025',
       title: ['TOEIC', 'English'],
       subtitle: 'Test of English for International Communication',
       signals: ['English', 'Language'],

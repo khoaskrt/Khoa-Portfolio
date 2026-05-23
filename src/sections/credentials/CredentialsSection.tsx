@@ -108,11 +108,12 @@ export function CredentialsSection() {
       <div style={{ marginTop: 'clamp(2rem, 4vh, 3rem)' }}>
         {credentialsContent.credentials.map((cred, i) => {
           const isFeatured = !!cred.image;
+          const isLast = i === credentialsContent.credentials.length - 1;
           return (
             <div
               key={cred.issuer}
               ref={(el) => { blocksRef.current[i] = el; }}
-              className={`creds-sticky-block ${isFeatured ? 'creds-sticky-block--featured' : 'creds-sticky-block--compact'}`}
+              className={`creds-sticky-block ${isFeatured ? 'creds-sticky-block--featured' : 'creds-sticky-block--compact'} ${isLast ? 'creds-sticky-block--last' : ''}`}
             >
               <span className="creds-block-index" aria-hidden="true">
                 {String(i + 1).padStart(2, '0')}

@@ -240,21 +240,8 @@ function ChapterCard({ chapter, index, bgColor }: ChapterCardProps) {
       className="work-chapter"
       {...(isDark && { 'data-cursor-dark': '' })}
       style={{
-        position: 'relative',
-        isolation: 'isolate',
-        overflow: 'hidden',
         background: bgColor,
         color: isDark ? '#FFFFFF' : 'oklch(0.13 0.01 255)',
-        paddingInline: 'var(--layout-padding)',
-        width: '100%',
-        maxWidth: '100dvw',
-        boxSizing: 'border-box',
-        minHeight: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        paddingTop: 'clamp(3.5rem, 8vh, 6.5rem)',
-        paddingBottom: 'clamp(3rem, 6vh, 5rem)',
         ...(isDark && {
           '--day-heading': '#FFFFFF',
           '--day-body': '#FFFFFF',

@@ -198,8 +198,8 @@ export function AboutSection({ transitionProgress = 0 }: AboutSectionProps) {
 
       <div
         ref={gridRef}
-        className="about-grid grid w-full grid-cols-[1.25fr_0.95fr]"
-        style={{ marginTop: 'clamp(1.5rem, 3vw, 2rem)', minHeight: '540px', gap: 'clamp(2rem, 4vw, 2.5rem)' }}
+        className="about-grid grid w-full grid-cols-1 md:grid-cols-[1.25fr_0.95fr] md:min-h-[540px]"
+        style={{ marginTop: 'clamp(1.5rem, 3vw, 2rem)', gap: 'clamp(2rem, 4vw, 2.5rem)' }}
       >
         <div className="relative h-full">
           <h2

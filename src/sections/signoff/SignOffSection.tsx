@@ -49,19 +49,18 @@ export function SignOffSection() {
 
       {/* Main row */}
       <div
-        className="signoff-main-grid relative z-2 grid items-end"
+        className="signoff-main-grid relative z-2 grid items-end grid-cols-1 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] gap-y-16 lg:gap-y-0"
         style={{
           marginTop: 'clamp(2.5rem, 5vw, 5rem)',
-          gridTemplateColumns: 'minmax(0, 1.05fr) minmax(0, 1fr)',
           columnGap: 'clamp(2rem, 6vw, 6rem)',
           minHeight: 'clamp(18rem, 28vw, 28rem)',
         }}
       >
         {/* Wordmark */}
         <div
-          className="signoff-mark self-end"
+          className="signoff-mark self-end lg:self-end"
           style={{
-            fontSize: 'clamp(5rem, calc(1.56rem + 9.18vw), 17rem)',
+            fontSize: 'clamp(3.5rem, 14vw, 17rem)',
           }}
         >
           <div
@@ -81,9 +80,8 @@ export function SignOffSection() {
 
         {/* Cluster: columns + back to top */}
         <div
-          className="signoff-cluster grid items-start pb-2"
+          className="signoff-cluster grid items-start pb-2 grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-[repeat(3,minmax(0,1fr))_auto] gap-y-12 lg:gap-y-0"
           style={{
-            gridTemplateColumns: 'repeat(3, minmax(0, 1fr)) auto',
             columnGap: 'clamp(1.25rem, 3vw, 3rem)',
           }}
         >

@@ -18,14 +18,15 @@ export function FooterSlideTransition({ children }: Props) {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReduced) return;
 
-    gsap.set(panel, { yPercent: 100 });
+    // Start panel pushed down by 50% for a parallax reveal effect
+    gsap.set(panel, { yPercent: 50 });
 
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: wrapper,
-        start: 'top top',
-        end: 'bottom bottom',
-        scrub: 2,
+        start: 'top bottom', // Start when wrapper top enters bottom of viewport
+        end: 'bottom bottom', // End when wrapper bottom reaches bottom of viewport
+        scrub: 1, // Smooth scrub
       },
     });
 
@@ -37,31 +38,22 @@ export function FooterSlideTransition({ children }: Props) {
     };
   }, []);
 
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
-
   return (
-    <div ref={wrapperRef} style={{ height: isMobile ? '150vh' : '200vh' }}>
+    <div
+      ref={wrapperRef}
+      style={{
+        position: 'relative',
+        overflow: 'hidden',
+        background: 'var(--day-surface)',
+      }}
+    >
       <div
+        ref={panelRef}
         style={{
-          position: 'sticky',
-          top: 0,
-          height: '100vh',
-          overflow: 'hidden',
-          background: 'var(--day-surface)',
+          willChange: 'transform',
         }}
       >
-        <div
-          ref={panelRef}
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            willChange: 'transform',
-          }}
-        >
-          {children}
-        </div>
+        {children}
       </div>
     </div>
   );
