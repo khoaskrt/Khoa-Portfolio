@@ -1,15 +1,49 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useLenis } from 'lenis/react';
 import khoaLogo from '../assets/brand/khoa-logo.svg';
 import { headerContent } from './header-content';
 
 export function PortfolioHeader() {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState<string>('');
   const drawerRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const lenis = useLenis();
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (href.startsWith('#')) {
+      e.preventDefault();
+      setDrawerOpen(false);
+      lenis?.scrollTo(href, { offset: 0, duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+    }
+  };
 
   const closeDrawer = useCallback(() => {
     setDrawerOpen(false);
     triggerRef.current?.focus();
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(`#${entry.target.id}`);
+          }
+        });
+      },
+      {
+        rootMargin: '-50% 0px -50% 0px',
+      }
+    );
+
+    const sectionIds = headerContent.navLinks.map(link => link.href.substring(1));
+    sectionIds.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
@@ -86,15 +120,26 @@ export function PortfolioHeader() {
           </button>
 
           <nav className="hero-nav hidden items-center gap-5 text-[var(--text-meta)] sm:flex md:gap-8 lg:gap-10">
-            {headerContent.navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="hero-nav-link relative pb-[0.22rem] opacity-90 transition-[color,opacity] duration-200 ease-[var(--ease-quart-out)] hover:text-[var(--signal-red-hover)] hover:opacity-100"
-              >
-                {link.label}
-              </a>
-            ))}
+            {headerContent.navLinks.map((link) => {
+              const isActive = activeSection === link.href;
+              return (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  onClick={(e) => handleNavClick(e, link.href)}
+                  className={`hero-nav-link relative pb-[0.22rem] transition-all duration-300 ease-[var(--ease-quart-out)] ${
+                    isActive ? 'text-[var(--signal-red)] opacity-100' : 'opacity-90 hover:text-[var(--signal-red-hover)] hover:opacity-100'
+                  }`}
+                >
+                  {link.label}
+                  <span 
+                    className={`absolute -bottom-[2px] left-1/2 h-[3px] w-[3px] -translate-x-1/2 rounded-full bg-[var(--signal-red)] transition-all duration-300 ease-[var(--ease-quart-out)] ${
+                      isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+                    }`} 
+                  />
+                </a>
+              );
+            })}
           </nav>
 
 
@@ -143,24 +188,29 @@ export function PortfolioHeader() {
 
           {/* Drawer links */}
           <nav className="flex flex-1 flex-col items-start justify-center gap-6 overflow-y-auto px-8 py-4" aria-label="Main menu">
-            {headerContent.navLinks.map((link, i) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="block font-display text-[clamp(2rem,calc(0.56rem+3.84vw),3.5rem)] font-bold uppercase leading-[0.88] tracking-[-0.02em] text-[var(--frost-text)] transition-colors duration-200 ease-[var(--ease-quart-out)] hover:text-[var(--signal-red)] focus-visible:outline-1 focus-visible:outline-[var(--signal-red)] focus-visible:outline-offset-4"
-                onClick={closeDrawer}
-                style={
-                  reducedMotion
-                    ? {}
-                    : {
-                        opacity: 0,
-                        animation: `drawer-link-in 500ms cubic-bezier(0.16, 1, 0.3, 1) ${120 + i * 80}ms forwards`,
-                      }
-                }
-              >
-                {link.label}
-              </a>
-            ))}
+            {headerContent.navLinks.map((link, i) => {
+              const isActive = activeSection === link.href;
+              return (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className={`block font-display text-[clamp(2rem,calc(0.56rem+3.84vw),3.5rem)] font-bold uppercase leading-[0.88] tracking-[-0.02em] transition-colors duration-300 ease-[var(--ease-quart-out)] focus-visible:outline-1 focus-visible:outline-[var(--signal-red)] focus-visible:outline-offset-4 ${
+                    isActive ? 'text-[var(--signal-red)]' : 'text-[var(--frost-text)] hover:text-[var(--signal-red)]'
+                  }`}
+                  onClick={(e) => handleNavClick(e, link.href)}
+                  style={
+                    reducedMotion
+                      ? {}
+                      : {
+                          opacity: 0,
+                          animation: `drawer-link-in 500ms cubic-bezier(0.16, 1, 0.3, 1) ${120 + i * 80}ms forwards`,
+                        }
+                  }
+                >
+                  {link.label}
+                </a>
+              );
+            })}
           </nav>
 
           {/* Drawer footer */}

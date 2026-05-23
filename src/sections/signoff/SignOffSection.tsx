@@ -20,7 +20,7 @@ export function SignOffSection() {
 
   return (
     <footer
-      id="signoff"
+      id="contact"
       className="signoff-section relative overflow-hidden font-sans"
       style={{
         background: 'var(--night-base)',

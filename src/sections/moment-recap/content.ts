@@ -1,5 +1,6 @@
 import certVbaOutstanding from '../../assets/images/cert-vba-outstanding.jpg';
 import panelDiscussImage from '../../assets/images/panel_discuss.jpeg';
+import money2020Image from '../../assets/images/money2020.JPG';
 
 export type MomentRecapFrame = {
   stamp: string;
@@ -34,6 +35,14 @@ export const momentRecapContent = {
       title: ['Panel', 'Discussion'],
       subtitle: "Hong Kong Trust & Crypto Gateway — Representing Basal Pay at the Hong Kong Fiduciary Association event, exploring crypto regulatory frameworks and cross-border trust structures.",
     },
-
+    {
+      stamp: 'Frame · 03',
+      image: money2020Image,
+      alt: 'Money 20/20 Thailand — Fintech & Payments Summit',
+      year: '2024',
+      number: 'No. 03',
+      title: ['Money 20/20', 'Thailand'],
+      subtitle: "Money 20/20 Thailand — Fintech & Payments Summit — Attending Money 20/20 in Bangkok to build strategic partnerships and join private panel discussions on cross-border payment infrastructure and the role of stablecoin policy in global finance.",
+    },
   ] satisfies MomentRecapFrame[],
 } as const;
