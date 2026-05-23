@@ -22,7 +22,7 @@ export const momentRecapContent = {
       alt: 'Outstanding Contribution Award — VBA Ecosystem 2025',
       year: '2025',
       number: 'No. 01',
-      title: ['Outstanding', 'Contribution.'],
+      title: ['Outstanding', 'Contribution'],
       subtitle: "VBA Ecosystem 2025 — Recognized for exceptional performance and meaningful contributions to the growth of the Vietnam Blockchain Association's ecosystem.",
     },
     {
@@ -31,7 +31,7 @@ export const momentRecapContent = {
       alt: 'Hong Kong Trust & Crypto Gateway — Panel Discussion',
       year: '2024',
       number: 'No. 02',
-      title: ['Panel', 'Discussion.'],
+      title: ['Panel', 'Discussion'],
       subtitle: "Hong Kong Trust & Crypto Gateway — Representing Basal Pay at the Hong Kong Fiduciary Association event, exploring crypto regulatory frameworks and cross-border trust structures.",
     },
 

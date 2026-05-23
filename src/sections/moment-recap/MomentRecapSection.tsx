@@ -296,7 +296,7 @@ function MomentRecapFrame({ frame, index, reducedMotion, parentTween }: MomentRe
     const descEl = descRef.current;
     if (!titleEl) return;
 
-    const split = new SplitText(titleEl, { type: 'chars' });
+    const split = new SplitText(titleEl, { type: 'words,chars' });
     const slideEl = titleEl.closest('.moment-recap-slide');
 
     if (numberEl) gsap.set(numberEl, { opacity: 0, y: 12 });
@@ -410,7 +410,7 @@ function MomentRecapFrame({ frame, index, reducedMotion, parentTween }: MomentRe
         <h3
           ref={titleRef}
           className="m-0 font-display font-bold leading-[0.88] tracking-[-0.04em] text-[var(--day-ink)]"
-          style={{ fontSize: 'clamp(2.25rem, calc(0.4rem + 4.8vw), 5rem)' }}
+          style={{ fontSize: 'clamp(2.25rem, calc(0.4rem + 4.8vw), 5rem)', whiteSpace: 'nowrap' }}
         >
           {frame.title.map((line, i) => (
             <React.Fragment key={i}>
