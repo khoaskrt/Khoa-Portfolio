@@ -315,12 +315,14 @@
     left: 0;
     bottom: 0;
     height: 1px;
-    width: 0;
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: left center;
     background: currentColor;
-    transition: width 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
     pointer-events: none;
   }
-  .hero-nav-link:hover::after { width: 100%; }
+  .hero-nav-link:hover::after { transform: scaleX(1); }
 
   .hero-nav-link:focus-visible {
     outline: 1px solid currentColor;

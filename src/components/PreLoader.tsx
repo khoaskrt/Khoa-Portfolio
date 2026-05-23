@@ -4,19 +4,16 @@ import { ease } from '../motion/easing';
 
 type Phase = 'counting' | 'hold' | 'wipe-in' | 'wipe-out' | 'done';
 
-const SVG_H = 180;
-const WIPE_IN_MS = 680;
-const WIPE_OUT_MS = 720;
-const START_DELAY = 900;
-const EXIT_HOLD = 380;
+const WIPE_OUT_MS = 850;
+const START_DELAY = 300;
+const EXIT_HOLD = 350;
 
 const STATUSES = [
-  { at: 0, text: 'INITIALIZING' },
-  { at: 12, text: 'LOADING FONTS' },
-  { at: 30, text: 'LOADING ASSETS' },
-  { at: 55, text: 'CRAFTING UI' },
-  { at: 78, text: 'POLISHING' },
-  { at: 94, text: 'READY' },
+  { at: 0, text: 'SYSTEM START' },
+  { at: 20, text: 'LOADING ASSETS' },
+  { at: 60, text: 'COMPUTING LAYOUT' },
+  { at: 85, text: 'POLISHING' },
+  { at: 100, text: 'READY' },
 ];
 
 function getStatus(p: number): string {
@@ -34,10 +31,6 @@ interface PreLoaderProps {
 export function PreLoader({ onComplete }: PreLoaderProps) {
   const [phase, setPhase] = useState<Phase>('counting');
   const [progress, setProgress] = useState(0);
-  const [fillY, setFillY] = useState(SVG_H);
-  const [waveY, setWaveY] = useState(SVG_H);
-  const [clock, setClock] = useState('');
-  const wavePhaseRef = useRef(0);
   const progressRef = useRef(0);
   const rafRef = useRef(0);
   const onCompleteRef = useRef(onComplete);
@@ -45,43 +38,21 @@ export function PreLoader({ onComplete }: PreLoaderProps) {
 
   useEffect(() => {
     const tick = () => {
-      const n = new Date();
-      const pad = (v: number) => String(v).padStart(2, '0');
-      setClock(`${pad(n.getHours())}:${pad(n.getMinutes())}:${pad(n.getSeconds())}`);
-    };
-    tick();
-    const id = setInterval(tick, 1000);
-    return () => clearInterval(id);
-  }, []);
-
-  useEffect(() => {
-    const tick = () => {
       const p = progressRef.current;
       let inc: number;
-      if (p < 35) inc = Math.random() * 2.4 + 0.7;
-      else if (p < 68) inc = Math.random() * 1.3 + 0.3;
-      else if (p < 88) inc = Math.random() * 0.65 + 0.15;
-      else inc = 0.14 + Math.random() * 0.09;
+      if (p < 35) inc = Math.random() * 3.5 + 0.5;
+      else if (p < 70) inc = Math.random() * 2.0 + 0.3;
+      else if (p < 90) inc = Math.random() * 1.2 + 0.1;
+      else inc = 0.3 + Math.random() * 0.1;
 
       const next = Math.min(p + inc, 100);
       progressRef.current = next;
-
-      const rectY = SVG_H * (1 - next / 100);
-      wavePhaseRef.current += 0.06;
-      const wobble =
-        Math.sin(wavePhaseRef.current) * 4 +
-        Math.cos(wavePhaseRef.current * 0.7) * 2;
-
       setProgress(next);
-      setFillY(rectY);
-      setWaveY(rectY + wobble - 1);
 
       if (next < 100) {
         rafRef.current = requestAnimationFrame(tick);
       } else {
         setProgress(100);
-        setFillY(0);
-        setWaveY(0);
         setPhase('hold');
       }
     };
@@ -98,14 +69,10 @@ export function PreLoader({ onComplete }: PreLoaderProps) {
 
   useEffect(() => {
     if (phase === 'hold') {
-      const t = setTimeout(() => setPhase('wipe-in'), EXIT_HOLD);
-      return () => clearTimeout(t);
-    }
-    if (phase === 'wipe-in') {
       const t = setTimeout(() => {
         onCompleteRef.current();
         setPhase('wipe-out');
-      }, WIPE_IN_MS);
+      }, EXIT_HOLD);
       return () => clearTimeout(t);
     }
     if (phase === 'wipe-out') {
@@ -118,145 +85,89 @@ export function PreLoader({ onComplete }: PreLoaderProps) {
 
   const contentVisible = phase === 'counting' || phase === 'hold';
   const pct = Math.floor(progress);
-  const fillHeight = Math.max(0, SVG_H - fillY + 1);
 
   return (
     <div
-      className="preloader"
+      className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden"
       aria-hidden="true"
-      style={phase === 'wipe-out' ? { background: 'transparent' } : undefined}
     >
+      {/* Sirnik-style Split Screen Wipe */}
       <div
-        className="preloader__wipe"
+        className="absolute inset-x-0 top-0 z-0 bg-[var(--night-base)]"
         style={{
-          transform:
-            phase === 'wipe-in'
-              ? 'translateY(0%)'
-              : phase === 'wipe-out'
-                ? 'translateY(-100%)'
-                : 'translateY(100%)',
-          transition:
-            phase === 'wipe-in'
-              ? `transform ${WIPE_IN_MS}ms cubic-bezier(0.76, 0, 0.24, 1)`
-              : phase === 'wipe-out'
-                ? `transform ${WIPE_OUT_MS}ms cubic-bezier(0.22, 1, 0.36, 1)`
-                : 'none',
+          height: '50vh',
+          transform: phase === 'wipe-out' ? 'translateY(-100%)' : 'translateY(0)',
+          transition: `transform ${WIPE_OUT_MS}ms cubic-bezier(0.76, 0, 0.24, 1)`,
+        }}
+      />
+      <div
+        className="absolute inset-x-0 bottom-0 z-0 bg-[var(--night-base)]"
+        style={{
+          height: '50vh',
+          transform: phase === 'wipe-out' ? 'translateY(100%)' : 'translateY(0)',
+          transition: `transform ${WIPE_OUT_MS}ms cubic-bezier(0.76, 0, 0.24, 1)`,
         }}
       />
 
       <motion.div
-        className="preloader__content"
+        className="relative z-10 flex h-full w-full flex-col items-center justify-center"
         animate={{
           opacity: contentVisible ? 1 : 0,
-          scale: contentVisible ? 1 : 0.96,
-          filter: contentVisible ? 'blur(0px)' : 'blur(6px)',
+          scale: contentVisible ? 1 : 0.85,
+          filter: contentVisible ? 'blur(0px)' : 'blur(12px)',
         }}
-        transition={{ duration: 0.45, ease: ease.quartOut }}
+        transition={{ duration: 0.65, ease: ease.expoOut }}
       >
-        <motion.div
-          className="preloader__letter-wrap"
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.2, ease: ease.expoOut }}
-        >
-          <svg
-            viewBox="0 0 140 180"
-            className="preloader__letter-svg"
-            aria-hidden="true"
+        {/* Subtle framework/grid */}
+        <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center opacity-[0.12]">
+          <div className="absolute inset-y-0 left-1/3 w-px bg-white" />
+          <div className="absolute inset-y-0 right-1/3 w-px bg-white" />
+          <div className="absolute inset-x-0 top-1/3 h-px bg-white" />
+          <div className="absolute inset-x-0 bottom-1/3 h-px bg-white" />
+          
+          {/* Crosshairs at intersections */}
+          <div className="absolute h-3 w-3 border-l border-t border-white left-1/3 top-1/3 -translate-x-1/2 -translate-y-1/2" />
+          <div className="absolute h-3 w-3 border-r border-t border-white right-1/3 top-1/3 translate-x-1/2 -translate-y-1/2" />
+          <div className="absolute h-3 w-3 border-l border-b border-white left-1/3 bottom-1/3 -translate-x-1/2 translate-y-1/2" />
+          <div className="absolute h-3 w-3 border-r border-b border-white right-1/3 bottom-1/3 translate-x-1/2 translate-y-1/2" />
+        </div>
+
+        {/* Massive Ticker */}
+        <div className="z-10 overflow-hidden px-4">
+          <motion.div
+            initial={{ y: '100%', rotateX: 45 }}
+            animate={{ y: 0, rotateX: 0 }}
+            transition={{ duration: 1.4, ease: ease.expoOut }}
+            className="flex items-baseline font-display font-medium text-white leading-[0.8] tracking-[-0.05em]"
+            style={{ fontSize: 'clamp(8rem, 24vw, 20rem)', transformPerspective: 1000 }}
           >
-            <defs>
-              <clipPath id="preKClip">
-                <text
-                  x="70"
-                  y="148"
-                  textAnchor="middle"
-                  fontSize="180"
-                  fontWeight="700"
-                  fontFamily="Arial, Helvetica, sans-serif"
-                >
-                  K
-                </text>
-              </clipPath>
-            </defs>
-            <g clipPath="url(#preKClip)">
-              <rect
-                x="0"
-                y="0"
-                width="140"
-                height={SVG_H}
-                fill="rgba(255,255,255,0.05)"
-              />
-              <rect
-                x="0"
-                y={fillY}
-                width="140"
-                height={fillHeight}
-                fill="rgba(245,248,252,0.82)"
-              />
-              <rect
-                x="0"
-                y={waveY}
-                width="140"
-                height="1.5"
-                fill="rgba(255,255,255,0.9)"
-              />
-            </g>
-          </svg>
-          <div className="preloader__letter-glow" />
-        </motion.div>
+            {pct}
+            <span className="text-[clamp(3rem,8vw,6rem)] font-light opacity-40 ml-2 tracking-normal">%</span>
+          </motion.div>
+        </div>
 
+        {/* Status Line */}
         <motion.div
-          className="preloader__status"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.55 }}
-        >
-          {getStatus(pct)}
-        </motion.div>
-
-        <motion.div
-          className="preloader__track"
-          initial={{ opacity: 0, scaleX: 0 }}
-          animate={{ opacity: 1, scaleX: 1 }}
-          transition={{ duration: 0.8, delay: 0.5, ease: ease.expoOut }}
-        >
-          <div
-            className="preloader__bar"
-            style={{ transform: `scaleX(${progress / 100})` }}
-          />
-          <div
-            className="preloader__glow"
-            style={{ left: `${progress}%` }}
-          />
-        </motion.div>
-
-        <motion.div
-          className="preloader__info-row"
-          initial={{ opacity: 0, y: 8 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.65, ease: ease.quartOut }}
+          transition={{ duration: 1, delay: 0.3, ease: ease.expoOut }}
+          className="absolute bottom-[15vh] z-10 flex w-full max-w-sm flex-col items-center gap-4 px-6"
         >
-          <span className="preloader__counter">
-            <span className="preloader__number">
-              {String(pct).padStart(3, '0')}
-            </span>
-            <span className="preloader__percent">%</span>
-          </span>
-          <span className="preloader__clock">{clock}</span>
+          <div className="h-px w-full bg-white/10 overflow-hidden relative">
+            <div
+              className="absolute left-0 top-0 h-full bg-white/90"
+              style={{
+                width: `${progress}%`,
+                transition: 'width 0.1s linear',
+              }}
+            />
+          </div>
+          <div className="flex w-full justify-between text-[10px] sm:text-xs font-light tracking-[0.25em] uppercase text-white/50">
+            <span>{getStatus(pct)}</span>
+            <span>ENG / OS</span>
+          </div>
         </motion.div>
       </motion.div>
-
-      {(['tl', 'tr', 'bl', 'br'] as const).map((pos, i) => (
-        <motion.div
-          key={pos}
-          className={`preloader__corner preloader__corner--${pos}`}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: contentVisible ? 0.35 : 0 }}
-          transition={{ duration: 0.7, delay: 0.25 + i * 0.06 }}
-        />
-      ))}
-
-      <div className="preloader__noise" />
     </div>
   );
 }

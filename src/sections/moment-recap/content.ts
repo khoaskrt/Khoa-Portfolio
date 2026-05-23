@@ -1,7 +1,5 @@
 import certVbaOutstanding from '../../assets/images/cert-vba-outstanding.jpg';
-import heroPortrait from '../../assets/images/hero-portrait.jpg';
-import aboutImage from '../../assets/images/aboutus_image.JPG';
-import certUdemyDex from '../../assets/images/cert-udemy-dex.jpg';
+import panelDiscussImage from '../../assets/images/panel_discuss.jpeg';
 
 export type MomentRecapFrame = {
   stamp: string;
@@ -29,30 +27,13 @@ export const momentRecapContent = {
     },
     {
       stamp: 'Frame · 02',
-      image: aboutImage,
-      alt: 'Khoa at his desk overlooking the city skyline',
-      year: '2025',
+      image: panelDiscussImage,
+      alt: 'Hong Kong Trust & Crypto Gateway — Panel Discussion',
+      year: '2024',
       number: 'No. 02',
-      title: ['Command', 'Desk.'],
-      subtitle: "Where the day's calls get made — quiet floor, fast clock, view of the river.",
+      title: ['Panel', 'Discussion.'],
+      subtitle: "Hong Kong Trust & Crypto Gateway — Representing Basal Pay at the Hong Kong Fiduciary Association event, exploring crypto regulatory frameworks and cross-border trust structures.",
     },
-    {
-      stamp: 'Frame · 03',
-      image: certUdemyDex,
-      alt: 'DeFi and DEX Mastery certificate — Udemy 2024',
-      year: 'May 2024',
-      number: 'No. 03',
-      title: ['DeFi', 'Mastery.'],
-      subtitle: 'Late-night syllabus — the credential that closed the gap between operator and protocol.',
-    },
-    {
-      stamp: 'Frame · 04 — pending',
-      image: null,
-      alt: 'Pending slot',
-      year: '—',
-      number: 'No. 04',
-      title: ['Next', 'Frame.'],
-      subtitle: 'Reserved for the next milestone — a frame not yet earned.',
-    },
+
   ] satisfies MomentRecapFrame[],
 } as const;

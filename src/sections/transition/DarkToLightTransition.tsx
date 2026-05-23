@@ -44,7 +44,7 @@ export function DarkToLightTransition({ onRevealReadyChange, onProgressChange }:
   const horizonOpacity = useTransform(scrollYProgress, [0.36, 0.44], [0, 0.6]);
 
   // Section marker
-  const markerOpacity = useTransform(scrollYProgress, [0.50, 0.58, 0.68, 0.76], [0, 0.7, 0.7, 0]);
+  const markerOpacity = useTransform(scrollYProgress, [0.50, 0.58], [0, 0.8]);
   const markerY = useTransform(scrollYProgress, [0.50, 0.58], [8, 0]);
 
   // Bottom bridge gradient
@@ -105,7 +105,7 @@ export function DarkToLightTransition({ onRevealReadyChange, onProgressChange }:
         aria-hidden="true"
         className="absolute inset-0 z-0"
         style={{
-          background: 'radial-gradient(ellipse 80% 60% at 50% 40%, oklch(0.95 0.003 255), oklch(0.93 0.005 255))',
+          background: 'radial-gradient(ellipse 80% 60% at 50% 40%, var(--day-surface-warm), var(--day-surface))',
         }}
       />
 
@@ -118,7 +118,7 @@ export function DarkToLightTransition({ onRevealReadyChange, onProgressChange }:
           top: '-50%',
           height: '200%',
           x: prefersReducedMotion ? '-100vw' : leftPanelX,
-          background: 'oklch(0.1 0.012 253)',
+          background: 'var(--night-base)',
         }}
       >
         <motion.div
@@ -138,7 +138,7 @@ export function DarkToLightTransition({ onRevealReadyChange, onProgressChange }:
           top: '-50%',
           height: '200%',
           x: prefersReducedMotion ? '100vw' : rightPanelX,
-          background: 'oklch(0.1 0.012 253)',
+          background: 'var(--night-base)',
         }}
       >
         <motion.div
@@ -157,7 +157,7 @@ export function DarkToLightTransition({ onRevealReadyChange, onProgressChange }:
           scaleY: prefersReducedMotion ? 0 : lineScaleY,
           opacity: prefersReducedMotion ? 0 : lineOpacity,
           transformOrigin: 'center center',
-          background: 'oklch(0.94 0.005 255 / 0.85)',
+          background: 'oklch(from var(--mist-line) l c h / 0.85)',
         }}
       />
 
@@ -168,7 +168,7 @@ export function DarkToLightTransition({ onRevealReadyChange, onProgressChange }:
         style={{
           width: prefersReducedMotion ? '100vw' : horizonWidth,
           opacity: prefersReducedMotion ? 0.6 : horizonOpacity,
-          background: 'oklch(0.82 0.01 255)',
+          background: 'var(--border-day)',
         }}
       />
 
@@ -179,7 +179,7 @@ export function DarkToLightTransition({ onRevealReadyChange, onProgressChange }:
         style={{
           top: 'calc(50% + 1.5rem)',
           fontSize: 'var(--text-label)',
-          color: 'oklch(0.48 0.01 255)',
+          color: 'var(--day-faint)',
           opacity: prefersReducedMotion ? 0 : markerOpacity,
           y: prefersReducedMotion ? 0 : markerY,
         }}
@@ -193,7 +193,7 @@ export function DarkToLightTransition({ onRevealReadyChange, onProgressChange }:
         className="pointer-events-none absolute inset-x-0 bottom-0 z-[1]"
         style={{
           height: 'clamp(5rem, 10vh, 8rem)',
-          background: 'linear-gradient(180deg, oklch(0.93 0.005 255 / 0) 0%, oklch(0.93 0.005 255 / 0.62) 50%, oklch(0.93 0.005 255) 100%)',
+          background: 'linear-gradient(180deg, oklch(from var(--day-surface) l c h / 0) 0%, oklch(from var(--day-surface) l c h / 0.62) 50%, var(--day-surface) 100%)',
           opacity: prefersReducedMotion ? 1 : bridgeOpacity,
         }}
       />

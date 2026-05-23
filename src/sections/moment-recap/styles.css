@@ -59,6 +59,63 @@
 }
 
 /* ═══════════════════════════════════════════
+   Header progress line
+   ═══════════════════════════════════════════ */
+
+.moment-recap-header-progress {
+  flex: 1;
+  height: 1px;
+  background: var(--border-day-faint);
+  position: relative;
+  overflow: hidden;
+}
+
+.moment-recap-header-progress-bar {
+  position: absolute;
+  inset: 0;
+  background: var(--day-ink);
+  transform-origin: left center;
+  will-change: transform;
+}
+
+/* ═══════════════════════════════════════════
+   Pending frame — animated grid pattern
+   ═══════════════════════════════════════════ */
+
+.moment-recap-pending-frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.moment-recap-pending-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--border-day) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border-day) 1px, transparent 1px);
+  background-size: 32px 32px;
+  opacity: 0.4;
+  animation: pending-drift 20s linear infinite;
+}
+
+@keyframes pending-drift {
+  0% { background-position: 0 0; }
+  100% { background-position: 32px 32px; }
+}
+
+.moment-recap-pending-label {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-sans);
+  font-size: var(--text-meta);
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--day-faint);
+}
+
+/* ═══════════════════════════════════════════
    Responsive — Mobile: < 640px
    ═══════════════════════════════════════════ */
 
@@ -169,4 +226,7 @@
     height: auto;
   }
 
+  .moment-recap-pending-grid {
+    animation: none;
+  }
 }

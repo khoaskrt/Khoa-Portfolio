@@ -1,5 +1,5 @@
 .transition-band {
-  height: clamp(24rem, 250dvh, 400rem);
+  height: clamp(24rem, 150dvh, 200rem);
 }
 
 .transition-seam {
@@ -23,7 +23,7 @@
 
 @media (max-width: 639px) {
   .transition-band {
-    height: clamp(20rem, 120dvh, 180rem);
+    height: clamp(20rem, 100dvh, 140rem);
   }
 
   .transition-seam {
@@ -45,7 +45,7 @@
 
 @media (min-width: 640px) and (max-width: 768px) {
   .transition-band {
-    height: clamp(24rem, 150dvh, 240rem);
+    height: clamp(24rem, 120dvh, 180rem);
   }
 
   .transition-seam {
@@ -67,7 +67,7 @@
 
 @media (min-width: 769px) and (max-width: 1024px) {
   .transition-band {
-    height: clamp(24rem, 200dvh, 320rem);
+    height: clamp(24rem, 140dvh, 200rem);
   }
 
   .transition-seam {

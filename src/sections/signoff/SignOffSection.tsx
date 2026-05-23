@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 
 export function SignOffSection() {
   const [year, setYear] = useState('2026');
+  const emailAddress = 'khoado1205@gmail.com';
+  const emailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(emailAddress)}`;
 
   useEffect(() => {
     setYear(String(new Date().getFullYear()));
@@ -122,8 +124,14 @@ export function SignOffSection() {
                 </a>
               </li>
               <li>
-                <a href="mailto:Khoado1205@gmail.com" className="signoff-link relative inline-flex items-baseline gap-[0.4rem] transition-colors duration-[var(--duration-hover)] ease-[var(--ease-quart-out)] hover:text-[var(--signal-red)] focus-visible:outline-1 focus-visible:outline-[var(--signal-red)] focus-visible:outline-offset-4">
-                  Email
+                <a
+                  href={emailComposeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Email ${emailAddress}`}
+                  className="signoff-link relative inline-flex items-baseline gap-[0.4rem] transition-colors duration-[var(--duration-hover)] ease-[var(--ease-quart-out)] hover:text-[var(--signal-red)] focus-visible:outline-1 focus-visible:outline-[var(--signal-red)] focus-visible:outline-offset-4"
+                >
+                  Email <span className="font-sans font-light text-[var(--text-label)] tracking-[0.18em] text-white -translate-y-[0.15em]" aria-hidden="true">↗</span>
                 </a>
               </li>
               <li>

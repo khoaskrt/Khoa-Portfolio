@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useLenis } from 'lenis/react';
 import { workExperienceContent } from './content';
 import './styles.css';
 
@@ -19,23 +20,60 @@ const chapterBgs = [
 
 export function WorkExperienceSection({ transitionProgress = 0 }: WorkExperienceSectionProps) {
   const liveDate = useLiveDate();
+  const lenis = useLenis();
+  const sectionRef = useRef<HTMLElement>(null);
   const chaptersRef = useRef<HTMLDivElement>(null);
+  const skipBtnRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
+    const section = sectionRef.current;
     const container = chaptersRef.current;
-    if (!container) return;
+    if (!section || !container) return;
 
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const isMobile = window.innerWidth < 640;
     const panels = gsap.utils.toArray<HTMLElement>('.work-chapter', container);
-
     const triggers: ScrollTrigger[] = [];
+    const tweens: gsap.core.Tween[] = [];
 
-    panels.forEach((panel) => {
+    // ── Staggered reveals per card ──
+    if (!prefersReducedMotion) {
+      panels.forEach((panel) => {
+        const reveals = panel.querySelectorAll('.work-reveal');
+        if (!reveals.length) return;
+
+        gsap.set(reveals, { opacity: 0, y: 32 });
+
+        const revealTween = gsap.to(reveals, {
+          opacity: 1,
+          y: 0,
+          duration: 0.9,
+          ease: 'expo.out',
+          stagger: 0.1,
+          paused: true,
+        });
+        tweens.push(revealTween);
+
+        const st = ScrollTrigger.create({
+          trigger: panel,
+          start: 'top 78%',
+          onEnter: () => revealTween.play(),
+        });
+        triggers.push(st);
+      });
+    }
+
+    // ── Pin + cinematic exit per card ──
+    panels.forEach((panel, i) => {
+      const isLast = i === panels.length - 1;
+      const chapNum = panel.querySelector('.work-chap-num');
+      const visual = panel.querySelector('.work-card-visual');
+
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: panel,
           start: 'bottom bottom',
-          pinSpacing: false,
+          pinSpacing: isLast,
           pin: true,
           scrub: true,
           anticipatePin: 1,
@@ -47,29 +85,82 @@ export function WorkExperienceSection({ transitionProgress = 0 }: WorkExperience
         },
       });
 
-      tl.fromTo(
-        panel,
-        { scale: 1, opacity: 1 },
-        { scale: isMobile ? 0.85 : 0.5, opacity: isMobile ? 0.3 : 0.5, duration: 1 },
-      ).to(panel, { opacity: 0, duration: 0.1 });
+      if (prefersReducedMotion) {
+        tl.to(panel, { opacity: 0, duration: 1 });
+      } else {
+        tl.fromTo(
+          panel,
+          { scale: 1, opacity: 1 },
+          { scale: isMobile ? 0.88 : 0.55, opacity: isMobile ? 0.3 : 0.4, duration: 1 },
+        );
+
+        if (chapNum && !isMobile) {
+          tl.fromTo(chapNum, { y: 0 }, { y: -100, duration: 1 }, 0);
+        }
+
+        if (visual && !isMobile) {
+          tl.fromTo(visual, { y: 0 }, { y: -30, duration: 1 }, 0);
+        }
+
+        tl.to(panel, { opacity: 0, duration: 0.1 });
+      }
 
       if (tl.scrollTrigger) triggers.push(tl.scrollTrigger);
     });
 
+    const skipBtn = skipBtnRef.current;
+    if (skipBtn && !prefersReducedMotion) {
+      gsap.set(skipBtn, { autoAlpha: 0 });
+      const skipSt = ScrollTrigger.create({
+        trigger: section,
+        start: 'top top',
+        end: 'bottom bottom',
+        onEnter: () => gsap.to(skipBtn, { autoAlpha: 1, duration: 0.3 }),
+        onLeave: () => gsap.to(skipBtn, { autoAlpha: 0, duration: 0.3 }),
+        onEnterBack: () => gsap.to(skipBtn, { autoAlpha: 1, duration: 0.3 }),
+        onLeaveBack: () => gsap.to(skipBtn, { autoAlpha: 0, duration: 0.3 }),
+      });
+      triggers.push(skipSt);
+    }
+
     return () => {
+      tweens.forEach((t) => t.kill());
       triggers.forEach((st) => st.kill());
     };
   }, []);
 
+  const chapters = workExperienceContent.chapters;
+
   return (
     <section
+      ref={sectionRef}
       id={workExperienceContent.id}
       className="work-section relative isolate z-[var(--z-work)] overflow-hidden text-[var(--day-body)]"
       style={{
         background: 'var(--day-surface)',
         paddingInline: 'var(--layout-padding)',
+        marginBottom: '-10vh',
       }}
     >
+      <button
+        ref={skipBtnRef}
+        onClick={() => lenis?.scrollTo('#moment-recap', { duration: 1.5, lock: true })}
+        className="fixed right-4 sm:right-6 md:right-8 top-24 z-[120] flex items-center justify-center gap-[6px] rounded-full border px-[0.8rem] py-[0.4rem] text-[9px] sm:text-[10px] font-medium tracking-[0.15em] uppercase transition-colors sm:px-[1rem] sm:py-[0.5rem] sm:tracking-[0.2em] hover:bg-white hover:text-black hover:mix-blend-normal"
+        style={{
+          color: 'white',
+          borderColor: 'rgba(255,255,255,0.4)',
+          mixBlendMode: 'difference',
+        }}
+        aria-label="Skip to next section"
+      >
+        <span>Fast Forward</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="square" className="h-[10px] w-[10px] sm:h-3 sm:w-3">
+          <line x1="12" y1="4" x2="12" y2="20" />
+          <polyline points="18 14 12 20 6 14" />
+          <line x1="6" y1="4" x2="18" y2="4" />
+        </svg>
+      </button>
+
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 top-0"
@@ -101,7 +192,7 @@ export function WorkExperienceSection({ transitionProgress = 0 }: WorkExperience
           {workExperienceContent.headline[2]}
         </h2>
         <div className="flex items-center gap-[0.6rem] pb-2 text-[var(--text-label)] font-light tracking-[0.2em] uppercase text-[var(--day-faint)]">
-          <span>{workExperienceContent.chapters.length} roles</span>
+          <span>{chapters.length} roles</span>
           <span className="opacity-40" aria-hidden="true">·</span>
           <span>2024 — 2026</span>
         </div>
@@ -121,7 +212,7 @@ export function WorkExperienceSection({ transitionProgress = 0 }: WorkExperience
           marginTop: 'clamp(3.5rem, 6vh, 5.5rem)',
         }}
       >
-        {workExperienceContent.chapters.map((chapter, index) => (
+        {chapters.map((chapter, index) => (
           <ChapterCard
             key={chapter.num}
             chapter={chapter}
@@ -161,9 +252,9 @@ function ChapterCard({ chapter, index, bgColor }: ChapterCardProps) {
         minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         paddingTop: 'clamp(3.5rem, 8vh, 6.5rem)',
-        paddingBottom: 'clamp(2.5rem, 5vh, 4rem)',
+        paddingBottom: 'clamp(3rem, 6vh, 5rem)',
         ...(isDark && {
           '--day-heading': '#FFFFFF',
           '--day-body': '#FFFFFF',
@@ -173,7 +264,8 @@ function ChapterCard({ chapter, index, bgColor }: ChapterCardProps) {
           '--day-signal-text': 'rgba(255,255,255,0.6)',
           '--day-stamp-border': 'rgba(255,255,255,0.3)',
         } as React.CSSProperties),
-      }}
+        '--card-bg': bgColor,
+      } as React.CSSProperties}
     >
       {index > 0 && (
         <div
@@ -183,12 +275,12 @@ function ChapterCard({ chapter, index, bgColor }: ChapterCardProps) {
       )}
 
       <div
-        className="pointer-events-none absolute select-none font-display font-bold leading-[0.85] tracking-[-0.055em] text-[var(--day-heading)]"
+        className="work-era-watermark pointer-events-none absolute select-none font-display font-bold leading-[0.85] tracking-[-0.055em] text-[var(--day-heading)]"
         style={{
-          right: 'clamp(0.5rem, 2vw, 2rem)',
+          left: 'clamp(-1rem, 2vw, 1rem)',
           bottom: '-1.5rem',
-          fontSize: 'clamp(7rem, 22vw, 18rem)',
-          opacity: isDark ? 0.06 : 0.028,
+          fontSize: 'clamp(8rem, 24vw, 20rem)',
+          opacity: isDark ? 0.08 : 0.04,
           zIndex: 0,
           whiteSpace: 'nowrap',
         }}
@@ -198,7 +290,7 @@ function ChapterCard({ chapter, index, bgColor }: ChapterCardProps) {
       </div>
 
       <div className="relative z-2 flex items-start justify-between gap-6">
-        <div className="work-title-block flex flex-col" style={{ gap: 'clamp(1.25rem, 2.5vh, 2rem)', flex: '1 1 0%' }}>
+        <div className="work-title-block work-reveal flex flex-col" style={{ gap: 'clamp(1.25rem, 2.5vh, 2rem)', flex: '1 1 0%' }}>
           <h3
             className="work-title m-0 font-display font-medium leading-[0.88] tracking-[-0.04em] text-[var(--day-heading)]"
             style={{ fontSize: 'var(--text-headline)', textWrap: 'balance', overflowWrap: 'anywhere' }}
@@ -217,7 +309,7 @@ function ChapterCard({ chapter, index, bgColor }: ChapterCardProps) {
           </div>
         </div>
         <span
-          className={`work-chap-num m-0 shrink-0 select-none font-display font-bold leading-[0.88] tracking-[-0.04em] ${isDark ? 'text-[rgba(255,255,255,0.4)]' : 'text-[oklch(0.58_0.01_255/0.72)]'}`}
+          className={`work-chap-num work-reveal m-0 shrink-0 select-none font-display font-bold leading-[0.88] tracking-[-0.04em] ${isDark ? 'text-[rgba(255,255,255,0.4)]' : 'text-[oklch(0.58_0.01_255/0.72)]'}`}
           style={{ fontSize: 'var(--text-headline)' }}
           aria-hidden="true"
         >
@@ -226,7 +318,7 @@ function ChapterCard({ chapter, index, bgColor }: ChapterCardProps) {
       </div>
 
       <div
-        className={`h-px ${isDark ? 'bg-[rgba(255,255,255,0.2)]' : 'bg-[oklch(0.55_0.01_255/0.35)]'}`}
+        className={`work-reveal h-px ${isDark ? 'bg-[rgba(255,255,255,0.2)]' : 'bg-[oklch(0.55_0.01_255/0.35)]'}`}
         style={{
           marginTop: 'clamp(2.5rem, 5vh, 4rem)',
           marginBottom: 'clamp(1.75rem, 3.5vh, 2.75rem)',
@@ -236,29 +328,34 @@ function ChapterCard({ chapter, index, bgColor }: ChapterCardProps) {
 
       <div className="work-card-body relative z-2">
         <div className="work-card-narrative">
-          <span className="work-card-label text-[var(--text-label)] font-light tracking-[0.2em] uppercase text-[var(--day-signal-text)] leading-none">
+          <span className="work-card-label work-reveal text-[var(--text-label)] font-light tracking-[0.2em] uppercase text-[var(--day-signal-text)] leading-none">
             Mandate
           </span>
 
-          <div className="work-card-text flex flex-col">
-            <p
-              className="work-operative m-0 font-body leading-[1.34] tracking-[-0.015em] text-[var(--day-heading)]"
-              style={{ fontSize: 'var(--text-quote)', textWrap: 'balance' }}
-            >
-              {lead}
-            </p>
-            {support && (
-              <p
-                className="work-operative-support m-0 font-body leading-[1.52] tracking-[0.004em] text-[var(--day-body)]"
-                style={{ fontSize: 'var(--text-body)', textWrap: 'pretty' }}
-              >
-                {support}
-              </p>
-            )}
+          <div className="work-card-text work-reveal flex flex-col" style={{ gap: '1.25rem' }}>
+            {chapter.operative.map((paragraph, pIndex) => (
+              pIndex === 0 ? (
+                <p
+                  key={pIndex}
+                  className="work-operative m-0 font-body leading-[1.34] tracking-[-0.015em] text-[var(--day-heading)]"
+                  style={{ fontSize: 'var(--text-quote)', textWrap: 'balance' }}
+                >
+                  {paragraph}
+                </p>
+              ) : (
+                <p
+                  key={pIndex}
+                  className="work-operative-support m-0 font-body leading-[1.52] tracking-[0.004em] text-[var(--day-body)]"
+                  style={{ fontSize: 'var(--text-body)', textWrap: 'pretty' }}
+                >
+                  {paragraph}
+                </p>
+              )
+            ))}
           </div>
 
           {chapter.shift && (
-            <div className="work-card-shift flex flex-col">
+            <div className="work-card-shift work-reveal flex flex-col">
               <span className="text-[var(--text-label)] font-light tracking-[0.2em] uppercase text-[var(--day-signal-text)] leading-none">
                 The shift
               </span>
@@ -271,8 +368,28 @@ function ChapterCard({ chapter, index, bgColor }: ChapterCardProps) {
             </div>
           )}
 
+          {!chapter.shift && chapter.keyPoints.length > 0 && (
+            <div className="work-card-keypoints work-reveal flex flex-col" style={{ gap: 'clamp(0.6rem, 1.2vh, 0.85rem)' }}>
+              <span className="text-[var(--text-label)] font-light tracking-[0.2em] uppercase text-[var(--day-signal-text)] leading-none">
+                Key actions
+              </span>
+              <ul className="m-0 p-0 list-none flex flex-col" style={{ gap: 'clamp(0.4rem, 0.8vh, 0.6rem)' }}>
+                {chapter.keyPoints.slice(0, 3).map((point) => (
+                  <li
+                    key={point}
+                    className="flex items-start gap-[0.5rem] font-body leading-[1.45] text-[var(--day-secondary)]"
+                    style={{ fontSize: 'var(--text-small)' }}
+                  >
+                    <span className="shrink-0 opacity-40" style={{ marginTop: '0.18em' }}>—</span>
+                    <span>{point}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           {chapter.signals.length > 0 && (
-            <div className="work-card-signals flex flex-wrap gap-[0.5rem]">
+            <div className="work-card-signals work-reveal flex flex-wrap gap-[0.5rem]">
               {chapter.signals.map((signal) => (
                 <span
                   key={signal}
@@ -289,7 +406,7 @@ function ChapterCard({ chapter, index, bgColor }: ChapterCardProps) {
           )}
         </div>
 
-        <div className="work-card-visual">
+        <div className="work-card-visual work-reveal">
           {'image' in chapter && chapter.image ? (
             <div className="work-visual-photo">
               <img
