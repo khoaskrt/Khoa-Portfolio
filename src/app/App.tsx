@@ -14,6 +14,7 @@ import { SignOffSection } from '../sections/signoff/SignOffSection';
 import { DarkToLightTransition } from '../sections/transition/DarkToLightTransition';
 import { FooterSlideTransition } from '../sections/transition/FooterSlideTransition';
 import { WorkExperienceSection } from '../sections/work-experience/WorkExperienceSection';
+import { SelectedProjectsSection } from '../sections/selected-projects/SelectedProjectsSection';
 import { useTransitionState } from './hooks/useTransitionState';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -81,6 +82,7 @@ export default function App() {
         <AboutSection transitionProgress={transitionProgress} />
         <DarkToLightTransition onRevealReadyChange={setWorkRevealReady} onProgressChange={setTransitionProgress} />
         <WorkExperienceSection revealReady={workRevealReady} transitionProgress={transitionProgress} />
+        <SelectedProjectsSection />
         <MomentRecapSection />
         <CredentialsSection />
       </main>

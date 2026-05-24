@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useLenis } from 'lenis/react';
 import khoaLogo from '../assets/brand/khoa-logo.svg';
 import { headerContent } from './header-content';
+import { GlitchText } from './GlitchText';
 
 export function PortfolioHeader() {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -131,7 +132,7 @@ export function PortfolioHeader() {
                     isActive ? 'text-[var(--signal-red)] opacity-100' : 'opacity-90 hover:text-[var(--signal-red-hover)] hover:opacity-100'
                   }`}
                 >
-                  {link.label}
+                  <GlitchText text={link.label} />
                   <span 
                     className={`absolute -bottom-[2px] left-1/2 h-[3px] w-[3px] -translate-x-1/2 rounded-full bg-[var(--signal-red)] transition-all duration-300 ease-[var(--ease-quart-out)] ${
                       isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
@@ -207,7 +208,7 @@ export function PortfolioHeader() {
                         }
                   }
                 >
-                  {link.label}
+                  <GlitchText text={link.label} />
                 </a>
               );
             })}

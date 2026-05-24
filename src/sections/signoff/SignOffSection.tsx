@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { GlitchText } from '../../components/GlitchText';
 
 export function SignOffSection() {
   const [year, setYear] = useState('2026');
@@ -104,9 +105,9 @@ export function SignOffSection() {
               Menu
             </span>
             <ul className="m-0 flex list-none flex-col gap-[0.55rem] p-0 font-sans font-medium tracking-[0.02em] text-white" style={{ fontSize: 'var(--text-small)' }}>
-              <li><a href="#about" className="signoff-link relative inline-flex items-baseline gap-[0.4rem] transition-colors duration-[var(--duration-hover)] ease-[var(--ease-quart-out)] hover:text-[var(--signal-red)] focus-visible:outline-1 focus-visible:outline-[var(--signal-red)] focus-visible:outline-offset-4">About</a></li>
-              <li><a href="#works" className="signoff-link relative inline-flex items-baseline gap-[0.4rem] transition-colors duration-[var(--duration-hover)] ease-[var(--ease-quart-out)] hover:text-[var(--signal-red)] focus-visible:outline-1 focus-visible:outline-[var(--signal-red)] focus-visible:outline-offset-4">Work</a></li>
-              <li><a href="#credentials" className="signoff-link relative inline-flex items-baseline gap-[0.4rem] transition-colors duration-[var(--duration-hover)] ease-[var(--ease-quart-out)] hover:text-[var(--signal-red)] focus-visible:outline-1 focus-visible:outline-[var(--signal-red)] focus-visible:outline-offset-4">Credentials</a></li>
+              <li><a href="#about" className="signoff-link relative inline-flex items-baseline gap-[0.4rem] transition-colors duration-[var(--duration-hover)] ease-[var(--ease-quart-out)] hover:text-[var(--signal-red)] focus-visible:outline-1 focus-visible:outline-[var(--signal-red)] focus-visible:outline-offset-4"><GlitchText text="About" /></a></li>
+              <li><a href="#works" className="signoff-link relative inline-flex items-baseline gap-[0.4rem] transition-colors duration-[var(--duration-hover)] ease-[var(--ease-quart-out)] hover:text-[var(--signal-red)] focus-visible:outline-1 focus-visible:outline-[var(--signal-red)] focus-visible:outline-offset-4"><GlitchText text="Work" /></a></li>
+              <li><a href="#credentials" className="signoff-link relative inline-flex items-baseline gap-[0.4rem] transition-colors duration-[var(--duration-hover)] ease-[var(--ease-quart-out)] hover:text-[var(--signal-red)] focus-visible:outline-1 focus-visible:outline-[var(--signal-red)] focus-visible:outline-offset-4"><GlitchText text="Credentials" /></a></li>
             </ul>
           </nav>
 
@@ -118,7 +119,7 @@ export function SignOffSection() {
             <ul className="m-0 flex list-none flex-col gap-[0.55rem] p-0 font-sans font-medium tracking-[0.02em] text-white" style={{ fontSize: 'var(--text-small)' }}>
               <li>
                 <a href="https://www.linkedin.com/in/khoa-do-blockchain" target="_blank" rel="noopener noreferrer" className="signoff-link relative inline-flex items-baseline gap-[0.4rem] transition-colors duration-[var(--duration-hover)] ease-[var(--ease-quart-out)] hover:text-[var(--signal-red)] focus-visible:outline-1 focus-visible:outline-[var(--signal-red)] focus-visible:outline-offset-4">
-                  LinkedIn <span className="font-sans font-light text-[var(--text-label)] tracking-[0.18em] text-white -translate-y-[0.15em]" aria-hidden="true">↗</span>
+                  <GlitchText text="LinkedIn" /> <span className="font-sans font-light text-[var(--text-label)] tracking-[0.18em] text-white -translate-y-[0.15em]" aria-hidden="true">↗</span>
                 </a>
               </li>
               <li>
@@ -129,12 +130,12 @@ export function SignOffSection() {
                   aria-label={`Email ${emailAddress}`}
                   className="signoff-link relative inline-flex items-baseline gap-[0.4rem] transition-colors duration-[var(--duration-hover)] ease-[var(--ease-quart-out)] hover:text-[var(--signal-red)] focus-visible:outline-1 focus-visible:outline-[var(--signal-red)] focus-visible:outline-offset-4"
                 >
-                  Email <span className="font-sans font-light text-[var(--text-label)] tracking-[0.18em] text-white -translate-y-[0.15em]" aria-hidden="true">↗</span>
+                  <GlitchText text="Email" /> <span className="font-sans font-light text-[var(--text-label)] tracking-[0.18em] text-white -translate-y-[0.15em]" aria-hidden="true">↗</span>
                 </a>
               </li>
               <li>
                 <a href="https://t.me/RyanDo1212" target="_blank" rel="noopener noreferrer" className="signoff-link relative inline-flex items-baseline gap-[0.4rem] transition-colors duration-[var(--duration-hover)] ease-[var(--ease-quart-out)] hover:text-[var(--signal-red)] focus-visible:outline-1 focus-visible:outline-[var(--signal-red)] focus-visible:outline-offset-4">
-                  Telegram <span className="font-sans font-light text-[var(--text-label)] tracking-[0.18em] text-white -translate-y-[0.15em]" aria-hidden="true">↗</span>
+                  <GlitchText text="Telegram" /> <span className="font-sans font-light text-[var(--text-label)] tracking-[0.18em] text-white -translate-y-[0.15em]" aria-hidden="true">↗</span>
                 </a>
               </li>
             </ul>
