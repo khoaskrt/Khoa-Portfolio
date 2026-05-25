@@ -1,6 +1,7 @@
 import certUdemyDex from '../../assets/images/cert-udemy-dex.jpg';
 import certGooglePM from '../../assets/images/cert-google-pm.jpg';
 import certToeic from '../../assets/images/toeic.jpg';
+import certOpMgmt from '../../assets/images/cert-op-mgmt.jpg';
 
 export type Credential = {
   era: string;
@@ -30,7 +31,7 @@ export const credentialsContent = {
     {
       era: '2025',
       image: certGooglePM,
-      issuer: 'Google',
+      issuer: 'Coursera',
       date: 'Jun 2025',
       title: ['Project', 'Management'],
       subtitle: 'Google Project Management Professional Certificate · 7 courses',
@@ -39,11 +40,20 @@ export const credentialsContent = {
     {
       era: '2025',
       image: certToeic,
-      issuer: 'ETS · TOEIC',
+      issuer: 'TES',
       date: '2025',
       title: ['TOEIC', 'English'],
       subtitle: 'Test of English for International Communication',
       signals: ['English', 'Language'],
+    },
+    {
+      era: '2026',
+      image: certOpMgmt,
+      issuer: 'Udemy',
+      date: '2026',
+      title: ['Operation', 'Management'],
+      subtitle: 'Operation Management A-Z: Business Processes and Systems · 6.5 hrs',
+      signals: ['Operations', 'Management'],
     },
   ] satisfies Credential[],
 } as const;
