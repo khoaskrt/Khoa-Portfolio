@@ -11,6 +11,7 @@ Before any design work or file edits, pass these gates. Skipping them produces g
 
 | Gate | Required check | If fail |
 |---|---|---|
+| Rules | Agent has read `CLAUDE.md` (project rules and workflow) via the `view_file` tool. | Use `view_file` on `CLAUDE.md` in the root before continuing. |
 | Context | The PRODUCT.md / DESIGN.md loader result is known from `node .agents/skills/impeccable/scripts/load-context.mjs`. | Run the loader before continuing. |
 | Product | PRODUCT.md exists and is not empty or placeholder (`[TODO]` markers, <200 chars). | Run `$impeccable teach`, refresh context, then resume. Never synthesize PRODUCT.md from the user's original prompt alone. |
 | Command | The matching command reference is loaded when a sub-command is used. | Load the reference before continuing. |
@@ -34,6 +35,7 @@ Two files, case-insensitive. The loader looks at the project root by default and
 
 - **PRODUCT.md** — required. Users, brand, tone, anti-references, strategic principles.
 - **DESIGN.md** — optional, strongly recommended. Colors, typography, elevation, components.
+- **CLAUDE.md** — required. Project structures and workflow rules. The loader does not read this, you must read it directly via `view_file` on `CLAUDE.md` in the project root.
 
 Load both in one call:
 

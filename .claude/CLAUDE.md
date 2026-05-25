@@ -102,3 +102,27 @@ node .agents/skills/impeccable/scripts/load-context.mjs
 - Tailwind CSS v4 (with `@theme` directive in tokens.css)
 - Motion (framer-motion) for animations
 - Deployed on Vercel
+
+## Agent-User Workflow (Anti-Rollback Protocol)
+
+To ensure stability and prevent unnecessary rollbacks, the agent MUST follow these 5 steps for every task:
+
+1. **Sync & Context (Read Before Writing):**
+   - The agent MUST use tools (`view_file`, `grep_search`) to read the relevant files and understand the current context *before* proposing or writing any code.
+   - Never assume the structure or state of a file based on memory.
+
+2. **Plan & Approve (For Complex Tasks):**
+   - For medium-to-large tasks (e.g., adding components, refactoring logic, moving files), the agent MUST briefly propose the approach first (e.g., "I plan to modify function A in file B by doing C").
+   - Wait for the user's approval before executing to avoid "garbage code" and rollbacks.
+
+3. **Surgical Execution:**
+   - Use precise editing tools (`replace_file_content`) to modify exact lines.
+   - DO NOT rewrite entire files unless absolutely necessary.
+   - Address one sub-task at a time. Report progress and await user validation before moving to the next. Do not bundle multiple large requests into a single massive edit.
+
+4. **Verify & Debug:**
+   - If the user reports an error or UI mismatch, the agent must analyze the specific error log or visual discrepancy provided by the user.
+   - Never use "blind guessing" to fix bugs. Investigate first.
+
+5. **The Rollback Protocol:**
+   - If a fix fails multiple times or the user says "Rollback", the agent must immediately stop patching, help restore the file to its previous working state, and re-evaluate from Step 1.

@@ -9,7 +9,6 @@ gsap.registerPlugin(ScrollTrigger);
 export function SelectedProjectsSection() {
   const containerRef = useRef<HTMLElement>(null);
   const titlesContainerRef = useRef<HTMLDivElement>(null);
-  const [activeIndex, setActiveIndex] = useState(0);
   const leftColRef = useRef<HTMLDivElement>(null);
   const detailsRefs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -28,20 +27,63 @@ export function SelectedProjectsSection() {
     
     const ctx = gsap.context(() => {
       const titles = gsap.utils.toArray<HTMLElement>('.kinetic-title-wrapper');
+      const years = gsap.utils.toArray<HTMLElement>('.year-number');
+      let currentIndex = 0;
+
+      // Ensure initial state is set
+      detailsRefs.current.forEach((el, i) => {
+        if (!el) return;
+        if (i === 0) {
+          gsap.set(el, { opacity: 1, y: 0, zIndex: 10, pointerEvents: 'auto' });
+        } else {
+          gsap.set(el, { opacity: 0, y: 20, zIndex: 0, pointerEvents: 'none' });
+        }
+      });
       
+      const switchActive = (index: number, direction: 1 | -1) => {
+        if (currentIndex === index) return;
+        
+        const prevEl = detailsRefs.current[currentIndex];
+        const nextEl = detailsRefs.current[index];
+        const prevYear = years[currentIndex];
+        const nextYear = years[index];
+
+        const yOffset = 20 * direction;
+
+        if (prevEl) {
+          gsap.to(prevEl, { opacity: 0, y: -yOffset, duration: 0.6, ease: 'power3.out', zIndex: 0, pointerEvents: 'none', overwrite: true });
+        }
+        if (nextEl) {
+          gsap.fromTo(nextEl, { opacity: 0, y: yOffset }, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out', zIndex: 10, pointerEvents: 'auto', overwrite: true });
+        }
+
+        if (prevYear) gsap.to(prevYear, { opacity: 0, duration: 0.4, overwrite: true });
+        if (nextYear) gsap.to(nextYear, { opacity: 1, duration: 0.4, overwrite: true });
+
+        currentIndex = index;
+      };
+
       titles.forEach((title, i) => {
+        // Trigger for switching the left column content based on center of viewport
+        ScrollTrigger.create({
+          trigger: title,
+          start: "top center",
+          end: "bottom center",
+          onEnter: () => switchActive(i, 1),
+          onEnterBack: () => switchActive(i, -1),
+        });
+
+        // Animation for the title itself (scrubbing as it scrolls)
         gsap.timeline({
           scrollTrigger: {
             trigger: title,
-            start: "top 55%",
-            end: "bottom 45%",
+            start: "top 75%",
+            end: "bottom 25%",
             scrub: true,
-            onEnter: () => setActiveIndex(i),
-            onEnterBack: () => setActiveIndex(i),
           }
         })
-        .fromTo(title, { scale: 0.95, opacity: 0.25 }, { scale: 1, opacity: 1, duration: 1, ease: 'power1.inOut' })
-        .to(title, { scale: 0.95, opacity: 0.25, duration: 1, ease: 'power1.inOut' });
+        .fromTo(title, { scale: 0.9, opacity: 0.2 }, { scale: 1, opacity: 1, duration: 1, ease: 'power2.inOut' })
+        .to(title, { scale: 0.9, opacity: 0.2, duration: 1, ease: 'power2.inOut' });
       });
       
     }, containerRef);
@@ -51,27 +93,43 @@ export function SelectedProjectsSection() {
 
   useEffect(() => {
     if (isMobile) return;
-    
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
     const ctx = gsap.context(() => {
-      detailsRefs.current.forEach((el, i) => {
-        if (!el) return;
-        if (i === activeIndex) {
-          gsap.to(el, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out', zIndex: 10, pointerEvents: 'auto' });
-        } else {
-          gsap.to(el, { opacity: 0, y: 20, duration: 0.6, ease: 'power3.out', zIndex: 0, pointerEvents: 'none' });
-        }
+      const titles = gsap.utils.toArray<HTMLElement>('.kinetic-title-wrapper');
+      const lastTitle = titles[titles.length - 1];
+
+      if (!leftColRef.current || !lastTitle) return;
+
+      gsap.to(leftColRef.current, {
+        opacity: 0,
+        scale: 0.96,
+        y: -30,
+        scrollTrigger: {
+          trigger: lastTitle,
+          start: 'top 45%',
+          end: 'bottom 20%',
+          scrub: 1.2,
+          ease: 'power2.out',
+          invalidateOnRefresh: true,
+        },
       });
-    }, leftColRef);
-    
+    }, containerRef);
+
     return () => ctx.revert();
-  }, [activeIndex, isMobile, selectedProjectsContent.projects.length]);
+  }, [isMobile, selectedProjectsContent.projects.length]);
 
   return (
     <section
       ref={containerRef}
       id={selectedProjectsContent.id}
-      className="selected-projects-section relative w-full flex flex-col text-[var(--frost-text)]"
-      style={{ background: 'var(--night-base)' }}
+      className="selected-projects-section relative w-full flex flex-col text-[var(--frost-text)] mb-[10vh]"
+      style={{
+        background: 'var(--night-base)',
+        zIndex: 'var(--z-projects)',
+      }}
     >
       {/* Section Header */}
       <header
@@ -122,7 +180,8 @@ export function SelectedProjectsSection() {
               {selectedProjectsContent.projects.map((project, i) => (
                 <span 
                   key={`year-${i}`}
-                  className={`absolute -right-8 md:-right-16 top-1/2 -translate-y-1/2 text-sm font-mono tracking-widest text-[var(--frost-dim)] z-20 tabular-nums transition-opacity duration-700 ease-out ${i === activeIndex ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+                  className="year-number absolute -right-8 md:-right-16 top-1/2 -translate-y-1/2 text-sm font-mono tracking-widest text-[var(--frost-dim)] z-20 tabular-nums pointer-events-none"
+                  style={{ opacity: i === 0 ? 1 : 0 }}
                 >
                   {project.year}
                 </span>
@@ -132,8 +191,12 @@ export function SelectedProjectsSection() {
                 <div 
                   key={i} 
                   ref={el => detailsRefs.current[i] = el}
-                  className="absolute inset-0 flex flex-col opacity-0 pointer-events-none"
-                  style={{ transform: 'translateY(20px)' }}
+                  className={`absolute inset-0 flex flex-col ${i === 0 ? 'pointer-events-auto' : 'pointer-events-none'}`}
+                  style={{ 
+                    transform: i === 0 ? 'translateY(0)' : 'translateY(20px)',
+                    opacity: i === 0 ? 1 : 0,
+                    zIndex: i === 0 ? 10 : 0
+                  }}
                 >
                   <div className="relative bg-[var(--night-deep)]" style={{ height: 'clamp(300px, 50vh, 550px)', aspectRatio: '2/3' }}>
                     {project.image ? (
@@ -151,20 +214,29 @@ export function SelectedProjectsSection() {
                   
                   <div className="flex flex-col gap-0 mt-8">
                     <div className="flex border-t border-[var(--border-frost-soft)] pt-4 pb-4">
-                      <div className="w-[30%] font-sans font-light leading-[1.2] tracking-[0.2em] text-[length:var(--text-label)] uppercase text-[var(--frost-dim)] mt-1">Overview</div>
-                      <div className="w-[70%] font-sans font-normal text-[length:var(--text-body)] leading-[1.5] text-[var(--frost-text)] pr-4">
+                      <div className="w-[30%] font-sans font-semibold leading-[1.5] text-[length:var(--text-body)] text-white mt-1">Overview</div>
+                      <div className="w-[70%] font-sans font-medium text-[length:var(--text-body)] leading-[1.5] text-white pr-4">
                         {project.overview}
                       </div>
                     </div>
                     <div className="flex border-t border-[var(--border-frost-soft)] pt-4 pb-4">
-                      <div className="w-[30%] font-sans font-light leading-[1.2] tracking-[0.2em] text-[length:var(--text-label)] uppercase text-[var(--frost-dim)] mt-1">Tags</div>
-                      <div className="w-[70%] flex flex-wrap gap-x-4 gap-y-2 pr-4">
-                        {project.tags.map(tag => (
-                          <span key={tag} className="font-sans font-normal text-[length:var(--text-body)] leading-[1.5] text-[var(--frost-text)]">{tag}</span>
-                        ))}
-                        {project.industry.map(ind => (
-                          <span key={ind} className="font-sans font-normal text-[length:var(--text-body)] leading-[1.5] text-[var(--frost-text)]">{ind}</span>
-                        ))}
+                      <div className="w-[30%] font-sans font-semibold leading-[1.5] text-[length:var(--text-body)] text-white mt-1">What I do</div>
+                      <div className="w-[70%] font-sans font-medium text-[length:var(--text-body)] leading-[1.5] text-white pr-4">
+                        {project.whatIDo || 'To be updated'}
+                      </div>
+                    </div>
+                    <div className="flex border-t border-[var(--border-frost-soft)] pt-4 pb-4">
+                      <div className="w-[30%] font-sans font-semibold leading-[1.5] text-[length:var(--text-body)] text-white mt-1">What I learn from this project</div>
+                      <div className="w-[70%] font-sans font-medium text-[length:var(--text-body)] leading-[1.5] text-white pr-4">
+                        {project.whatILearn || 'To be updated'}
+                      </div>
+                    </div>
+                    <div className="flex border-t border-[var(--border-frost-soft)] pt-4 pb-4">
+                      <div className="w-[30%] font-sans font-semibold leading-[1.5] text-[length:var(--text-body)] text-white mt-1">Discover more</div>
+                      <div className="w-[70%] font-sans font-medium text-[length:var(--text-body)] leading-[1.5] text-white pr-4">
+                        {project.discoverMore ? (
+                          <a href={project.discoverMore} target="_blank" rel="noopener noreferrer" className="underline hover:opacity-80 transition-opacity">View Project</a>
+                        ) : 'To be updated'}
                       </div>
                     </div>
                   </div>
@@ -174,7 +246,7 @@ export function SelectedProjectsSection() {
           </div>
           
           {/* Right Column (Scrolling Titles) */}
-          <div className="w-[40%] flex flex-col items-start gap-[15vh] pt-[35vh] pb-[50vh]" ref={titlesContainerRef}>
+          <div className="w-[40%] flex flex-col items-start gap-[15vh] pt-[35vh] pb-[25vh]" ref={titlesContainerRef}>
             {selectedProjectsContent.projects.map((project, i) => (
               <div 
                 key={i} 
@@ -273,20 +345,29 @@ function MobileProjectCard({ project }: { project: typeof selectedProjectsConten
 
       <div ref={tableRef} className="flex flex-col gap-0 mt-2">
         <div className="flex flex-col border-t border-[var(--border-frost-soft)] pt-4 pb-4">
-          <div className="font-sans font-light leading-[1.2] tracking-[0.2em] text-[length:var(--text-label)] uppercase text-[var(--frost-dim)] mb-2">Overview</div>
-          <div className="font-sans font-normal text-[length:var(--text-body)] leading-[1.5] text-[var(--frost-text)]">
+          <div className="font-sans font-semibold leading-[1.5] text-[length:var(--text-body)] text-white mb-2">Overview</div>
+          <div className="font-sans font-medium text-[length:var(--text-body)] leading-[1.5] text-white">
             {project.overview}
           </div>
         </div>
         <div className="flex flex-col border-t border-[var(--border-frost-soft)] pt-4 pb-4">
-          <div className="font-sans font-light leading-[1.2] tracking-[0.2em] text-[length:var(--text-label)] uppercase text-[var(--frost-dim)] mb-2">Tags</div>
-          <div className="flex flex-wrap gap-x-4 gap-y-2">
-            {project.tags.map(tag => (
-              <span key={tag} className="font-sans font-normal text-[length:var(--text-body)] leading-[1.5] text-[var(--frost-text)]">{tag}</span>
-            ))}
-            {project.industry.map(ind => (
-              <span key={ind} className="font-sans font-normal text-[length:var(--text-body)] leading-[1.5] text-[var(--frost-text)]">{ind}</span>
-            ))}
+          <div className="font-sans font-semibold leading-[1.5] text-[length:var(--text-body)] text-white mb-2">What I do</div>
+          <div className="font-sans font-medium text-[length:var(--text-body)] leading-[1.5] text-white">
+            {project.whatIDo || 'To be updated'}
+          </div>
+        </div>
+        <div className="flex flex-col border-t border-[var(--border-frost-soft)] pt-4 pb-4">
+          <div className="font-sans font-semibold leading-[1.5] text-[length:var(--text-body)] text-white mb-2">What I learn from this project</div>
+          <div className="font-sans font-medium text-[length:var(--text-body)] leading-[1.5] text-white">
+            {project.whatILearn || 'To be updated'}
+          </div>
+        </div>
+        <div className="flex flex-col border-t border-[var(--border-frost-soft)] pt-4 pb-4">
+          <div className="font-sans font-semibold leading-[1.5] text-[length:var(--text-body)] text-white mb-2">Discover more</div>
+          <div className="font-sans font-medium text-[length:var(--text-body)] leading-[1.5] text-white">
+            {project.discoverMore ? (
+              <a href={project.discoverMore} target="_blank" rel="noopener noreferrer" className="underline hover:opacity-80 transition-opacity">View Project</a>
+            ) : 'To be updated'}
           </div>
         </div>
       </div>
