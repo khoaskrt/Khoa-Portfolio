@@ -222,7 +222,7 @@ export function AboutSection({ transitionProgress = 0 }: AboutSectionProps) {
           opacity: 1 - figureFade * 0.6,
           transform: `translateY(${figureFade * 12}px)`,
         }}>
-          <figure className="about-figure group relative max-w-[37ch] overflow-hidden border border-white/25 bg-white/[0.03] p-2 shadow-[0_16px_42px_rgba(0,0,0,0.42)]">
+          <figure className="about-figure group relative overflow-hidden border border-white/25 bg-white/[0.03] p-2 shadow-[0_16px_42px_rgba(0,0,0,0.42)]">
             <span aria-hidden="true" className="pointer-events-none absolute inset-0 border border-white/8" />
             <span aria-hidden="true" className="pointer-events-none absolute inset-x-2 top-2 h-px bg-white/20" />
             <img

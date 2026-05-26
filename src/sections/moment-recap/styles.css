@@ -143,11 +143,9 @@
   }
 
   .moment-recap-frame-media {
-    flex: 0 1 auto;
+    flex: 0 0 auto;
     aspect-ratio: 3 / 4;
-    max-height: 42vh;
-    width: auto;
-    max-width: 75vw;
+    width: min(75vw, calc(42vh * 0.75));
     margin: 0 auto;
   }
 

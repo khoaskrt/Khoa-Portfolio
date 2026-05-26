@@ -170,7 +170,7 @@ function FeaturedCard({ cred }: { cred: Credential }) {
             {cred.title[0]}<br />{cred.title[1]}
           </h3>
           <p
-            className="m-0 max-w-[38ch] font-normal leading-[1.5] tracking-[0.004em] text-[var(--day-muted)]"
+            className="m-0 font-normal leading-[1.5] tracking-[0.004em] text-[var(--day-muted)]"
             style={{ fontFamily: 'var(--font-quote)', fontSize: 'var(--text-meta)' }}
           >
             {cred.subtitle}

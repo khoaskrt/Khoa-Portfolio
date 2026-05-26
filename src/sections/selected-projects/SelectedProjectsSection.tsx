@@ -112,9 +112,9 @@ export function SelectedProjectsSection() {
           start: 'top 45%',
           end: 'bottom 20%',
           scrub: 1.2,
-          ease: 'power2.out',
           invalidateOnRefresh: true,
         },
+        ease: 'power2.out',
       });
     }, containerRef);
 
@@ -180,7 +180,7 @@ export function SelectedProjectsSection() {
               {selectedProjectsContent.projects.map((project, i) => (
                 <span 
                   key={`year-${i}`}
-                  className="year-number absolute -right-8 md:-right-16 top-1/2 -translate-y-1/2 text-sm font-mono tracking-widest text-[var(--frost-dim)] z-20 tabular-nums pointer-events-none"
+                  className="year-number absolute -right-8 md:-right-16 top-1/2 -translate-y-1/2 text-[length:var(--text-meta)] font-mono tracking-widest text-[var(--frost-dim)] z-20 tabular-nums pointer-events-none"
                   style={{ opacity: i === 0 ? 1 : 0 }}
                 >
                   {project.year}
@@ -212,30 +212,34 @@ export function SelectedProjectsSection() {
                     )}
                   </div>
                   
-                  <div className="flex flex-col gap-0 mt-8">
-                    <div className="flex border-t border-[var(--border-frost-soft)] pt-4 pb-4">
-                      <div className="w-[30%] font-sans font-semibold leading-[1.5] text-[length:var(--text-body)] text-white mt-1">Overview</div>
-                      <div className="w-[70%] font-sans font-medium text-[length:var(--text-body)] leading-[1.5] text-white pr-4">
+                  <div className="flex flex-col gap-0 mt-[clamp(0.5rem,2vh,2rem)]">
+                    <div className="flex border-t border-[var(--border-frost-soft)] py-[clamp(0.25rem,1.2vh,1rem)]">
+                      <div className="w-[30%] font-sans font-semibold leading-[1.4] text-[length:clamp(11px,1.5vh,var(--text-body))] text-white mt-1">Overview</div>
+                      <div className="w-[70%] font-sans font-medium text-[length:clamp(11px,1.5vh,var(--text-body))] leading-[1.4] text-white pr-4 text-pretty whitespace-pre-line">
                         {project.overview}
                       </div>
                     </div>
-                    <div className="flex border-t border-[var(--border-frost-soft)] pt-4 pb-4">
-                      <div className="w-[30%] font-sans font-semibold leading-[1.5] text-[length:var(--text-body)] text-white mt-1">What I do</div>
-                      <div className="w-[70%] font-sans font-medium text-[length:var(--text-body)] leading-[1.5] text-white pr-4">
+                    <div className="flex border-t border-[var(--border-frost-soft)] py-[clamp(0.25rem,1.2vh,1rem)]">
+                      <div className="w-[30%] font-sans font-semibold leading-[1.4] text-[length:clamp(11px,1.5vh,var(--text-body))] text-white mt-1">What I do</div>
+                      <div className="w-[70%] font-sans font-medium text-[length:clamp(11px,1.5vh,var(--text-body))] leading-[1.4] text-white pr-4 text-pretty whitespace-pre-line">
                         {project.whatIDo || 'To be updated'}
                       </div>
                     </div>
-                    <div className="flex border-t border-[var(--border-frost-soft)] pt-4 pb-4">
-                      <div className="w-[30%] font-sans font-semibold leading-[1.5] text-[length:var(--text-body)] text-white mt-1">What I learn from this project</div>
-                      <div className="w-[70%] font-sans font-medium text-[length:var(--text-body)] leading-[1.5] text-white pr-4">
+                    <div className="flex border-t border-[var(--border-frost-soft)] py-[clamp(0.25rem,1.2vh,1rem)]">
+                      <div className="w-[30%] font-sans font-semibold leading-[1.4] text-[length:clamp(11px,1.5vh,var(--text-body))] text-white mt-1">What I learn from this project</div>
+                      <div className="w-[70%] font-sans font-medium text-[length:clamp(11px,1.5vh,var(--text-body))] leading-[1.4] text-white pr-4 text-pretty whitespace-pre-line">
                         {project.whatILearn || 'To be updated'}
                       </div>
                     </div>
-                    <div className="flex border-t border-[var(--border-frost-soft)] pt-4 pb-4">
-                      <div className="w-[30%] font-sans font-semibold leading-[1.5] text-[length:var(--text-body)] text-white mt-1">Discover more</div>
-                      <div className="w-[70%] font-sans font-medium text-[length:var(--text-body)] leading-[1.5] text-white pr-4">
+                    <div className="flex border-t border-[var(--border-frost-soft)] py-[clamp(0.25rem,1.2vh,1rem)]">
+                      <div className="w-[30%] font-sans font-semibold leading-[1.4] text-[length:clamp(11px,1.5vh,var(--text-body))] text-white mt-1">Discover more</div>
+                      <div className="w-[70%] font-sans font-medium text-[length:clamp(11px,1.5vh,var(--text-body))] leading-[1.4] text-white pr-4 text-pretty whitespace-pre-line">
                         {project.discoverMore ? (
-                          <a href={project.discoverMore} target="_blank" rel="noopener noreferrer" className="underline hover:opacity-80 transition-opacity">View Project</a>
+                          project.discoverMore.startsWith('http') ? (
+                            <a href={project.discoverMore} target="_blank" rel="noopener noreferrer" className="underline hover:opacity-80 transition-opacity">View Project</a>
+                          ) : (
+                            <span>{project.discoverMore}</span>
+                          )
                         ) : 'To be updated'}
                       </div>
                     </div>
@@ -276,7 +280,7 @@ export function SelectedProjectsSection() {
   );
 }
 
-function MobileProjectCard({ project }: { project: typeof selectedProjectsContent.projects[0] }) {
+function MobileProjectCard({ project, key }: { project: typeof selectedProjectsContent.projects[0]; key?: React.Key }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const mediaRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
@@ -327,7 +331,7 @@ function MobileProjectCard({ project }: { project: typeof selectedProjectsConten
 
       <div 
         ref={mediaRef}
-        className="w-[85%] sm:w-[60%] max-w-[400px] mx-auto relative bg-[var(--night-deep)]"
+        className="w-full relative bg-[var(--night-deep)]"
         style={{ aspectRatio: '2/3' }}
       >
         {project.image ? (
@@ -346,27 +350,31 @@ function MobileProjectCard({ project }: { project: typeof selectedProjectsConten
       <div ref={tableRef} className="flex flex-col gap-0 mt-2">
         <div className="flex flex-col border-t border-[var(--border-frost-soft)] pt-4 pb-4">
           <div className="font-sans font-semibold leading-[1.5] text-[length:var(--text-body)] text-white mb-2">Overview</div>
-          <div className="font-sans font-medium text-[length:var(--text-body)] leading-[1.5] text-white">
+          <div className="font-sans font-medium text-[length:var(--text-body)] leading-[1.5] text-white whitespace-pre-line">
             {project.overview}
           </div>
         </div>
         <div className="flex flex-col border-t border-[var(--border-frost-soft)] pt-4 pb-4">
           <div className="font-sans font-semibold leading-[1.5] text-[length:var(--text-body)] text-white mb-2">What I do</div>
-          <div className="font-sans font-medium text-[length:var(--text-body)] leading-[1.5] text-white">
+          <div className="font-sans font-medium text-[length:var(--text-body)] leading-[1.5] text-white whitespace-pre-line">
             {project.whatIDo || 'To be updated'}
           </div>
         </div>
         <div className="flex flex-col border-t border-[var(--border-frost-soft)] pt-4 pb-4">
           <div className="font-sans font-semibold leading-[1.5] text-[length:var(--text-body)] text-white mb-2">What I learn from this project</div>
-          <div className="font-sans font-medium text-[length:var(--text-body)] leading-[1.5] text-white">
+          <div className="font-sans font-medium text-[length:var(--text-body)] leading-[1.5] text-white whitespace-pre-line">
             {project.whatILearn || 'To be updated'}
           </div>
         </div>
         <div className="flex flex-col border-t border-[var(--border-frost-soft)] pt-4 pb-4">
           <div className="font-sans font-semibold leading-[1.5] text-[length:var(--text-body)] text-white mb-2">Discover more</div>
-          <div className="font-sans font-medium text-[length:var(--text-body)] leading-[1.5] text-white">
+          <div className="font-sans font-medium text-[length:var(--text-body)] leading-[1.5] text-white whitespace-pre-line">
             {project.discoverMore ? (
-              <a href={project.discoverMore} target="_blank" rel="noopener noreferrer" className="underline hover:opacity-80 transition-opacity">View Project</a>
+              project.discoverMore.startsWith('http') ? (
+                <a href={project.discoverMore} target="_blank" rel="noopener noreferrer" className="underline hover:opacity-80 transition-opacity">View Project</a>
+              ) : (
+                <span>{project.discoverMore}</span>
+              )
             ) : 'To be updated'}
           </div>
         </div>

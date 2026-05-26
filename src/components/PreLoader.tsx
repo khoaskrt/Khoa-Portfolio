@@ -162,7 +162,7 @@ export function PreLoader({ onComplete }: PreLoaderProps) {
               }}
             />
           </div>
-          <div className="flex w-full justify-between text-[10px] sm:text-xs font-light tracking-[0.25em] uppercase text-white/50">
+          <div className="flex w-full justify-between text-[length:var(--text-label)] font-light tracking-[0.25em] uppercase text-white/50">
             <span>{getStatus(pct)}</span>
             <span>ENG / OS</span>
           </div>

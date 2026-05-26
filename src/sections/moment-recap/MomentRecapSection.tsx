@@ -421,7 +421,7 @@ function MomentRecapFrame({ frame, index, reducedMotion, parentTween }: MomentRe
         </h3>
         <p
           ref={descRef}
-          className="m-0 max-w-[34ch] font-body leading-[1.5] tracking-[0.004em] text-[var(--day-secondary)]"
+          className="m-0 font-body leading-[1.5] tracking-[0.004em] text-[var(--day-secondary)]"
           style={{ fontSize: 'var(--text-body)' }}
         >
           {frame.subtitle}
