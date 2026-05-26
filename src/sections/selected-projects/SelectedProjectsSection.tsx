@@ -34,9 +34,9 @@ export function SelectedProjectsSection() {
       detailsRefs.current.forEach((el, i) => {
         if (!el) return;
         if (i === 0) {
-          gsap.set(el, { opacity: 1, y: 0, zIndex: 10, pointerEvents: 'auto' });
+          gsap.set(el, { opacity: 1, y: 0, scale: 1, zIndex: 10, pointerEvents: 'auto' });
         } else {
-          gsap.set(el, { opacity: 0, y: 20, zIndex: 0, pointerEvents: 'none' });
+          gsap.set(el, { opacity: 0, y: 60, scale: 0.96, zIndex: 0, pointerEvents: 'none' });
         }
       });
       
@@ -48,17 +48,43 @@ export function SelectedProjectsSection() {
         const prevYear = years[currentIndex];
         const nextYear = years[index];
 
-        const yOffset = 20 * direction;
+        // Heavy mechanical shift
+        const yOffset = 60 * direction;
 
         if (prevEl) {
-          gsap.to(prevEl, { opacity: 0, y: -yOffset, duration: 0.6, ease: 'power3.out', zIndex: 0, pointerEvents: 'none', overwrite: true });
+          gsap.to(prevEl, { 
+            opacity: 0, 
+            y: -yOffset, 
+            scale: 0.96,
+            duration: 0.7, 
+            ease: 'power3.out', 
+            zIndex: 0, 
+            pointerEvents: 'none', 
+            overwrite: true 
+          });
         }
         if (nextEl) {
-          gsap.fromTo(nextEl, { opacity: 0, y: yOffset }, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out', zIndex: 10, pointerEvents: 'auto', overwrite: true });
+          gsap.fromTo(nextEl, 
+            { opacity: 0, y: yOffset, scale: 0.96 }, 
+            { 
+              opacity: 1, 
+              y: 0, 
+              scale: 1, 
+              duration: 1.2, 
+              ease: 'back.out(1.2)', // Mechanical settle/snap
+              zIndex: 10, 
+              pointerEvents: 'auto', 
+              overwrite: true 
+            }
+          );
         }
 
-        if (prevYear) gsap.to(prevYear, { opacity: 0, duration: 0.4, overwrite: true });
-        if (nextYear) gsap.to(nextYear, { opacity: 1, duration: 0.4, overwrite: true });
+        if (prevYear) {
+          gsap.to(prevYear, { opacity: 0, y: -20 * direction, duration: 0.6, ease: 'power3.out', overwrite: true });
+        }
+        if (nextYear) {
+          gsap.fromTo(nextYear, { opacity: 0, y: 20 * direction }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', overwrite: true });
+        }
 
         currentIndex = index;
       };
@@ -73,17 +99,41 @@ export function SelectedProjectsSection() {
           onEnterBack: () => switchActive(i, -1),
         });
 
-        // Animation for the title itself (scrubbing as it scrolls)
+        // The Vault Dial: 3D rotation and scale tied to scroll scrub
         gsap.timeline({
           scrollTrigger: {
             trigger: title,
-            start: "top 75%",
-            end: "bottom 25%",
-            scrub: true,
+            start: "top 85%",
+            end: "bottom 15%",
+            scrub: 0.8, // Smoothing adds weight
           }
         })
-        .fromTo(title, { scale: 0.9, opacity: 0.2 }, { scale: 1, opacity: 1, duration: 1, ease: 'power2.inOut' })
-        .to(title, { scale: 0.9, opacity: 0.2, duration: 1, ease: 'power2.inOut' });
+        .fromTo(title, 
+          { scale: 0.85, opacity: 0.15, rotationX: 60, transformOrigin: "left center" }, 
+          { scale: 1, opacity: 1, rotationX: 0, duration: 1, ease: 'power2.out' })
+        .to(title, 
+          { scale: 0.85, opacity: 0.15, rotationX: -60, duration: 1, ease: 'power2.in' });
+      });
+
+      // Velocity-based physical inertia for the entire left column
+      ScrollTrigger.create({
+        trigger: containerRef.current,
+        start: "top bottom",
+        end: "bottom top",
+        onUpdate: (self) => {
+          const velocity = self.getVelocity();
+          // Dampen velocity to realistic physical limits
+          const shift = gsap.utils.clamp(-25, 25, velocity / 100);
+          
+          if (leftColRef.current) {
+            gsap.to(leftColRef.current, {
+              y: shift,
+              duration: 0.8,
+              ease: "power3.out",
+              overwrite: "auto"
+            });
+          }
+        }
       });
       
     }, containerRef);
@@ -250,7 +300,7 @@ export function SelectedProjectsSection() {
           </div>
           
           {/* Right Column (Scrolling Titles) */}
-          <div className="w-[40%] flex flex-col items-start gap-[15vh] pt-[35vh] pb-[25vh]" ref={titlesContainerRef}>
+          <div className="w-[40%] flex flex-col items-start gap-[15vh] pt-[35vh] pb-[25vh]" ref={titlesContainerRef} style={{ perspective: '1000px' }}>
             {selectedProjectsContent.projects.map((project, i) => (
               <div 
                 key={i} 
