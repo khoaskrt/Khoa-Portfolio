@@ -1,6 +1,12 @@
 @import 'tailwindcss';
 @import './styles/tokens.css';
-@import './styles/utilities.css';
+@import './styles/preloader.css';
+@import './styles/hero.css';
+@import './styles/about.css';
+@import './styles/work-experience.css';
+@import './styles/moment-recap.css';
+@import './styles/signoff.css';
+@import './styles/responsive.css';
 
 body {
   overflow-x: hidden;

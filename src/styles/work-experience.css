@@ -1,0 +1,25 @@
+@layer utilities {
+  /* ============================================================
+     WORK EXPERIENCE — Responsive collapses for chapter cards
+  ============================================================ */
+  @media (max-width: 720px) {
+    .work-chapter { padding-block: clamp(2.5rem, 6vh, 4rem) !important; }
+    .work-title { font-size: clamp(2.5rem, calc(0.37rem + 5.68vw), 4.5rem) !important; }
+    .work-chap-num {
+      font-size: clamp(2rem, calc(0.61rem + 3.71vw), 3rem) !important;
+      color: oklch(0.55 0.01 255 / 0.8) !important;
+    }
+    .work-card-body {
+      flex-direction: column !important;
+      gap: clamp(1.5rem, 3vh, 2.25rem) !important;
+    }
+    .work-card-body > * { width: 100% !important; }
+    .work-card-brief { max-width: 100% !important; }
+  }
+
+  @media (max-width: 639px) {
+    .work-stamp {
+      font-size: var(--text-label) !important;
+    }
+  }
+}

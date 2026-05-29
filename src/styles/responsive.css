@@ -1,0 +1,114 @@
+@layer utilities {
+  /* ============================================================
+     MOBILE DRAWER — hamburger nav overlay
+  ============================================================ */
+  @keyframes drawer-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @keyframes drawer-link-in {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ============================================================
+     LANDSCAPE MOBILE — prevent content overflow on short viewports
+  ============================================================ */
+  @media (max-height: 500px) and (orientation: landscape) {
+    .hero-section {
+      min-height: 100dvh;
+    }
+
+    .hero-section .hero-h1-reveal,
+    .hero-section .hero-h2-reveal {
+      font-size: clamp(2rem, 8vw, 5rem) !important;
+    }
+
+    .about-section {
+      padding-top: clamp(1.5rem, 3vw, 2.5rem) !important;
+      padding-bottom: clamp(4rem, 8vw, 8rem) !important;
+    }
+
+    .moment-recap-frame-media {
+      max-height: 70vh;
+      aspect-ratio: 16 / 9;
+    }
+
+    .signoff-mark {
+      font-size: clamp(3rem, 8vw, 6rem) !important;
+    }
+  }
+
+  /* ============================================================
+     ULTRA-WIDE (≥2560px) — prevent excessive stretching
+  ============================================================ */
+  @media (min-width: 2560px) {
+    .about-figure {
+      max-width: 32ch;
+    }
+
+    .work-card-brief {
+      max-width: 55%;
+    }
+
+    .moment-recap-frame-content {
+      max-width: 38ch;
+    }
+  }
+
+  /* ============================================================
+     VERY SMALL SCREENS (≤375px) — tighten everything
+  ============================================================ */
+  @media (max-width: 375px) {
+    .about-snap-list li {
+      padding-block: clamp(1rem, 2vh, 1.5rem);
+      font-size: clamp(0.9rem, calc(0.8rem + 0.4vw), 1.1rem);
+    }
+
+    .signoff-cluster {
+      grid-template-columns: 1fr !important;
+      row-gap: 1.75rem;
+    }
+  }
+
+  /* ============================================================
+     REDUCED MOTION
+  ============================================================ */
+  @media (prefers-reduced-motion: reduce) {
+    .about-flow-orb {
+      transform: none !important;
+    }
+
+    .hero-h1-reveal,
+    .hero-h2-reveal {
+      opacity: 1 !important;
+      transform: none !important;
+      filter: none !important;
+      transition: none !important;
+    }
+
+    .work-chapter {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+
+    .moment-recap-frame,
+    .moment-recap-frame-img {
+      transition: none !important;
+      transform: none !important;
+    }
+    .moment-recap-frame {
+      opacity: 1 !important;
+    }
+    .moment-recap-frame-img {
+      transform: scale(1) !important;
+    }
+
+    .signoff-mark-inner {
+      animation: none !important;
+      transform: none !important;
+    }
+  }
+}

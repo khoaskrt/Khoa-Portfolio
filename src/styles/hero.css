@@ -1,0 +1,118 @@
+@layer utilities {
+  /* ============================================================
+     HERO — Cement text effect
+  ============================================================ */
+  .hero-cement {
+    color: rgb(244 248 252 / 0.98);
+    text-shadow:
+      0 0 20px rgb(255 255 255 / 0.52),
+      0 0 6px rgb(255 255 255 / 0.28),
+      0 1px 0 rgb(255 255 255 / 0.46),
+      0 -1px 0 rgb(90 98 110 / 0.34),
+      1px 0 0 rgb(188 196 208 / 0.22),
+      -1px 0 0 rgb(108 116 128 / 0.18);
+    -webkit-text-stroke: 0.55px rgb(246 250 255 / 0.62);
+    filter: brightness(1.1) contrast(1.2) saturate(0.86);
+    letter-spacing: -0.012em;
+    opacity: 1;
+  }
+
+  .hero-cement-soft {
+    color: rgb(240 245 250 / 0.96);
+    text-shadow:
+      0 0 14px rgb(255 255 255 / 0.44),
+      0 0 4px rgb(255 255 255 / 0.22),
+      0 1px 0 rgb(255 255 255 / 0.34),
+      0 -1px 0 rgb(86 94 106 / 0.32),
+      1px 0 0 rgb(182 190 202 / 0.18),
+      -1px 0 0 rgb(102 110 122 / 0.16);
+    -webkit-text-stroke: 0.45px rgb(243 248 254 / 0.56);
+    filter: brightness(1.04) contrast(1.16) saturate(0.86);
+    opacity: 1;
+  }
+
+  /* ============================================================
+     HERO — Cinematic blur+lift reveal for h1/h2
+  ============================================================ */
+  .hero-h1-reveal,
+  .hero-h2-reveal {
+    opacity: 0;
+    transform: translateY(38px);
+    filter: blur(6px);
+    transition:
+      opacity 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.25s,
+      transform 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.25s,
+      filter 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.25s;
+  }
+
+  .hero-section:not(.is-loaded) .hero-h1-reveal,
+  .hero-section:not(.is-loaded) .hero-h2-reveal {
+    will-change: opacity, transform, filter;
+  }
+
+  .hero-h2-reveal {
+    transition-delay: 0.45s;
+  }
+
+  .hero-section.is-loaded .hero-h1-reveal,
+  .hero-section.is-loaded .hero-h2-reveal {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+
+  /* ============================================================
+     HERO — Nav link underline-grow on hover
+  ============================================================ */
+  .hero-nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 1px;
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: left center;
+    background: currentColor;
+    transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+  }
+  .hero-nav-link:hover::after { transform: scaleX(1); }
+
+  .hero-nav-link:focus-visible {
+    outline: 1px solid currentColor;
+    outline-offset: 4px;
+  }
+
+  /* ============================================================
+     HERO — CTA letter-spacing breathe + bg blend
+  ============================================================ */
+  .hero-cta {
+    transition:
+      color 0.45s cubic-bezier(0.25, 1, 0.5, 1),
+      border-color 0.45s cubic-bezier(0.25, 1, 0.5, 1),
+      background-color 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+      letter-spacing 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .hero-cta:hover {
+    letter-spacing: 0.22em;
+    background-color: rgba(255, 255, 255, 0.16);
+    border-color: var(--signal-red);
+    color: var(--signal-red-hover);
+  }
+
+  [data-header-theme="light"] .hero-cta:hover {
+    background-color: oklch(0.637 0.237 25.3 / 0.06);
+    border-color: var(--signal-red);
+    color: var(--signal-red);
+  }
+
+  .hero-cta:focus-visible {
+    outline: 2px solid var(--signal-red);
+    outline-offset: 2px;
+  }
+
+  [data-header-theme="light"] .hero-nav-link:focus-visible {
+    outline-color: var(--day-ink);
+  }
+}

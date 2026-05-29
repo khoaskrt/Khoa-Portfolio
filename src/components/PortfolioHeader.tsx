@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useLenis } from 'lenis/react';
-import khoaLogo from '../assets/brand/khoa-logo.svg';
+const khoaLogo = '/assets/brand/khoa-logo.svg';
 import { headerContent } from './header-content';
 import { GlitchText } from './GlitchText';
 

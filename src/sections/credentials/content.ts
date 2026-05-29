@@ -1,7 +1,7 @@
-import certUdemyDex from '../../assets/images/cert-udemy-dex.jpg';
-import certGooglePM from '../../assets/images/cert-google-pm.jpg';
-import certToeic from '../../assets/images/toeic.jpg';
-import certOpMgmt from '../../assets/images/cert-op-mgmt.jpg';
+const certUdemyDex = '/assets/certificates/cert-udemy-dex.jpg';
+const certGooglePM = '/assets/certificates/cert-google-pm.jpg';
+const certToeic = '/assets/images/toeic.jpg';
+const certOpMgmt = '/assets/certificates/cert-op-mgmt.jpg';
 
 export type Credential = {
   era: string;

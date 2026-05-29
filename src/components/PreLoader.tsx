@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import { useState, useEffect, useRef } from 'react';
-import { ease } from '../motion/easing';
+import { ease } from '../motion/shared-easing';
 
 type Phase = 'counting' | 'hold' | 'wipe-in' | 'wipe-out' | 'done';
 

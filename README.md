@@ -1,21 +1,52 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Khoa — '26 Portfolio
 
-# Run and deploy your AI Studio app
+A personal portfolio website showcasing work experience, projects, credentials, and professional milestones.
 
-This contains everything you need to run your app locally.
+## Tech Stack
 
-View your app in AI Studio: https://ai.studio/apps/981b43ab-748a-4d1d-a033-16020f6165c3
+- **React 19** + **TypeScript**
+- **Vite** — build tool & dev server
+- **Tailwind CSS v4** — utility-first styling
+- **GSAP** + **Motion** (Framer Motion) — scroll-driven animations
+- **Lenis** — smooth scrolling
+- **Vercel** — deployment
 
-## Run Locally
+## Getting Started
 
-**Prerequisites:**  Node.js
+```bash
+# Install dependencies
+npm install
 
+# Start dev server
+npm run dev
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
-# Khoa-Portfolio
+# Build for production
+npm run build
+
+# Type check
+npm run lint
+```
+
+## Project Structure
+
+```
+src/
+├── app/                  # App shell + shared hooks
+├── components/           # Shared UI (Header, PreLoader, Cursor)
+├── motion/               # Shared easing/duration constants
+├── styles/               # Design tokens + section CSS
+├── types/                # TypeScript declarations
+└── sections/             # Each section = isolated module
+    ├── hero/
+    ├── about/
+    ├── transition/
+    ├── work-experience/
+    ├── selected-projects/
+    ├── moment-recap/
+    ├── credentials/
+    └── signoff/
+```
+
+## Design System
+
+See [docs/DESIGN.md](docs/DESIGN.md) for the full design system documentation including colors, typography, layout, motion, and component specifications.

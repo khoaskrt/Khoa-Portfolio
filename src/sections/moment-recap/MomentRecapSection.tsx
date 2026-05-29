@@ -1,12 +1,39 @@
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { SplitText } from 'gsap/SplitText';
 import { momentRecapContent } from './content';
-import { momentRecapMotion } from './motion';
 import './styles.css';
 
-gsap.registerPlugin(ScrollTrigger, SplitText);
+const momentRecapMotion = {
+  ease: {
+    expoOut: 'power4.out',
+    quartOut: 'power3.out',
+    quadOut: 'power2.out',
+  },
+  intro: {
+    y: 24,
+    duration: 0.9,
+    stagger: 0.1,
+  },
+  splitText: {
+    y: 60,
+    duration: 0.9,
+    stagger: 0.025,
+  },
+  imageZoom: {
+    from: 1.15,
+    to: 1.0,
+  },
+  cascade: {
+    numberDuration: 0.6,
+    ruleDuration: 0.7,
+    descY: 16,
+    descDuration: 0.7,
+  },
+  scrub: 2.5,
+} as const;
+
+gsap.registerPlugin(ScrollTrigger);
 
 function ScrollHint({ parentTween }: { parentTween: gsap.core.Tween | null }) {
   const hintRef = useRef<HTMLDivElement>(null);
@@ -143,39 +170,6 @@ export function MomentRecapSection() {
     };
   }, [reducedMotion]);
 
-  useEffect(() => {
-    if (reducedMotion) return;
-    const headerWrapper = headerWrapperRef.current;
-    const bufferLine = bufferLineRef.current;
-    const els = [headerRef.current, leadRef.current, ruleRef.current].filter(Boolean) as HTMLElement[];
-    if (!headerWrapper || els.length === 0) return;
-
-    if (bufferLine) {
-      gsap.set(bufferLine, { scaleX: 0, transformOrigin: 'left center' });
-    }
-    gsap.set(els, { opacity: 0, y: momentRecapMotion.intro.y });
-
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: headerWrapper,
-        start: 'top 85%',
-        once: true,
-      },
-    });
-
-    if (bufferLine) {
-      tl.to(bufferLine, { scaleX: 1, duration: 0.9, ease: 'power3.out' });
-    }
-    tl.to(els, {
-      opacity: 1,
-      y: 0,
-      duration: momentRecapMotion.intro.duration,
-      ease: momentRecapMotion.ease.expoOut,
-      stagger: momentRecapMotion.intro.stagger,
-    }, bufferLine ? '-=0.55' : 0);
-
-    return () => { tl.kill(); };
-  }, [reducedMotion]);
 
   return (
     <section
@@ -188,10 +182,7 @@ export function MomentRecapSection() {
         <div
           ref={bufferLineRef}
           className="h-px w-full bg-[var(--border-day)]"
-          style={{
-            marginBottom: 'clamp(2rem, 4vh, 3.5rem)',
-            ...(reducedMotion ? {} : { transform: 'scaleX(0)' }),
-          }}
+          style={{ marginBottom: 'clamp(2rem, 4vh, 3.5rem)' }}
           aria-hidden="true"
         />
         <header
@@ -288,71 +279,6 @@ function MomentRecapFrame({ frame, index, reducedMotion, parentTween }: MomentRe
     };
   }, [reducedMotion, parentTween]);
 
-  useEffect(() => {
-    if (reducedMotion || !parentTween) return;
-    const titleEl = titleRef.current;
-    const numberEl = numberRef.current;
-    const ruleEl = ruleRef.current;
-    const descEl = descRef.current;
-    if (!titleEl) return;
-
-    const split = new SplitText(titleEl, { type: 'words,chars' });
-    const slideEl = titleEl.closest('.moment-recap-slide');
-
-    if (numberEl) gsap.set(numberEl, { opacity: 0, y: 12 });
-    if (ruleEl) gsap.set(ruleEl, { scaleX: 0, transformOrigin: 'left center' });
-    gsap.set(split.chars, { y: momentRecapMotion.splitText.y, opacity: 0 });
-    if (descEl) gsap.set(descEl, { opacity: 0, y: momentRecapMotion.cascade.descY });
-
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: slideEl,
-        containerAnimation: parentTween,
-        start: 'left 75%',
-        toggleActions: 'play none none none',
-      },
-    });
-
-    if (numberEl) {
-      tl.to(numberEl, {
-        opacity: 1,
-        y: 0,
-        duration: momentRecapMotion.cascade.numberDuration,
-        ease: momentRecapMotion.ease.quartOut,
-      });
-    }
-
-    if (ruleEl) {
-      tl.to(ruleEl, {
-        scaleX: 1,
-        duration: momentRecapMotion.cascade.ruleDuration,
-        ease: momentRecapMotion.ease.expoOut,
-      }, numberEl ? '-=0.35' : 0);
-    }
-
-    tl.to(split.chars, {
-      y: 0,
-      opacity: 1,
-      duration: momentRecapMotion.splitText.duration,
-      ease: momentRecapMotion.ease.quadOut,
-      stagger: momentRecapMotion.splitText.stagger,
-    }, ruleEl ? '-=0.4' : (numberEl ? '-=0.2' : 0));
-
-    if (descEl) {
-      tl.to(descEl, {
-        opacity: 1,
-        y: 0,
-        duration: momentRecapMotion.cascade.descDuration,
-        ease: momentRecapMotion.ease.quartOut,
-      }, '-=0.5');
-    }
-
-    return () => {
-      tl.scrollTrigger?.kill();
-      tl.kill();
-      split.revert();
-    };
-  }, [reducedMotion, parentTween]);
 
   return (
     <article

@@ -1,6 +1,6 @@
-import work02AlphatruePresenting from '../../assets/images/work-02-alphatrue-presenting.jpg';
-import basalPayImage from '../../assets/images/basalpay.JPG';
-import researchVbaImage from '../../assets/images/research_VBA.JPEG';
+const work02AlphatruePresenting = '/assets/images/work-02-alphatrue-presenting.jpg';
+const basalPayImage = '/assets/images/basalpay.JPG';
+const researchVbaImage = '/assets/images/research_VBA.jpeg';
 
 export const workExperienceContent = {
   id: 'works',
