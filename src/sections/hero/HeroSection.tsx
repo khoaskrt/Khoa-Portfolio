@@ -1,8 +1,9 @@
 import { motion } from 'motion/react';
 import { useEffect, useState } from 'react';
-import heroPortrait from '../../assets/images/hero-portrait.jpg';
 import { heroContent } from './content';
 import { bgVariants, containerVariants, itemVariants } from './motion';
+
+const heroPortrait = '/assets/images/hero-portrait.jpg';
 
 interface HeroSectionProps {
   preloaderDone?: boolean;

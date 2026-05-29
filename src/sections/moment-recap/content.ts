@@ -1,7 +1,7 @@
-import certVbaOutstanding from '../../assets/images/cert-vba-outstanding.jpg';
-import panelDiscussImage from '../../assets/images/panel_discuss.jpeg';
-import money2020Image from '../../assets/images/money2020.JPG';
-import saoKhueImage from '../../assets/images/ThuyetMinh_SaoKhue.jpg';
+const certVbaOutstanding = '/assets/certificates/cert-vba-outstanding.jpg';
+const panelDiscussImage = '/assets/images/panel_discuss.jpeg';
+const money2020Image = '/assets/images/money2020.JPG';
+const saoKhueImage = '/assets/images/ThuyetMinh_SaoKhue.jpg';
 
 export type MomentRecapFrame = {
   stamp: string;

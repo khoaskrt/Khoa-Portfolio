@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useLenis } from 'lenis/react';
-import khoaLogo from '../assets/brand/khoa-logo.svg';
 import { headerContent } from './header-content';
+
+const khoaLogo = '/assets/brand/khoa-logo.svg';
 import { GlitchText } from './GlitchText';
 
 export function PortfolioHeader() {

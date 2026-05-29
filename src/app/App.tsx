@@ -4,7 +4,7 @@ import type Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { CustomCursor } from '../components/CustomCursor';
-import { PreLoader } from '../components/PreLoader';
+
 import { PortfolioHeader } from '../components/PortfolioHeader';
 import { AboutSection } from '../sections/about/AboutSection';
 import { CredentialsSection } from '../sections/credentials/CredentialsSection';
@@ -65,6 +65,14 @@ export default function App() {
     return () => { document.body.style.overflow = ''; };
   }, [loading]);
 
+  // Sync React loading state with Vanilla JS preloader (takes ~2900ms)
+  useEffect(() => {
+    const t = setTimeout(() => {
+      setLoading(false);
+    }, 2900);
+    return () => clearTimeout(t);
+  }, [setLoading]);
+
   return (
     <ReactLenis root options={lenisOptions}>
       <LenisScrollTriggerSync />
@@ -75,7 +83,7 @@ export default function App() {
         Skip to content
       </a>
       <CustomCursor />
-      <PreLoader onComplete={() => setLoading(false)} />
+
       <PortfolioHeader />
       <main>
         <HeroSection preloaderDone={!loading} />

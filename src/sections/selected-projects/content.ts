@@ -13,7 +13,7 @@ export const selectedProjectsContent = {
       discoverMore: 'https://syncible.io/en',
       tags: ['Tokenized Certificates', 'Platform'],
       industry: ['Web3', 'Education'],
-      image: '/assets/Mockup_Syncible.png',
+      image: '/assets/mockups/Mockup_Syncible.png',
       alt: 'Syncible',
     },
     {
@@ -26,7 +26,7 @@ export const selectedProjectsContent = {
       discoverMore: 'https://apps.apple.com/vn/app/basal-wallet/id6478577563',
       tags: ['Digital Currency', 'Security'],
       industry: ['Web3', 'Wallet'],
-      image: '/assets/BasalWallet_Mockup.png',
+      image: '/assets/mockups/BasalWallet_Mockup.png',
       alt: 'Basal Wallet',
     },
     {
@@ -39,7 +39,7 @@ export const selectedProjectsContent = {
       discoverMore: 'https://aitracuuluat.vn',
       tags: ['Digital Asset', 'Custody'],
       industry: ['Web3', 'Asset Management'],
-      image: '/assets/AILaw_mockup.png',
+      image: '/assets/mockups/AILaw_mockup.png',
       alt: 'AI Law Search',
     },
     {
@@ -52,7 +52,7 @@ export const selectedProjectsContent = {
       discoverMore: 'Product for External-Customer, Non-disclose',
       tags: ['Decentralized Identity', 'Security'],
       industry: ['Web3', 'Analysis'],
-      image: '/assets/BasalDID_Mockup.png',
+      image: '/assets/mockups/BasalDID_Mockup.png',
       alt: 'Basal DID',
     },
     {
@@ -65,7 +65,7 @@ export const selectedProjectsContent = {
       discoverMore: 'https://basalpay.com/',
       tags: ['QR Payment', 'Fintech'],
       industry: ['Web3', 'Payment'],
-      image: '/assets/Mockup_BasalPay.png',
+      image: '/assets/mockups/Mockup_BasalPay.png',
       alt: 'Basal Pay',
     }
   ]
