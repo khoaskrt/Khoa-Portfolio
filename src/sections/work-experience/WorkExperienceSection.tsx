@@ -73,6 +73,7 @@ export function WorkExperienceSection({ transitionProgress = 0 }: WorkExperience
         scrollTrigger: {
           trigger: panel,
           start: 'bottom bottom',
+          end: () => `+=${panel.offsetHeight + window.innerHeight}`,
           pinSpacing: isLast,
           pin: true,
           scrub: true,
@@ -86,23 +87,28 @@ export function WorkExperienceSection({ transitionProgress = 0 }: WorkExperience
       });
 
       if (prefersReducedMotion) {
-        tl.to(panel, { opacity: 0, duration: 1 });
+        tl.to({}, { duration: window.innerHeight })
+          .to(panel, { opacity: 0, duration: panel.offsetHeight });
       } else {
+        // Pause for 100vh
+        tl.to({}, { duration: window.innerHeight });
+
         tl.fromTo(
           panel,
           { scale: 1, opacity: 1 },
-          { scale: isMobile ? 0.88 : 0.55, opacity: isMobile ? 0.3 : 0.4, duration: 1 },
+          { scale: isMobile ? 0.88 : 0.55, opacity: isMobile ? 0.3 : 0.4, duration: panel.offsetHeight },
+          window.innerHeight
         );
 
         if (chapNum && !isMobile) {
-          tl.fromTo(chapNum, { y: 0 }, { y: -100, duration: 1 }, 0);
+          tl.fromTo(chapNum, { y: 0 }, { y: -100, duration: panel.offsetHeight }, window.innerHeight);
         }
 
         if (visual && !isMobile) {
-          tl.fromTo(visual, { y: 0 }, { y: -30, duration: 1 }, 0);
+          tl.fromTo(visual, { y: 0 }, { y: -30, duration: panel.offsetHeight }, window.innerHeight);
         }
 
-        tl.to(panel, { opacity: 0, duration: 0.1 });
+        tl.to(panel, { opacity: 0, duration: panel.offsetHeight * 0.1 }, window.innerHeight + panel.offsetHeight);
       }
 
       if (tl.scrollTrigger) triggers.push(tl.scrollTrigger);
@@ -217,6 +223,7 @@ export function WorkExperienceSection({ transitionProgress = 0 }: WorkExperience
             key={chapter.num}
             chapter={chapter}
             index={index}
+            isLast={index === chapters.length - 1}
             bgColor={chapterBgs[index] ?? chapterBgs[0]}
           />
         ))}
@@ -228,10 +235,11 @@ export function WorkExperienceSection({ transitionProgress = 0 }: WorkExperience
 type ChapterCardProps = React.ComponentProps<'article'> & {
   chapter: (typeof workExperienceContent.chapters)[number];
   index: number;
+  isLast: boolean;
   bgColor: string;
 };
 
-function ChapterCard({ chapter, index, bgColor }: ChapterCardProps) {
+function ChapterCard({ chapter, index, isLast, bgColor }: ChapterCardProps) {
   const [lead, support] = chapter.operative;
   const isDark = index >= 1;
 
@@ -241,6 +249,7 @@ function ChapterCard({ chapter, index, bgColor }: ChapterCardProps) {
       {...(isDark && { 'data-cursor-dark': '' })}
       style={{
         background: bgColor,
+        marginBottom: isLast ? 0 : '100vh',
         color: isDark ? '#FFFFFF' : 'oklch(0.13 0.01 255)',
         ...(isDark && {
           '--day-heading': '#FFFFFF',
